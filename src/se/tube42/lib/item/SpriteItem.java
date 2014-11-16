@@ -1,0 +1,73 @@
+package se.tube42.lib.item;
+
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.*;
+
+import se.tube42.lib.tweeny.*;
+import se.tube42.lib.scene.*;
+
+public class SpriteItem extends BaseItem
+{
+    public static final int 
+        TL_SET_INDEX = 10
+        ;
+
+
+    protected TextureRegion [] textures;
+    protected int index;
+    
+    
+    public SpriteItem(TextureRegion [] textures)
+    {
+        this(textures, 0, null);
+    }
+    
+    public SpriteItem(TextureRegion [] textures, int index)
+    {    
+        this(textures, index, null);
+    }
+    public SpriteItem(TextureRegion [] textures, String name)
+    {    
+        this(textures, 0, name);
+    } 
+     
+    public SpriteItem(TextureRegion [] textures, int index, String name)
+    {    
+        super(name);
+        this.textures = textures;        
+        this.index = index;
+        w = textures[index].getRegionWidth();
+        h = textures[index].getRegionHeight(); 
+    }
+    
+    public int getIndex() { return index; }
+    
+    public void setIndex(int index)
+    {
+        this.index = index;
+    }
+    
+    public void draw(SpriteBatch sb)
+    {
+        final float a = getAlpha();        
+        sb.setColor( cr, cg, cb, a);
+        
+        draw_texture(sb, textures[index]);        
+    }
+ 
+    protected void draw_texture(SpriteBatch sb, TextureRegion texture)
+    {
+        final float s = getScale();
+        final float x = getX();
+        final float y = getY();
+        final float r = getRotation();            
+        final float w2 = w / 2;
+        final float h2 = h / 2;                
+                
+        sb.draw(texture,
+                x + 0.5f, y + 0.5f, 
+                w2, h2,
+                w, h, 
+                s, s, r);
+    }       
+}

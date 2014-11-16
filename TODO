@@ -1,0 +1,25 @@
+TODO
+ 
+ * code should be optimized for 48K and 44.1K 
+ * add base and random velocity to each voice 
+ * add effect chain with reverb and dist  
+
+  
+DONE
+
+ * tile interface with touch patterns
+ * mix and play sound
+ * make sure each write is exactly buffer_size or N5 will die.
+ * add tempo indicator
+ * samples for 48K and 44.1K 
+ * add multiple banks
+ * add code to select between versions of the same drum
+ * control ideas:
+    - pause
+    - clear this pattern
+    - alternative pattern
+    - shuffle this pattern
+ * see if the resampling code can be imporved
+ 
+
+ 

@@ -14,29 +14,28 @@ Building
 --------
 To build this app, you will need
 
-# java, ant, android SDK and all that
-# sox for converting samples
-# imagemagic for converting PNG images
-# inkscape for rendering SVG files
-# hiero (from gdx nighly builds) for font generation
-# my own tool "marm" for content manegement
-
-Furthermore, these tools must be accessible from command line via scripts or aliases.
+1. java, ant, android SDK and all that
+2. sox for converting samples
+3. imagemagic for converting PNG images
+4. inkscape for rendering SVG files
+5. hiero (from gdx nighly builds) for font generation
+6. my own tool "marm" for content manegement
+7. All these tools must be accessible from command line via scripts or aliases.
 
 
 To setup the project and download required lins
 
-# ant setup
+* ant setup
 
 To build the assets, you should do
 
-# make
+* make
 
 To build the project and run on desktop
 
-# ant run
+* ant run
 
 
 To build for android and upload it to your device
 
-# ant debug install
+* ant debug install

@@ -27,15 +27,15 @@ implements Runnable, Disposable
         final int lat = ad.getLatency();
         this.buffer_size = World.samples;
         this.buffer = new float[buffer_size];        
-        System.out.println("AudioDevice latency=" + lat + "samp/" + 
+        System.out.println(
+                  "AudioDevice latency=" + lat + "samp/" + 
                   (1000 * lat / (float)freq) + " ms " + 
                   " freq=" + freq + 
                   " samples=" + buffer_size + 
                   " mono=" + ad.isMono());                
         thread = new Thread(this);
     }
-    
-    
+        
     public void start()
     {
         stopped = false;

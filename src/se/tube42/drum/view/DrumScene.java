@@ -150,9 +150,6 @@ public class DrumScene extends Scene
         
         switch(mode) {
         case 0:            
-            //            v2 = World.seq.getTempoMultiplier() == 1;
-            //            v3 = World.seq.getTempoMultiplier() != 1;            
-            
             if(World.seq.getTempoMultiplier() == 4) {
                 i3 = ICON_NOTE16;
             } else if(World.seq.getTempoMultiplier() == 2) {
@@ -166,10 +163,10 @@ public class DrumScene extends Scene
             i1 = World.seq.getBank(voice) == 0 ? ICON_A : ICON_B;
             break;
         case 2:
-            i0 = World.seq.getSample(voice) == 0 ? ICON_A : ICON_B;
-            v1 = World.chain.isEnabled(0);
-            v2 = World.chain.isEnabled(1);
-            v3 = World.chain.isEnabled(2);
+            v0 = World.chain.isEnabled(0);
+            v1 = World.chain.isEnabled(1);
+            v2 = World.chain.isEnabled(2);
+            v3 = World.chain.isEnabled(3);
             break;
         case 3:
             break;
@@ -199,22 +196,16 @@ public class DrumScene extends Scene
     private void voice_set_voice(int voice)
     {
         final int old_voice = World.seq.getVoice();
-        if(old_voice == voice) return;
         
-        World.tile_voices[voice].mark0();
-        
-        World.seq.setVoice(voice);
-        
-        for(int i = 0; i < VOICES ; i++) {
-            World.tile_voices[i].setAlpha(i == voice ? 1f : 0.4f);
+        if(old_voice == voice) {
+            voice_alt_toggle(voice);            
+        } else {                    
+            World.seq.setVoice(voice);            
+            for(int i = 0; i < VOICES ; i++)
+                World.tile_voices[i].setAlpha(i == voice ? 1f : 0.4f);
         }
         
-        /*
-        for(int i = 0; i < PADS; i++)         
-            World.tile_pads[i].setColorIndex( col_index);
-        
-           ServiceProvider.setColor(col_rgb, World.marker, 1f, -1f);
-         */
+        World.tile_voices[voice].mark0();                    
         voice_tile_update_all();        
     }
     
@@ -228,7 +219,7 @@ public class DrumScene extends Scene
     
     private void voice_tile_update(int tile)
     {
-        final int voice =  World.seq.getVoice();        
+        final int voice =  World.seq.getVoice();       
         World.tile_pads[tile].setTile( World.seq.get(voice, tile) );
     }
     
@@ -313,19 +304,19 @@ public class DrumScene extends Scene
             
             // mode = 2, waveform
         case 8:
-            voice_alt_toggle(voice);            
+            World.chain.toggle(0);            
             break;
             
         case 9:
-            World.chain.toggle(0);
-            break;
-            
-        case 10:
             World.chain.toggle(1);
             break;
             
-        case 11:
+        case 10:
             World.chain.toggle(2);
+            break;
+            
+        case 11:
+            World.chain.toggle(3);
             break;
             
             // mode = 3, settings

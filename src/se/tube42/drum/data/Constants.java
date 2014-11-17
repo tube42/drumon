@@ -100,10 +100,10 @@ public final class Constants
         ICON_PAUSE, ICON_A, ICON_MIX, ICON_DEL,
         
         // waveform
-        ICON_A, ICON_FX, ICON_FX, ICON_FX,
+        ICON_FX, ICON_FX, ICON_FX, ICON_FX,
         
         // settings
-        -1, -1, -1, -1,                
+        ICON_QUESTION, ICON_QUESTION, ICON_QUESTION, ICON_QUESTION
     };
     
     // ---------------------------------------
@@ -118,10 +118,10 @@ public final class Constants
     //
     
     public static final int
-          COLOR_BG = 0x303030,
+          COLOR_BG = 0x505050,
           COLOR_PADS = 0x000000,
-          COLOR_MARKER = 0xA01012,
-          COLOR_VOICES = 0xC29918
+          COLOR_MARKER = 0xA02032,
+          COLOR_VOICES = 0xC29968
           ;
     
     public static final int [] COLOR_SELECTORS = {

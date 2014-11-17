@@ -11,7 +11,7 @@ import se.tube42.drum.data.*;
 
 public class EffectChain
 {    
-    public static final int SIZE = 3;
+    public static final int SIZE = 4;
     
     private boolean [] enabled;
     private IIRFilter iir;
@@ -47,14 +47,18 @@ public class EffectChain
     public void process(float [] data, int offset, int size)
     {        
         if(isEnabled(0)) {
+            // TODO...
+        }
+        
+        if(isEnabled(1)) {
             iir.process(data, offset, size);
         }
         
-        if(isEnabled(1)) {            
+        if(isEnabled(2)) {            
             delay.process(data, offset, size);            
         }
         
-        if(isEnabled(2)) {
+        if(isEnabled(3)) {
             comp.process(data, offset, size);            
         }
     }    

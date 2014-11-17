@@ -25,7 +25,6 @@ public class UIC
     // general stuff
     public static int dpi, dpi_class, dpi_scale;
     public static int sw, sh, s_scale, s_scale_bin;
-    public static int pad;    
 
     // -----------------------------------------------------
 
@@ -33,14 +32,13 @@ public class UIC
     {
         dpi = (int)(160 * Gdx.graphics.getDensity());
         dpi_scale = (int)Math.min(4, Math.max(1, dpi / 240));
-        pad = (~3) & (int)(dpi_scale * 8);                                
         
         dpi_class = DPU_TO_CLASS[DPU_TO_CLASS.length-1];
         for(int i = 0; i < DPU_TO_CLASS.length; i++)
             if( dpi_class < DPU_TO_CLASS[i] * 1.2f)
                 dpi_class = i;
         
-        System.out.println("DPI: " + dpi + "/" + dpi_class + " DPI_SCALE=" + dpi_scale + " PAD=" + pad);
+        System.out.println("DPI: " + dpi + "/" + dpi_class + " DPI_SCALE=" + dpi_scale);
 
     }    
 }

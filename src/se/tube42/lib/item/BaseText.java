@@ -8,12 +8,7 @@ import se.tube42.lib.ks.*;
 import se.tube42.lib.scene.*;
 
 public class BaseText extends BaseItem
-implements MessageListener
 {
-    public static final int
-          MSG_SET_TEXT = 0
-          ;
-    
 
     private String text;
     private BitmapFont font;
@@ -22,12 +17,6 @@ implements MessageListener
     
     public BaseText(BitmapFont font)
     {
-        this(font, null);
-    }
-    
-    public BaseText(BitmapFont font, String name)
-    {
-        super(name);
         this.font = font;
         setText("");
         setAlignment(0, 0);
@@ -109,17 +98,6 @@ implements MessageListener
         final float x1 = x0 + w;
         final float y1 = y0 + h;        
         return x >= x0 && x <= x1 && y >= y0 && y <= y1;
-    }
-    
-    // --------------------------------------------------   
-    
-    public void onMessage(int msg, int data0, Object data1, Object sender)
-    {
-        switch(msg) {
-        case MSG_SET_TEXT:
-            setText( (String) data1);
-            break;
-        }
-    }
+    }    
     
 }

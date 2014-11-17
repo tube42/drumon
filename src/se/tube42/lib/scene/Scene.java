@@ -7,8 +7,8 @@ import  se.tube42.lib.item.*;
 
 public class Scene
 {   
-    private String name;
 	private LayerList layers;
+    private String name;
     
     public Scene(String name)
     {

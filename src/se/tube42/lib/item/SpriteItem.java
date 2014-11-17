@@ -8,32 +8,17 @@ import se.tube42.lib.scene.*;
 
 public class SpriteItem extends BaseItem
 {
-    public static final int 
-        TL_SET_INDEX = 10
-        ;
-
-
     protected TextureRegion [] textures;
     protected int index;
     
     
     public SpriteItem(TextureRegion [] textures)
     {
-        this(textures, 0, null);
+        this(textures, 0);
     }
     
     public SpriteItem(TextureRegion [] textures, int index)
-    {    
-        this(textures, index, null);
-    }
-    public SpriteItem(TextureRegion [] textures, String name)
-    {    
-        this(textures, 0, name);
-    } 
-     
-    public SpriteItem(TextureRegion [] textures, int index, String name)
-    {    
-        super(name);
+    {
         this.textures = textures;        
         this.index = index;
         w = textures[index].getRegionWidth();
@@ -50,21 +35,16 @@ public class SpriteItem extends BaseItem
     public void draw(SpriteBatch sb)
     {
         final float a = getAlpha();        
-        sb.setColor( cr, cg, cb, a);
-        
-        draw_texture(sb, textures[index]);        
-    }
- 
-    protected void draw_texture(SpriteBatch sb, TextureRegion texture)
-    {
         final float s = getScale();
         final float x = getX();
         final float y = getY();
         final float r = getRotation();            
         final float w2 = w / 2;
         final float h2 = h / 2;                
-                
-        sb.draw(texture,
+        
+        sb.setColor( cr, cg, cb, a);
+                        
+        sb.draw(textures[index],
                 x + 0.5f, y + 0.5f, 
                 w2, h2,
                 w, h, 

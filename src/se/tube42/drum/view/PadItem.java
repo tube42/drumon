@@ -23,7 +23,6 @@ public class PadItem extends BaseItem
     
     public PadItem(int tile, int color)
     {
-        super(null);
         
         setColor(color);
         setTile(tile);

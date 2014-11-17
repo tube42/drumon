@@ -79,30 +79,5 @@ public class LayerList
         return null;
     }
     
-    public Layer getLayer(String name)
-    {
-        final int len = getSize();        
-        for(int i = 0; i < len; i++) {
-            final Layer l = get(i);
-            if(l != null && name.equals(l.name))
-                return l;
-        }
-        return null;
-    }
-    
-    public BaseItem getItem(String name)
-    {
-        final int len = getSize();        
-        for(int i = 0; i < len; i++) {
-            final Layer l = get(i);
-            if(l != null) {
-                final BaseItem b = l.getItem(name);
-                if(b != null) {
-                    return b;
-                }
-            }
-        }
-        return null;
-    }
     
 }

@@ -15,40 +15,14 @@ public class AssetService
     
     // -------------------------------------------------------------------
     // fonts
-    public static BitmapFont loadFont(TextureAtlas atlas, String name)
+    public static BitmapFont loadFont(String name)
     {   
         
-        BitmapFont ret = null;
-        if(atlas == null) {
-            ret = new BitmapFont(
-                      Gdx.files.internal(name + ".fnt"),
-                      Gdx.files.internal(name + ".png"), 
-                      false, true);        
-        } else {
-            String [] tmp = name.split("/");
-            String simple = tmp[tmp.length-1];   
-            
-            return loadFont(atlas, simple, name + ".fnt");
-        }
-
-        // Texture.TextureFilter tf = Texture.TextureFilter.Linear;
-        // ret.getRegion().getTexture().setFilter( tf, tf);
-        
-        return ret;
-    }
-    
-    public static BitmapFont loadFont(TextureAtlas atlas, 
-              String name, String fontfile)
-    {           
-        TextureRegion reg = atlas.findRegion(name);
         BitmapFont ret = new BitmapFont(
-                  Gdx.files.internal(fontfile),
-                  reg, false);
-        ret.setUseIntegerPositions(true);                    
+                  Gdx.files.internal(name + ".fnt"),
+                  Gdx.files.internal(name + ".png"), 
+                  false, true);        
 
-        // Texture.TextureFilter tf = Texture.TextureFilter.Linear;
-        // ret.getRegion().getTexture().setFilter( tf, tf);
-        
         return ret;
     }
     

@@ -83,15 +83,11 @@ public class ServiceProvider
     // ------------------------------------------------
     // Fonts
     
-    public static BitmapFont loadFont(TextureAtlas atlas, String name)
+    public static BitmapFont loadFont(String name)
     {
-        return AssetService.loadFont(atlas, name);
+        return AssetService.loadFont(name);
     }
     
-    public static BitmapFont loadFont(TextureAtlas atlas, String name, String filename)
-    {
-        return AssetService.loadFont(atlas, name, filename);
-    }
     
     // ------------------------------------------------    
     // NinePatch

@@ -23,8 +23,6 @@ public class PressItem extends BaseItem
     
     public PressItem(int tile, int icon, int color)
     {
-        super(null);
-        
         setTile(tile);
         setIcon(icon);
         setColor(color);

@@ -83,7 +83,7 @@ public class DrumApp extends BaseApp
                   World.s_scale_bin * 16,
                   World.s_scale_bin * 16);
         
-        World.font = ServiceProvider.loadFont(null, base + "/font1");
+        World.font = ServiceProvider.loadFont(base + "/font1");
         World.font.setScale(1f / World.s_scale_bin);
         
         try {

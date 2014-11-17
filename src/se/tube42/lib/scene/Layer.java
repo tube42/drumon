@@ -23,7 +23,6 @@ public class Layer
         
     private ArrayList<BaseItem> list;    
     public int flags;
-    public String name;
     
     public Layer()
     {
@@ -34,7 +33,6 @@ public class Layer
     {
         this.list = list;
         this.flags = FLAG_VISIBLE | FLAG_TOUCHABLE;
-        this.name = null;
     }
     
     
@@ -76,34 +74,8 @@ public class Layer
         return list.get(index);
     }
     
-    // -----------------------------------------    
-    
-    public void setAllImmediate(int index, float value)
-    {
-        final int len = getSize();        
-        for(int i = 0; i < len; i++)
-            get(i).setImmediate(index, value);        
-    }
-    
-    public void setAll(int index, float value, 
-              float dur, TweenEquation eq)
-    {
-        final int len = getSize();        
-        for(int i = 0; i < len; i++)
-            get(i).set(index, value).configure(dur, eq);
-    }
     
     // -----------------------------------------    
-    public BaseItem getItem(String name)
-    {
-        final int len = getSize();        
-        for(int i = 0; i < len; i++) {
-            final BaseItem ni = get(i);
-            if(ni != null && name.equals(ni.name))
-                return ni;
-        }
-        return null;
-    }
     
     public void update(float dt)
     {
@@ -157,15 +129,11 @@ public class Layer
     
     public void clear()
     {
-        for(BaseItem it : list)
-            it.release();
-        
         list.clear();
     }
     
     public void remove(BaseItem item)
     {
-        item.release();
         list.remove(item);
     }
 }

@@ -27,40 +27,19 @@ public abstract class BaseItem extends Item
     
     // --------------------------------------------------------------
     
-    public KSPool pool;
-    public float d0, d1, d2; // extra data
     protected float w, h;    
     public float cr, cg, cb;
     public int flags;    
-    public String name;
     
-    private float [] saved_pos = null;
-    private int saved_index = -1;
-
     public BaseItem()
-    {
-        this(null);  
-    }
-    
-    public BaseItem(String name)
     {
         super(6);  
         
         // temporary for now        
         setColor(null); 
-        this.name = name;
         this.w = this.h = 64; 
         this.flags = FLAG_VISIBLE /* | FLAG_TOUCHABLE */;
-        this.pool = null;
         reset();
-    }
-    
-    public void release()
-    {
-        if(pool != null) {
-            pool.put(this);
-            pool = null;
-        }
     }
     
     public void reset()
@@ -100,61 +79,6 @@ public abstract class BaseItem extends Item
     }
     
     
-    // --------------------------------------------
-    // saved position:
-    private float[] get_saved_pos()
-    {
-        if(saved_pos == null)
-            saved_pos = new float[2 * 4];
-        return saved_pos;
-    }
-
-    public float loadX(int index) { return get_saved_pos()[ index * 2 + 0]; }
-    public float loadY(int index) { return get_saved_pos()[ index * 2 + 1]; }
-    public int getSavedIndex() { return saved_index; }
-
-    public void savePosition(int index)
-    {
-        savePosition(index, getX(), getY());
-    }
-    
-    public void savePosition(int index, float x, float y)
-    {
-        final float [] v = get_saved_pos();
-        v[index * 2 + 0] = x;
-        v[index * 2 + 1] = y;
-    }
-
-    public void addPosition(int from, int to, float dx, float dy)
-    {
-        savePosition(to, dx + loadX(from), dy  + loadY(from));
-    }
-
-    public void loadPosition(int index)
-    {
-        saved_index = index;
-        setPosition(loadX(index), loadY(index));
-    }
-
-    public TweenNode loadPosition(int index, float t, TweenEquation eq)
-    {
-        saved_index = index;
-        set(ITEM_X, loadX(index)).configure(t, eq);
-        return set(ITEM_Y, loadY(index)).configure(t, eq);
-    }
-
-    public TweenNode loadPosition(int from, int to, float t, TweenEquation eq)
-    {
-        loadPosition(from);
-        return loadPosition(to, t, eq);
-    }
-
-    public void loadPositionIf(int index, float t, TweenEquation eq)
-    {
-        if(saved_index != index)
-            loadPosition(index, t, eq);
-    }
-
     // --------------------------------------------
     
     public void setAlpha(float a)

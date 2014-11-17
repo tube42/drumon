@@ -3,6 +3,8 @@ DRUM ON
 
 This is a FOSS drum app for Android. 
 
+.. image:: http://tube42.github.io/drumon/img/img00.png
+
 
 To download, go to https://play.google.com/store/apps/details?id=se.tube42.drum.android
 

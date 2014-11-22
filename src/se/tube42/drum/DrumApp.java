@@ -18,74 +18,79 @@ import se.tube42.drum.data.*;
 import static se.tube42.drum.data.Constants.*;
 
 public class DrumApp extends BaseApp
-{     
-    
+{
+
     public DrumApp()
     {
-        super(200, 300);        
+        super(200, 300);
     }
-    
-    
+
+
     public void onCreate(SceneManager mgr, Item bgc)
     {
     	ServiceProvider.init();
-        
-        
+
+
         // force one first resize!
         onResize(World.sw, World.sh);
-        
+
         World.bgc = bgc;
         load_assets();
+
+        // create mixer
+        World.seq = new Sequencer();
+        final DeviceOutput dev = new DeviceOutput();
+        World.mixer = new Mixer(dev);
+
+
+
         mgr.setScene( new DrumScene());
-        
-        // create this one last!
-        World.mixer = new Mixer();
-        World.mixer.start();
 
     	// TEMP until we fix the code handling back:
 		Gdx.input.setCatchBackKey(false);
-        
-        
-        
+
+        // start the mixer!
+        World.mixer.start();
+
     }
 
 
     public void onUpdate(float dt, long dtl)
     {
-        ServiceProvider.service(dtl); // this will update job manager, tween manager and so on 
+        ServiceProvider.service(dtl); // this will update job manager, tween manager and so on
     }
-    
+
     public void onResize(int w, int h)
     {
         final int s1 = ~1 & (int)Math.min( World.sw / 4, World.sh / 8);
-        final int s2 = ~3 & (int)(s1 * 0.98f);        
+        final int s2 = ~3 & (int)(s1 * 0.98f);
         World.tile_stripe = s1;
-        World.tile_size = s2;        
+        World.tile_size = s2;
         World.tile_x0 = ((int)(World.sw - s1 * 4 + s1 - s2)) / 2;
         World.tile_y0 = ((int)(World.sh - s1 * 8 + s1 - s2)) / 2;
     }
-    
+
     // ----------------------------------------------
-    
+
     private void load_assets()
     {
         System.out.println("Asset scale: " + World.s_scale_bin);
-        
+
         final String base = "" + World.s_scale_bin;
-        
+
         Texture tmp = ServiceProvider.loadTexture(base + "/tiles.png", true);
-        World.tex_tiles =  ServiceProvider.divideTexture(tmp, 
-                  World.s_scale_bin * 32, 
+        World.tex_tiles =  ServiceProvider.divideTexture(tmp,
+                  World.s_scale_bin * 32,
                   World.s_scale_bin * 32);
-        
+
         tmp = ServiceProvider.loadTexture(base + "/icons.png", true);
-        World.tex_icons =  ServiceProvider.divideTexture(tmp, 
+        World.tex_icons =  ServiceProvider.divideTexture(tmp,
                   World.s_scale_bin * 16,
                   World.s_scale_bin * 16);
-        
+
         World.font = ServiceProvider.loadFont(base + "/font1");
         World.font.setScale(1f / World.s_scale_bin);
-        
+
         try {
             final int scount = SAMPLES.length;
             World.sounds = new Sample[scount];
@@ -100,7 +105,7 @@ public class DrumApp extends BaseApp
             System.exit(20);
         }
     }
-    
+
     public void dispose()
     {
         System.out.println("Disposing...\n");

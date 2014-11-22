@@ -23,7 +23,7 @@ To build this app, you will need
 7. All these tools must be accessible from command line via scripts or aliases.
 
 
-To setup the project and download required lins
+To setup the project and download required libs
 
 * ant setup
 

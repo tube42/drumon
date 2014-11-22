@@ -1,9 +1,8 @@
 TODO
  
+ * re-write the low-pass to decrease load
  * code should be optimized for 48K and 44.1K 
  * add base and random velocity to each voice 
- * add effect chain with reverb and dist  
-
   
 DONE
 

@@ -13,5 +13,5 @@ public class DesktopMain
         DrumApp app = new DrumApp();
         new LwjglApplication( app, "Drum On...", 480, 640);
     }
-    
+
 }

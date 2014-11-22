@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.*;
 import  se.tube42.lib.item.*;
 
 public class Scene
-{   
+{
 	private LayerList layers;
     private String name;
-    
+
     public Scene(String name)
     {
         this.name = name;
@@ -17,17 +17,17 @@ public class Scene
     }
 
     // -----------------------------------------------
-            
+
     public void render(SpriteBatch batch)
-    { 
-        layers.draw(batch);                  
-    }    
+    {
+        layers.draw(batch);
+    }
 
     public BaseItem hit(int x, int y)
     {
     	return layers.hit(x, y);
     }
-    
+
     // ---------------------------------------
 
     public Layer addLayer(Layer l)
@@ -42,41 +42,41 @@ public class Scene
 
     public LayerList getLayers()
     {
-    	return layers;    
+    	return layers;
     }
 
     // ------------------------------------------------
-    
+
     public void resize(int w, int h)
     {
-        
+
     }
-        
-    public final void update(float dt) 
-    { 
+
+    public final void update(float dt)
+    {
         onUpdate(dt);
         layers.update(dt);
     }
 
-    
-    public void dispose() { }    
+
+    public void dispose() { }
 
     public void onUpdate(float dt)  { }
     public void onShow() { }
     public void onHide() { }
-    
+
     public boolean touch(int x, int y, boolean down, boolean drag)
     {
         return false;
     }
-    
-    public boolean type(int key, boolean down)    
+
+    public boolean type(int key, boolean down)
     {
         return false;
     }
-    
+
     public String toString()
     {
         return name;
-    }    
+    }
 }

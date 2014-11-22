@@ -19,29 +19,29 @@ import static se.tube42.drum.data.Constants.*;
 
 public class VoiceItem extends PressItem
 {
-    
+
     public VoiceItem(int tile, int icon, int color)
     {
         super(tile, icon, color);
     }
-    
+
     public void mark0()
     {
         final float r = ServiceProvider.getRandom(0.05f, 0.1f);
         set(ITEM_S, 1.2f).configure(1 * r, null)
-              .tail(1f).configure(1 * r, null);        
+              .tail(1f).configure(1 * r, null);
     }
-    
-    
+
+
     public void mark1()
     {
-        final float r = ServiceProvider.getRandom(0.05f, 0.1f);                
+        final float r = ServiceProvider.getRandom(0.05f, 0.1f);
         set(ITEM_R, -5).configure(1 * r, null)
               .tail(+5).configure(2 * r, null)
               .tail(-3).configure(1 * r, null)
               .tail(+3).configure(1 * r, null)
            .tail(0f).configure(1 * r, null);
-        
+
     }
 
 }

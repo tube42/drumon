@@ -15,7 +15,8 @@ public abstract class BaseItem extends Item
           ITEM_R = 1,
           ITEM_X = 2,
           ITEM_Y = 3,
-          ITEM_A = 4
+          ITEM_A = 4,
+          ITEM_V = 5
           ;
     public static final int
           FLAG_VISIBLE    = 1,
@@ -44,6 +45,7 @@ public abstract class BaseItem extends Item
 
     public void reset()
     {
+        setImmediate(ITEM_V, 0);
         setScale(1);
         setAlpha(1);
         setRotation(0);

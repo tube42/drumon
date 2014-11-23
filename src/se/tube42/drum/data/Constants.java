@@ -4,11 +4,11 @@ package se.tube42.drum.data;
 public final class Constants
 {
     public static final boolean
-          DEBUG = true
+          DEBUG = false
           ;
 
     public static final int
-          MAX_TEMPO = 280,
+          MAX_TEMPO = 340,
           MIN_TEMPO = 40,
           SIMD_WIDTH = 4
           ;
@@ -50,14 +50,20 @@ public final class Constants
           ICON_PLAY = 15,
           ICON_METRONOME = 16,
           ICON_WAVEFORM = 17,
-          ICON_FX = 18,
+          ICON_MIX = 18,
           ICON_SEQ = 19,
 
           ICON_NOTE4 = 20,
           ICON_NOTE8 = 21,
           ICON_NOTE16 = 22,
           ICON_DOT = 23,
-          ICON_MIX = 24,
+          
+          ICON_CRUSH = 24,
+          ICON_LPFILTER = 25,
+          ICON_ECHO = 26,
+          ICON_COMPRESS = 27,
+          
+
           ICON_QUESTION = 31
           ;
 
@@ -105,10 +111,10 @@ public final class Constants
         ICON_PAUSE, ICON_A, ICON_MIX, ICON_DEL,
 
         // waveform
-        ICON_FX, ICON_FX, ICON_FX, ICON_FX,
+        ICON_CRUSH, ICON_LPFILTER, ICON_ECHO, ICON_COMPRESS,
 
         // settings
-        ICON_QUESTION, ICON_QUESTION, ICON_QUESTION, ICON_QUESTION
+        -1, -1, -1, -1
     };
 
     // ---------------------------------------
@@ -124,7 +130,6 @@ public final class Constants
 
     public static final int
           COLOR_BG = 0x505050,
-          COLOR_PADS = 0x000000,
           COLOR_MARKER = 0xA02032,
           COLOR_VOICES = 0xC29968
           ;
@@ -134,6 +139,21 @@ public final class Constants
         0x228022,
         0x222280,
         0x808022,
+    };
+    
+    
+    /* see
+     * http://gamedev.stackexchange.com/questions/46463/is-there-an-optimum-set-of-colors-for-10-players/
+     */
+    public static final int [] COLOR_PADS  = {        
+        0x95bf7f,
+        0xffdd7f,
+        0xf33f7f,
+        0xffaebf,
+        0xc47f7f,
+        0x807f99,
+        0x807fc7,
+        0xff7fff,
     };
 
 }

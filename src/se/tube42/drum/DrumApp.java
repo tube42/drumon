@@ -38,7 +38,8 @@ public class DrumApp extends BaseApp
         load_assets();
 
         // create mixer
-        World.seq = new Sequencer();
+        World.prog = new Program();
+        World.seq = new Sequencer(World.prog);
         final DeviceOutput dev = new DeviceOutput();
         World.mixer = new Mixer(dev);
 

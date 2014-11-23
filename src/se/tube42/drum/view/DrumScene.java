@@ -35,7 +35,7 @@ public class DrumScene extends Scene
         // PADS
         World.tile_pads = new PadItem[PADS];
         for(int i = 0; i < PADS; i++) {
-            World.tile_pads[i] = new PadItem(TILE_PAD0, COLOR_PADS);
+            World.tile_pads[i] = new PadItem(TILE_PAD0);
         }
 
         // VOICES
@@ -80,7 +80,7 @@ public class DrumScene extends Scene
         getLayer(2).add(item_msg);
 
         // init
-        sel_set_mode(0);
+        sel_set_mode(0, false);
         voice_set_voice(1);
         voice_set_voice(0);
         voice_tile_update_all();
@@ -115,28 +115,25 @@ public class DrumScene extends Scene
     private void all_update()
     {
         voice_tile_update_all();
-        tools_update_all();
+        tools_update_all(false);
         voice_tile_update_all();
     }
 
-    private void sel_set_mode(int mode)
+    private void sel_set_mode(int mode, boolean byuser)
     {
         this.mode = mode;
-
-        final int color = COLOR_SELECTORS[mode];
-        for(int i = 0; i < TOOLS; i++)
-            World.tile_tools[i].setColor(color);
-
+        
         for(int i = 0; i < SELECTORS; i++)
             World.tile_selectors[ i].setActive(i == mode);
-
-        tools_update_all();
+                
+        tools_update_all(byuser);
     }
 
-    private void tools_update_all()
+    private void tools_update_all(boolean modechange)
     {
         final Sequencer seq = World.seq;
-        final int voice = seq.getVoice();
+        final Program prog = World.prog;
+        final int voice = prog.getVoice();
 
         boolean v0, v1, v2, v3;
         int t0, t1, t2, t3, i0, i1, i2, i3;
@@ -152,9 +149,9 @@ public class DrumScene extends Scene
 
         switch(mode) {
         case 0:
-            if(seq.getTempoMultiplier() == 4) {
+            if(prog.getTempoMultiplier() == 4) {
                 i3 = ICON_NOTE16;
-            } else if(seq.getTempoMultiplier() == 2) {
+            } else if(prog.getTempoMultiplier() == 2) {
                 i3 = ICON_NOTE8;
             } else {
                 i3 = ICON_NOTE4;
@@ -162,7 +159,7 @@ public class DrumScene extends Scene
             break;
         case 1:
             i0 = seq.isPaused() ? ICON_PLAY : ICON_PAUSE;
-            i1 = seq.getBank(voice) == 0 ? ICON_A : ICON_B;
+            i1 = prog.getBank(voice) == 0 ? ICON_A : ICON_B;
             break;
         case 2:
             v0 = World.mixer.getEffectChain().isEnabled(0);
@@ -174,37 +171,39 @@ public class DrumScene extends Scene
             break;
         }
 
-
-        World.tile_tools[0].setIcon(i0);
-        World.tile_tools[1].setIcon(i1);
-        World.tile_tools[2].setIcon(i2);
-        World.tile_tools[3].setIcon(i3);
-
-        World.tile_tools[0].setTile(v0 ? TILE_BUTTON1 : TILE_BUTTON0);
-        World.tile_tools[1].setTile(v1 ? TILE_BUTTON1 : TILE_BUTTON0);
-        World.tile_tools[2].setTile(v2 ? TILE_BUTTON1 : TILE_BUTTON0);
-        World.tile_tools[3].setTile(v3 ? TILE_BUTTON1 : TILE_BUTTON0);
-
+        final int color = COLOR_SELECTORS[mode];        
+        World.tile_tools[0].change(color, i0, v0, modechange);
+        World.tile_tools[1].change(color, i1, v1, modechange);
+        World.tile_tools[2].change(color, i2, v2, modechange);
+        World.tile_tools[3].change(color, i3, v3, modechange);
     }
 
     private void voice_alt_toggle(int voice)
     {
-        World.seq.setSample(voice, 1 ^ World.seq.getSample(voice));
+        World.prog.setSample(voice, 1 ^ World.prog.getSample(voice));
         World.tile_voices[voice].setTile(
-                  World.seq.getSample(voice) == 0
+                  World.prog.getSample(voice) == 0
                   ? TILE_BUTTON0 : TILE_BUTTON0_ALT);
     }
 
     private void voice_set_voice(int voice)
     {
-        final int old_voice = World.seq.getVoice();
+        final int old_voice = World.prog.getVoice();
 
         if(old_voice == voice) {
             voice_alt_toggle(voice);
         } else {
-            World.seq.setVoice(voice);
+            World.prog.setVoice(voice);
             for(int i = 0; i < VOICES ; i++)
                 World.tile_voices[i].setAlpha(i == voice ? 1f : 0.4f);
+            
+            final int color = COLOR_PADS[voice];
+            ServiceProvider.setColorItem(color, World.bgc,
+                  0f, 0.6f, 0.7f);
+            
+            for(int i = 0; i < PADS; i++)
+                World.tile_pads[i].setColor(color);
+            
         }
 
         World.tile_voices[voice].mark0();
@@ -213,16 +212,16 @@ public class DrumScene extends Scene
 
     private void voice_tile_toggle(int tile)
     {
-        final int voice =  World.seq.getVoice();
-        World.seq.set(voice, tile, World.seq.get(voice, tile) ^ 1);
+        final int voice =  World.prog.getVoice();
+        World.prog.set(voice, tile, World.prog.get(voice, tile) ^ 1);
         World.tile_pads[tile].mark0();
         voice_tile_update(tile);
     }
 
     private void voice_tile_update(int tile)
     {
-        final int voice =  World.seq.getVoice();
-        World.tile_pads[tile].setTile( World.seq.get(voice, tile) );
+        final int voice =  World.prog.getVoice();
+        World.tile_pads[tile].setTile( World.prog.get(voice, tile) );
     }
 
     private void voice_tile_update_all()
@@ -241,13 +240,13 @@ public class DrumScene extends Scene
 
     private void button_selector_select(int id)
     {
-        sel_set_mode(id);
+        sel_set_mode(id, true);
         all_update();
     }
 
     private void button_tool_select(int id)
     {
-        final int voice = World.seq.getVoice();
+        final int voice = World.prog.getVoice();
         final int op = TOOLS * mode + id;
 
         World.tile_tools[id].mark0();
@@ -255,24 +254,24 @@ public class DrumScene extends Scene
         switch(op) {
             // mode = 0, timing
         case 0:
-            World.seq.setTempo( World.seq.getTempo() - 2);
-            msg_show("" + World.seq.getTempo(), -1, 0);
+            World.prog.setTempo( World.prog.getTempo() - 2);
+            msg_show("" + World.prog.getTempo(), -1, 0);
             break;
         case 1:
             if(World.td.add()) {
-                World.seq.setTempo( World.td.get() );
+                World.prog.setTempo( World.td.get() );
                 msg_show("" + World.td.get(), 0, -1);
             }
             break;
         case 2:
-            World.seq.setTempo( World.seq.getTempo() + 2);
-            msg_show("" + World.seq.getTempo(), +1, 0);
+            World.prog.setTempo( World.prog.getTempo() + 2);
+            msg_show("" + World.prog.getTempo(), +1, 0);
             break;
 
         case 3:
-            int n = World.seq.getTempoMultiplier() * 2;
+            int n = World.prog.getTempoMultiplier() * 2;
             if(n > 4) n = 1;
-            World.seq.setTempoMultiplier(n);
+            World.prog.setTempoMultiplier(n);
             break;
 
             // mode = 1, sequence
@@ -281,7 +280,7 @@ public class DrumScene extends Scene
             break;
 
         case 5:
-            World.seq.setBank(voice, 1 ^ World.seq.getBank(voice));
+            World.prog.setBank(voice, 1 ^ World.prog.getBank(voice));
             break;
 
         case 6:
@@ -290,8 +289,8 @@ public class DrumScene extends Scene
                 int a = ServiceProvider.getRandomInt(PADS);
                 int b = ServiceProvider.getRandomInt(PADS);
 
-                if(World.seq.get(voice, a) != 0 &&
-                   World.seq.get(voice, b) == 0) {
+                if(World.prog.get(voice, a) != 0 &&
+                   World.prog.get(voice, b) == 0) {
                     voice_tile_toggle(a);
                     voice_tile_toggle(b);
                 }
@@ -301,7 +300,7 @@ public class DrumScene extends Scene
         case 7:
             // clear one
             for(int i = 0; i < PADS; i++)
-                World.seq.set(voice, i, 0);
+                World.prog.set(voice, i, 0);
             break;
 
             // mode = 2, waveform
@@ -343,9 +342,13 @@ public class DrumScene extends Scene
 
             for(int x = 0; x < 4; x++) {
                 final int index = x + y * 4;
-                World.tiles[index].setSize(World.tile_size, World.tile_size);
-                World.tiles[index].setPosition(
-                          World.tile_x0 + World.tile_stripe * x, y0);
+                World.tiles[index].setSize(World.tile_size, World.tile_size);                
+                
+                World.tiles[index].setImmediate(BaseItem.ITEM_X, World.tile_x0 + World.tile_stripe * x);
+                
+                final float r = ServiceProvider.getRandom(0.35f, 0.5f);      
+                World.tiles[index].set(BaseItem.ITEM_Y, y0 + h, y0)
+                      .configure(r, TweenEquation.BACK_OUT);
             }
         }
 

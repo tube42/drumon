@@ -109,7 +109,7 @@ implements ApplicationListener, InputProcessor
 
             UIC.s_scale_bin = Math.min(4, UIC.s_scale);
             if(UIC.s_scale_bin == 3)
-                UIC.s_scale_bin = 4;
+                UIC.s_scale_bin = 2;
 
         } else {
             UIC.s_scale = 1;

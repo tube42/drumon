@@ -21,10 +21,10 @@ public class PadItem extends BaseItem
 {
     private int tile;
 
-    public PadItem(int tile, int color)
+    public PadItem(int tile)
     {
 
-        setColor(color);
+        setColor(0xffffff);
         setTile(tile);
     }
 

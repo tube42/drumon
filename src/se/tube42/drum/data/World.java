@@ -42,6 +42,7 @@ public final class World extends UIC
     public static MarkerItem marker;
 
     public static TempoDetector td = new TempoDetector();
+    public static Program prog;
     public static Sequencer seq;
     public static Mixer mixer;
     public static Sample [] sounds;

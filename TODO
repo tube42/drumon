@@ -5,7 +5,8 @@ TODO
  * add base and random velocity to each voice 
   
 DONE
-
+ * fix noisy ride sample
+ * add tool change animation
  * tile interface with touch patterns
  * mix and play sound
  * make sure each write is exactly buffer_size or N5 will die.

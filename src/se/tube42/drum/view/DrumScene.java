@@ -199,7 +199,7 @@ public class DrumScene extends Scene
             
             final int color = COLOR_PADS[voice];
             ServiceProvider.setColorItem(color, World.bgc,
-                  0f, 0.6f, 0.7f);
+                  0f, 0.4f, 0.7f);
             
             for(int i = 0; i < PADS; i++)
                 World.tile_pads[i].setColor(color);
@@ -347,8 +347,8 @@ public class DrumScene extends Scene
                 World.tiles[index].setImmediate(BaseItem.ITEM_X, World.tile_x0 + World.tile_stripe * x);
                 
                 final float r = ServiceProvider.getRandom(0.35f, 0.5f);      
-                World.tiles[index].set(BaseItem.ITEM_Y, y0 + h, y0)
-                      .configure(r, TweenEquation.BACK_OUT);
+                World.tiles[index].pause(BaseItem.ITEM_Y, y0 +h, 0.8f)
+                      .tail(y0).configure(r, TweenEquation.BACK_OUT);
             }
         }
 

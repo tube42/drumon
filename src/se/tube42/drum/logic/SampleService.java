@@ -26,7 +26,10 @@ public final class SampleService
         for(int i = 0; i < data.length; i++)
             dos.writeShort((short)(data[i] * (1 << 15)));
 
+        dos.flush();
         dos.close();
+
+        os.flush();
         os.close();
     }
 

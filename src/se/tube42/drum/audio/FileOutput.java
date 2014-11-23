@@ -36,7 +36,6 @@ public class FileOutput implements Output
     {
         for(int i = 0; i < size; i++) {
             if(curr >= max) {
-                close();
                 return false;
             }
             data[curr++] = buffer[offset++];

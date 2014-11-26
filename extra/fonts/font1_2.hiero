@@ -13,7 +13,7 @@ pad.advance.y=1
 glyph.native.rendering=false
 glyph.page.width=128
 glyph.page.height=64
-glyph.text=0123456789
+glyph.text=0123456789%
 
 effect.class=com.badlogic.gdx.tools.hiero.unicodefont.effects.ColorEffect
 effect.Color=ffffff

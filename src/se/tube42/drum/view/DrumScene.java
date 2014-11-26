@@ -91,9 +91,9 @@ public class DrumScene extends Scene
     private void msg_show(String str, int sx, int sy)
     {
         final int x0 = World.sw / 2;
-        final int y0 = World.sh / 2;
+        final int y0 = World.sh * 2 / 3;
         final int dx = sx * World.sw / 4;
-        final int dy = sy * World.sh / 4;
+        final int dy = sy * World.sh / 3;
 
         item_msg.setText(str);
         item_msg.setImmediate(BaseItem.ITEM_Y, y0);
@@ -324,15 +324,15 @@ public class DrumScene extends Scene
 
             // mode = 3, settings
         case 12:
-            if( World.prog.setAmp(voice, World.prog.getAmp(voice) - 0.1f)=)
+            if( World.prog.setAmp(voice, World.prog.getAmp(voice) - 0.1f))
                 msg_show("" + (int)(0.5f + 100 * 
-                          World.prog.getAmp(voice)), 0, +2);
+                          World.prog.getAmp(voice)) + "%", 0, +2);
             break;
             
         case 13:
             if(World.prog.setAmp(voice, World.prog.getAmp(voice) + 0.1f))
                 msg_show("" + (int)(0.5f + 100 * 
-                          World.prog.getAmp(voice)), 0, -2);       
+                          World.prog.getAmp(voice)) + "%", 0, -2);       
             break;            
             
         }

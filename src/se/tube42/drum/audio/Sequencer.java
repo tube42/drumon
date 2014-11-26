@@ -100,8 +100,10 @@ public class Sequencer
 
             for(int i = 0; i < VOICES; i++) {
                 if(prog.get(i, bcnt) != 0) {
-                    final int index = i + prog.getSample(i) * VOICES;
-                    World.sounds[index].start();
+                    final int variant = prog.getSampleVariant(i);
+                    final float amp = prog.getAmp(i);
+                    
+                    World.sounds[i].start(variant, amp);
                     started[i] = true;
                 }
             }

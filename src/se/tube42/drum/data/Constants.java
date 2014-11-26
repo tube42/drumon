@@ -25,10 +25,12 @@ public final class Constants
           TILE_PAD1 = 0,
           TILE_PAD0 = 1,
           TILE_MARKER = 2,
-
-          TILE_BUTTON0 = 4,
-          TILE_BUTTON0_ALT = 5,
-          TILE_BUTTON1 = 6
+          TILE_BUTTON1 = 3,
+          
+          TILE_BUTTON0_1 = 4,
+          TILE_BUTTON0_2 = 5,
+          TILE_BUTTON0_3 = 6,
+          TILE_BUTTON0_4 = 7          
           ;
 
     public static final int
@@ -62,8 +64,10 @@ public final class Constants
           ICON_LPFILTER = 25,
           ICON_ECHO = 26,
           ICON_COMPRESS = 27,
+                    
+          ICON_AUDIO_LESS = 28,
+          ICON_AUDIO_MORE = 29,
           
-
           ICON_QUESTION = 31
           ;
 
@@ -71,19 +75,20 @@ public final class Constants
     // samples
     // ---------------------------------------
 
-    public static final String [] SAMPLES = {
-        "kick2.au", "snare2.au", "floor_tom2.au", "tamburin.au",
-        "side_stick1.au", "closed_hat_hard.au", "semi_open_hat.au", "ride_centre2.au",
-
-        "BD1.au",  "SD2.au", "HITOM4.au", "CLAPS.au",
-        "RIM.au", "CLHIHAT2.au",  "OPHIHAT2.au", "RIDE5.au",
+    public static final String [][] SAMPLES = {
+        { "kick2.au", "kick_hard.au", "BD1.au" },        
+        { "snare2.au", "SD2.au", "snare_supraphonic_hard.au", },
+        { "floor_tom2.au", "HITOM4.au" },        
+        { "tamburin.au", "CLAPS.au" },
+        
+        { "side_stick1.au", "CHOICE_BITS_COWBELL.au","RIM.au" },
+        { "closed_hat_hard.au", "HIGH_HAT_closed_soft.au", "CLHIHAT2.au" },        
+        { "semi_open_hat.au", "open_hat4.au", "OPHIHAT2.au" },
+        { "ride_centre2.au", "RIDE5.au" },
     };
 
     public static final float [] DEF_AMPS = {
         1.5f, 1.0f, 0.8f, 0.7f,
-        0.8f, 0.5f, 0.5f, 0.5f,
-
-        1.0f, 1.0f, 0.8f, 0.7f,
         0.8f, 0.5f, 0.5f, 0.5f,
     };
 
@@ -114,7 +119,7 @@ public final class Constants
         ICON_CRUSH, ICON_LPFILTER, ICON_ECHO, ICON_COMPRESS,
 
         // settings
-        -1, -1, -1, -1
+        ICON_AUDIO_LESS, ICON_AUDIO_MORE, -1, -1
     };
 
     // ---------------------------------------

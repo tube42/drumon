@@ -58,7 +58,7 @@ public class PressItem extends BaseItem
     public void change(int color, int icon, 
               boolean active, boolean animate)
     {
-        int new_tile = active ? TILE_BUTTON1 : TILE_BUTTON0;
+        int new_tile = active ? TILE_BUTTON1 : TILE_BUTTON0_1;
         setColor(color);
         setIcon(icon);
         setTile(new_tile);

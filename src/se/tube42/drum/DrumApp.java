@@ -38,11 +38,13 @@ public class DrumApp extends BaseApp
         load_assets();
 
         // create mixer
-        World.prog = new Program();
+        World.prog = new Program(DEF_AMPS);
         World.seq = new Sequencer(World.prog);
         final DeviceOutput dev = new DeviceOutput();
         World.mixer = new Mixer(dev);
-
+        
+        // set the default amps
+        
 
 
         mgr.setScene( new DrumScene());
@@ -91,15 +93,20 @@ public class DrumApp extends BaseApp
 
         World.font = ServiceProvider.loadFont(base + "/font1");
         World.font.setScale(1f / World.s_scale_bin);
-
-        try {
-            final int scount = SAMPLES.length;
-            World.sounds = new Sample[scount];
-            for(int i = 0; i < scount ; i++) {
-                final String filename = "samples/" + SAMPLES[i];
-                final float [] sam = ServiceProvider.loadSample(filename, World.freq);
-                World.sounds[i] = new Sample(sam, DEF_AMPS[i]);
+                        
+        try {           
+            World.sounds = new Sample[VOICES];
+            for(int i = 0; i < VOICES ; i++) {
+                final int vcount = SAMPLES[i].length;
+                final float [][] data = new float[vcount][];
+                for(int j = 0; j < vcount; j++) {
+                    data[j] = ServiceProvider.loadSample(
+                              "samples/" + SAMPLES[i][j], World.freq);
+                }
+                
+                World.sounds[i] = new Sample(data);
             }
+                        
         } catch(Exception e) {
             System.err.println("ERROR " + e);
             System.err.flush();

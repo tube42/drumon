@@ -20,9 +20,10 @@ import static se.tube42.drum.data.Constants.*;
 public class VoiceItem extends PressItem
 {
 
-    public VoiceItem(int tile, int icon, int color)
+    public VoiceItem(int variant, int icon, int color)
     {
-        super(tile, icon, color);
+        super(0, icon, color);
+        setVariant(variant);
     }
 
     public void mark0()
@@ -43,5 +44,9 @@ public class VoiceItem extends PressItem
            .tail(0f).configure(1 * r, null);
 
     }
-
+    
+    public void setVariant(int v)
+    {
+        setTile(TILE_BUTTON0_1 + v);
+    }
 }

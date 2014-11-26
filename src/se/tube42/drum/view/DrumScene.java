@@ -41,20 +41,20 @@ public class DrumScene extends Scene
         // VOICES
         World.tile_voices = new VoiceItem[VOICES];
         for(int i = 0; i < VOICES; i++) {
-            World.tile_voices[i] = new VoiceItem(TILE_BUTTON0,
+            World.tile_voices[i] = new VoiceItem(0,
                       VOICE_ICONS[i], COLOR_VOICES );
         }
 
         // tools
         World.tile_tools = new PressItem[TOOLS];
         for(int i = 0; i < TOOLS; i++) {
-            World.tile_tools[i] = new PressItem(TILE_BUTTON0, 0, 0);
+            World.tile_tools[i] = new PressItem(TILE_BUTTON0_1, 0, 0);
         }
 
         // selectors
         World.tile_selectors = new PressItem[SELECTORS];
         for(int i = 0; i < SELECTORS; i++) {
-            World.tile_selectors[i] = new PressItem(TILE_BUTTON0,
+            World.tile_selectors[i] = new PressItem(TILE_BUTTON0_1,
                       SELECTOR_ICONS[i], COLOR_SELECTORS[i]
                       );
         }
@@ -139,7 +139,7 @@ public class DrumScene extends Scene
         int t0, t1, t2, t3, i0, i1, i2, i3;
 
         v0 = v1 = v2 = v3 = false;
-        t0 = t1 = t2 = t3 = TILE_BUTTON0;
+        t0 = t1 = t2 = t3 = TILE_BUTTON0_1;
 
         i0 = TOOL_ICONS[SELECTORS * mode + 0];
         i1 = TOOL_ICONS[SELECTORS * mode + 1];
@@ -178,12 +178,14 @@ public class DrumScene extends Scene
         World.tile_tools[3].change(color, i3, v3, modechange);
     }
 
-    private void voice_alt_toggle(int voice)
+    private void voice_variant_next(int voice)
     {
-        World.prog.setSample(voice, 1 ^ World.prog.getSample(voice));
-        World.tile_voices[voice].setTile(
-                  World.prog.getSample(voice) == 0
-                  ? TILE_BUTTON0 : TILE_BUTTON0_ALT);
+        final int max = World.sounds[voice].getNumOfVariants();
+        int next = 1 + World.prog.getSampleVariant(voice);
+        if(next >= max) next = 0;
+        
+        World.prog.setSampleVariant(voice, next);
+        World.tile_voices[voice].setVariant(next);
     }
 
     private void voice_set_voice(int voice)
@@ -191,7 +193,7 @@ public class DrumScene extends Scene
         final int old_voice = World.prog.getVoice();
 
         if(old_voice == voice) {
-            voice_alt_toggle(voice);
+            voice_variant_next(voice);
         } else {
             World.prog.setVoice(voice);
             for(int i = 0; i < VOICES ; i++)
@@ -321,6 +323,18 @@ public class DrumScene extends Scene
             break;
 
             // mode = 3, settings
+        case 12:
+            if( World.prog.setAmp(voice, World.prog.getAmp(voice) - 0.1f)=)
+                msg_show("" + (int)(0.5f + 100 * 
+                          World.prog.getAmp(voice)), 0, +2);
+            break;
+            
+        case 13:
+            if(World.prog.setAmp(voice, World.prog.getAmp(voice) + 0.1f))
+                msg_show("" + (int)(0.5f + 100 * 
+                          World.prog.getAmp(voice)), 0, -2);       
+            break;            
+            
         }
 
 

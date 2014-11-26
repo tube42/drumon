@@ -1,98 +1,112 @@
-<project name="drum" default="help"> 
+<project name="drum" default="help">
   <property name="proj" value="drum" />
-  
-  
-  <target name="setup">    
-    <mkdir dir="libs" />    
-    <mkdir dir="libs/dl" />    
-    <mkdir dir="libs/pc" />    
-    
-    <!-- download needed files -->    
-    <get skipexisting="true" src="http://tube42.github.io/ks/bin/Kickstarter_lib.jar" dest="libs/Kickstarter_lib.jar" />   
-    <get skipexisting="true" src="http://tube42.github.io/tweeny/bin/Tweeny_lib.jar" dest="libs/Tweeny_lib.jar" />           
+  <property name="apkplz" value="drum-release.apk" />
+  <property name="site" location="../tube42.github.io/drumon/bin" />
+
+  <target name="setup">
+    <mkdir dir="libs" />
+    <mkdir dir="libs/dl" />
+    <mkdir dir="libs/pc" />
+
+    <!-- download needed files -->
+    <get skipexisting="true" src="http://tube42.github.io/ks/bin/Kickstarter_lib.jar" dest="libs/Kickstarter_lib.jar" />
+    <get skipexisting="true" src="http://tube42.github.io/tweeny/bin/Tweeny_lib.jar" dest="libs/Tweeny_lib.jar" />
     <get skipexisting="true" src="http://libgdx.badlogicgames.com/releases/libgdx-1.2.0.zip" dest="libs/dl/gdx.zip" />
-   
-    
-    <!-- unpack gdx -->    
+
+
+    <!-- unpack gdx -->
     <unzip src="libs/dl/gdx.zip" dest="libs/tmp"/>
-    
+
     <unjar src="libs/tmp/gdx.jar" dest="libs/common" />
     <unjar src="libs/tmp/extensions/gdx-freetype/gdx-freetype.jar" dest="libs/common" />
-    
-    
+
+
     <!-- desktop -->
     <unjar src="libs/tmp/gdx-backend-lwjgl-natives.jar" dest="libs/desktop" />
     <unjar src="libs/tmp/gdx-backend-lwjgl.jar" dest="libs/desktop" />
-    <unjar src="libs/tmp/gdx-natives.jar" dest="libs/desktop" />    
+    <unjar src="libs/tmp/gdx-natives.jar" dest="libs/desktop" />
     <unjar src="libs/tmp/extensions/gdx-freetype/gdx-freetype-natives.jar" dest="libs/desktop" />
-    
-    
+
+
     <!-- android -->
     <unjar src="libs/tmp/gdx-backend-android.jar" dest="libs/android/" />
     <copydir src="libs/tmp/armeabi/" dest="libs/android/lib/armeabi" />
     <copydir src="libs/tmp/armeabi-v7a/" dest="libs/android/lib/armeabi-v7a" />
     <copydir src="libs/tmp/x86" dest="libs/android/lib/x86" />
-    
+
     <copydir src="libs/tmp/extensions/gdx-freetype/armeabi" dest="libs/android/lib/armeabi" />
     <copydir src="libs/tmp/extensions/gdx-freetype/armeabi-v7a" dest="libs/android/lib/armeabi-v7a" />
     <copydir src="libs/tmp/extensions/gdx-freetype/x86" dest="libs/android/lib/x86" />
-    
+
     <!-- create jars -->
     <jar jarfile="libs/pc/libgdx_desktop.jar">
-      <fileset dir="libs/common" />      
-      <fileset dir="libs/desktop" />      
-    </jar>        
-    
+      <fileset dir="libs/common" />
+      <fileset dir="libs/desktop" />
+    </jar>
+
     <jar jarfile="libs/libgdx_android.jar" >
-      <fileset dir="libs/common" />      
-      <fileset dir="libs/android"/>            
-    </jar>    
-    
+      <fileset dir="libs/common" />
+      <fileset dir="libs/android"/>
+    </jar>
+
     <delete dir="libs/android"/>
     <delete dir="libs/desktop"/>
     <delete dir="libs/common"/>
     <delete dir="libs/tmp"/>
-    
+
   </target>
-  
-  
+
+
   <!-- for desktop -->
-  <path id="cp">        
-    <fileset dir="libs">    
+  <path id="cp">
+    <fileset dir="libs">
       <include name="Tweeny_lib.jar"/>
       <include name="Kickstarter_lib.jar"/>
-    </fileset> 
-    
-    <fileset dir="libs/pc"> 
+    </fileset>
+
+    <fileset dir="libs/pc">
       <include name="libgdx_desktop.jar"/>
-    </fileset> 
-    
+    </fileset>
+
     <pathelement path="build/"/>
   </path>
-  
-  
+
+
   <target name="init_local">
     <tstamp/>
     <mkdir dir="build"/>
   </target>
-  
-  <target name="compile_local" depends="init_local" >    
+
+  <target name="compile_local" depends="init_local" >
     <javac includeantruntime="false" destdir="build">
       <src path="src" />
       <exclude name="se/tube42/*/android/**" />
       <classpath refid="cp" />
     </javac>
   </target>
-      
+
   <target name="run" depends="compile_local" >
     <java dir="assets" classname="se.tube42.${proj}.desktop.DesktopMain" fork="yes">
-      <classpath refid="cp" /> 
+      <classpath refid="cp" />
     </java>
   </target>
-  
+
+  <target name="publish" depends="release" >
+    <copy file="bin/${apkplz}" todir="${site}"/>
+    <exec executable="git" dir="${site}">
+      <arg line="add ${apkplz}"/>
+    </exec>
+    <exec executable="git" dir="${site}">
+      <arg line="commit ${apkplz} -m 'published ${apkplz} from custom_rules.xml'"/>
+    </exec>
+    <exec executable="git" dir="${site}">
+      <arg line="push"/>
+    </exec>
+  </target>
+
   <target name="clean2"  depends="clean" description="clean up" >
     <delete dir="build"/>
     <delete dir="libs"/>
     <delete dir="bin"/>
-  </target>      
+  </target>
 </project>

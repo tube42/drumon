@@ -15,12 +15,12 @@ Building
 To build this app, you will need
 
 1. java, ant, android SDK and all that
-2. sox for converting samples
-3. imagemagic for converting PNG images
-4. inkscape for rendering SVG files
-5. hiero (from gdx nighly builds) for font generation
-6. my own tool "marm" for content manegement
-7. All these tools must be accessible from command line via scripts or aliases.
+2. "sox" for converting samples
+3. ImageMagic for converting PNG images
+4. Inkscape for rendering SVG files
+5. "hiero" (from gdx nighly builds) for font generation
+6. "marm" for content manegement (https://github.com/tube42/marm)
+7. all these tools must be accessible from command line via an alias or script in the same name...
 
 
 To setup the project and download required libs

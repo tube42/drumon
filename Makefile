@@ -1,23 +1,20 @@
+#
+# Makefile is used for asset, because we are too cool for ant
+#
 
-# script to convert all art
+INKSCAPE=inkscape
 
-INKSCAPE="inkscape"
+MARM = java -jar libs/bin/marm_app.jar hiero=libs/bin/hiero
 
-TARGETS += \
+##
+
+all: marm samples \
 	res/drawable-ldpi/ic_launcher.png \
 	res/drawable-mdpi/ic_launcher.png \
 	res/drawable-hdpi/ic_launcher.png \
 	res/drawable-xhdpi/ic_launcher.png \
 	res/drawable-xxhdpi/ic_launcher.png
 #	res/drawable-xxxhdpi/ic_launcher.png
-
-TARGETS += marm samples
-
-
-##
-
-all: $(TARGETS)
-
 
 
 
@@ -50,9 +47,11 @@ marm:
 	rm -rf assets/1
 	rm -rf assets/2
 	rm -rf assets/4
-	marm resize extra/fonts assets	
-	marm resize extra/textures assets
+	$(MARM) resize extra/fonts assets
+	$(MARM) resize extra/textures assets
 	rm -rf assets/.temp
+
+
 ##
 
 clean:

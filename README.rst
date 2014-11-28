@@ -18,12 +18,10 @@ To build this app, you will need
 2. "sox" for converting samples
 3. ImageMagic for converting PNG images
 4. Inkscape for rendering SVG files
-5. "hiero" (from gdx nighly builds) for font generation
-6. "marm" for content manegement (https://github.com/tube42/marm)
-7. all these tools must be accessible from command line via an alias or script in the same name...
+5. The rest (libgdx, marm, tweeny, ks, ...) is donwloaded when you do setup
 
 
-To setup the project and download required libs
+To setup the project and download required libs and binaries (all FOSS)
 
 * ant setup
 

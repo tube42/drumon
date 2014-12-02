@@ -122,10 +122,10 @@ public class DrumScene extends Scene
     private void sel_set_mode(int mode, boolean byuser)
     {
         this.mode = mode;
-        
+
         for(int i = 0; i < SELECTORS; i++)
             World.tile_selectors[ i].setActive(i == mode);
-                
+
         tools_update_all(byuser);
     }
 
@@ -171,7 +171,7 @@ public class DrumScene extends Scene
             break;
         }
 
-        final int color = COLOR_SELECTORS[mode];        
+        final int color = COLOR_SELECTORS[mode];
         World.tile_tools[0].change(color, i0, v0, modechange);
         World.tile_tools[1].change(color, i1, v1, modechange);
         World.tile_tools[2].change(color, i2, v2, modechange);
@@ -183,7 +183,7 @@ public class DrumScene extends Scene
         final int max = World.sounds[voice].getNumOfVariants();
         int next = 1 + World.prog.getSampleVariant(voice);
         if(next >= max) next = 0;
-        
+
         World.prog.setSampleVariant(voice, next);
         World.tile_voices[voice].setVariant(next);
     }
@@ -198,14 +198,14 @@ public class DrumScene extends Scene
             World.prog.setVoice(voice);
             for(int i = 0; i < VOICES ; i++)
                 World.tile_voices[i].setAlpha(i == voice ? 1f : 0.4f);
-            
+
             final int color = COLOR_PADS[voice];
             ServiceProvider.setColorItem(color, World.bgc,
                   0f, 0.4f, 0.7f);
-            
+
             for(int i = 0; i < PADS; i++)
                 World.tile_pads[i].setColor(color);
-            
+
         }
 
         World.tile_voices[voice].mark0();
@@ -325,16 +325,16 @@ public class DrumScene extends Scene
             // mode = 3, settings
         case 12:
             if( World.prog.setAmp(voice, World.prog.getAmp(voice) - 0.1f))
-                msg_show("" + (int)(0.5f + 100 * 
+                msg_show("" + (int)(0.5f + 100 *
                           World.prog.getAmp(voice)) + "%", 0, +2);
             break;
-            
+
         case 13:
             if(World.prog.setAmp(voice, World.prog.getAmp(voice) + 0.1f))
-                msg_show("" + (int)(0.5f + 100 * 
-                          World.prog.getAmp(voice)) + "%", 0, -2);       
-            break;            
-            
+                msg_show("" + (int)(0.5f + 100 *
+                          World.prog.getAmp(voice)) + "%", 0, -2);
+            break;
+
         }
 
 
@@ -356,11 +356,11 @@ public class DrumScene extends Scene
 
             for(int x = 0; x < 4; x++) {
                 final int index = x + y * 4;
-                World.tiles[index].setSize(World.tile_size, World.tile_size);                
-                
+                World.tiles[index].setSize(World.tile_size, World.tile_size);
+
                 World.tiles[index].setImmediate(BaseItem.ITEM_X, World.tile_x0 + World.tile_stripe * x);
-                
-                final float r = ServiceProvider.getRandom(0.35f, 0.5f);      
+
+                final float r = ServiceProvider.getRandom(0.35f, 0.5f);
                 World.tiles[index].pause(BaseItem.ITEM_Y, y0 +h, 0.8f)
                       .tail(y0).configure(r, TweenEquation.BACK_OUT);
             }

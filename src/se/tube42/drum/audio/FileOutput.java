@@ -28,8 +28,7 @@ public class FileOutput implements Output
 
     public void open()
     {
-
-
+        this.curr = 0;
     }
 
     public boolean write(float []buffer, int offset, int size)

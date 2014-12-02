@@ -13,7 +13,7 @@ public class Program
     private int [] banks;
     private int [] sample_variants;
     private float [] sample_amps;
-    
+
     private int tempo, tmul;
     private int voice;
     public Program(float [] amps)
@@ -22,13 +22,13 @@ public class Program
         this.banks = new int[VOICES];
         this.sample_variants = new int[VOICES];
         this.sample_amps = new float[VOICES];
-        
+
         // set default amps
         for(int i = 0; i < VOICES; i++) {
             sample_amps[i] = amps[i];
         }
-        
-        setTempoMultiplier(1);        
+
+        setTempoMultiplier(1);
         setTempo(120);
         setVoice(0);
         reset();
@@ -52,27 +52,27 @@ public class Program
     {
         return sample_variants[voice];
     }
-    
+
     public void setSampleVariant(int voice, int v)
     {
         sample_variants[voice] = v;
     }
-    
+
     //
     public float getAmp(int voice)
     {
         return sample_amps[voice];
     }
-    
+
     public boolean setAmp(int voice, float v)
     {
         if(v < 0.1f || v > 2.8f)
             return false;
-        
+
         sample_amps[voice] = v;
         return true;
     }
-    
+
     //
     public int getBank(int voice){ return banks[voice]; }
     public void setBank(int voice, int b)

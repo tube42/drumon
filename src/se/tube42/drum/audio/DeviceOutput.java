@@ -25,6 +25,8 @@ public class DeviceOutput implements Output
             close();
         }
 
+        System.out.println("DEVICE OUTPUT: opening...");
+
         int freq = World.freq;
         ad = Gdx.audio.newAudioDevice(freq, true);
         int lat = ad.getLatency();
@@ -52,6 +54,7 @@ public class DeviceOutput implements Output
     public void close()
     {
         if(ad != null) {
+            System.out.println("DEVICE OUTPUT: closing...");
             ad.dispose();
             ad = null;
         }

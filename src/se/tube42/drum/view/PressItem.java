@@ -20,7 +20,7 @@ import static se.tube42.drum.data.Constants.*;
 public class PressItem extends BaseItem
 {
     private int tile, icon;
-    
+
     public PressItem(int tile, int icon, int color)
     {
         setTile(tile);
@@ -39,7 +39,7 @@ public class PressItem extends BaseItem
     public void mark0()
     {
         final float r = ServiceProvider.getRandom(0.1f, 0.2f);
-        
+
         set(ITEM_S, 1.05f).configure(r, null)
               .tail(1.00f).configure(r, null);
     }
@@ -54,15 +54,15 @@ public class PressItem extends BaseItem
     {
         this.icon = icon;
     }
-    
-    public void change(int color, int icon, 
+
+    public void change(int color, int icon,
               boolean active, boolean animate)
     {
         int new_tile = active ? TILE_BUTTON1 : TILE_BUTTON0_1;
         setColor(color);
         setIcon(icon);
         setTile(new_tile);
-                
+
         if(animate) {
             final float r = ServiceProvider.getRandom(0.20f, 0.30f);
             set(ITEM_V, -World.sw, 0)

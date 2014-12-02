@@ -36,31 +36,33 @@ implements Runnable, Disposable
     {
         this.buffer_size = (World.samples + SIMD_WIDTH - 1) & ~(SIMD_WIDTH - 1);
         this.buffer = new float[buffer_size];
-        System.out.println("buffer-size=" + buffer_size +
+        System.out.println("MIXER: buffer-size=" + buffer_size +
                   " SIMD-width=" + SIMD_WIDTH);
-
         this.output = output;
         this.chain = new EffectChain();
         this.prof = new Profiler(20);
-        this.thread = new Thread(this);
+        this.thread = null;
     }
 
     public void start()
     {
-        stopped = false;
-        output.open();
-        thread.start();
+        if(thread == null) {
+            System.out.println("MIXER: started " + stopped);
+            stopped = false;
+            thread = new Thread(this);
+            thread.start();
+        }
     }
 
     public void stop()
     {
-        output.close();
         stopped = true;
+        thread = null;
+        System.out.println("MIXER: stopped " + stopped);
     }
 
     public void dispose()
     {
-        output.close();
         stop();
     }
 
@@ -86,14 +88,22 @@ implements Runnable, Disposable
     public void run()
     {
 
-        while(!stopped)  {
+        final Output output = this.output;
 
+        try {
+            Thread.sleep(1000);
+        } catch(Exception exx) {}
+
+        output.open();
+
+        while(!stopped) {
             for(int i = 0; i < buffer_size; i++) {
                 buffer[i] = 0;
             }
 
-            while(World.seq.isPaused() && !stopped) {
-                stopped |= !output.write(buffer, 0, buffer_size);
+            while(World.seq.isPaused()) {
+                if(stopped || !output.write(buffer, 0, buffer_size))
+                    break;
             }
 
             int cnt = World.seq.nextBeat();
@@ -136,8 +146,12 @@ implements Runnable, Disposable
             }
 
             /* write results */
-            stopped |= !output.write(buffer, 0, buffer_size);
+            if(!output.write(buffer, 0, buffer_size))
+                break;
         }
+
+
+        output.close();
     }
 
 }

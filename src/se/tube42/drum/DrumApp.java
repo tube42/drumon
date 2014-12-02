@@ -42,9 +42,9 @@ public class DrumApp extends BaseApp
         World.seq = new Sequencer(World.prog);
         final DeviceOutput dev = new DeviceOutput();
         World.mixer = new Mixer(dev);
-        
+
         // set the default amps
-        
+
 
 
         mgr.setScene( new DrumScene());
@@ -93,8 +93,8 @@ public class DrumApp extends BaseApp
 
         World.font = ServiceProvider.loadFont(base + "/font1");
         World.font.setScale(1f / World.s_scale_bin);
-                        
-        try {           
+
+        try {
             World.sounds = new Sample[VOICES];
             for(int i = 0; i < VOICES ; i++) {
                 final int vcount = SAMPLES[i].length;
@@ -103,10 +103,10 @@ public class DrumApp extends BaseApp
                     data[j] = ServiceProvider.loadSample(
                               "samples/" + SAMPLES[i][j], World.freq);
                 }
-                
+
                 World.sounds[i] = new Sample(data);
             }
-                        
+
         } catch(Exception e) {
             System.err.println("ERROR " + e);
             System.err.flush();
@@ -114,11 +114,23 @@ public class DrumApp extends BaseApp
         }
     }
 
+    /*
+    @Override public void pause()
+    {
+        World.mixer.stop();
+        super.pause();
+    }
+
+    @Override public void resume()
+    {
+        World.mixer.start();
+    }
+    */
     public void dispose()
     {
         System.out.println("Disposing...\n");
-        super.dispose();
         World.mixer.dispose();
+        super.dispose();
     }
 }
 

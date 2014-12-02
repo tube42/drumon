@@ -44,7 +44,7 @@ public class VoiceItem extends PressItem
            .tail(0f).configure(1 * r, null);
 
     }
-    
+
     public void setVariant(int v)
     {
         setTile(TILE_BUTTON0_1 + v);

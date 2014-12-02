@@ -1,6 +1,7 @@
 
 package se.tube42.drum.audio;
 
+import se.tube42.drum.logic.*;
 import se.tube42.drum.data.*;
 import static se.tube42.drum.data.Constants.*;
 
@@ -19,14 +20,16 @@ public class Sequencer
     private boolean pause;
     private boolean [] started;
     private Program prog;
-    
+
     public Sequencer(Program prog)
     {
         this.started = new boolean[VOICES];
-        
+
         setProgram(prog);
         setPause(false);
         reset();
+
+        bcnt = 15; // next will be 0
     }
 
     public void reset()
@@ -35,20 +38,20 @@ public class Sequencer
         bcnt = 0;
         prog.reset();
     }
-    
+
     //
     public void setProgram(Program prog)
     {
         this.prog = prog;
     }
-    
+
     public Program getProgram()
     {
         return prog;
     }
-        
+
     //
-    
+
     public boolean checkStarted(int voice)
     {
         if(started[voice]) {
@@ -79,9 +82,9 @@ public class Sequencer
 
         return n;
     }
-    
-    // 
-    
+
+    //
+
     public boolean update(int samples)
     {
         final int max = 60 * World.freq;
@@ -100,9 +103,11 @@ public class Sequencer
 
             for(int i = 0; i < VOICES; i++) {
                 if(prog.get(i, bcnt) != 0) {
+                    final float var = ServiceProvider.getRandom(
+                              1 - AMP_VARIATION, 1 + AMP_VARIATION);
+                    final float amp = prog.getAmp(i) * var;
                     final int variant = prog.getSampleVariant(i);
-                    final float amp = prog.getAmp(i);
-                    
+
                     World.sounds[i].start(variant, amp);
                     started[i] = true;
                 }

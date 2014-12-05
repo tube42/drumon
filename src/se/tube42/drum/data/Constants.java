@@ -25,12 +25,13 @@ public final class Constants
           TILE_PAD1 = 0,
           TILE_PAD0 = 1,
           TILE_MARKER = 2,
-          TILE_BUTTON1 = 3,
+          TILE_BUTTON0 = 4,
+          TILE_BUTTON1 = 5
+          ;
 
-          TILE_BUTTON0_1 = 4,
-          TILE_BUTTON0_2 = 5,
-          TILE_BUTTON0_3 = 6,
-          TILE_BUTTON0_4 = 7
+    public static final int
+          DECALS_NUM = 0,
+          DECALS_ALPHA = 4
           ;
 
     public static final int

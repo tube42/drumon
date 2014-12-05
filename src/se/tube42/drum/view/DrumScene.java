@@ -41,20 +41,19 @@ public class DrumScene extends Scene
         // VOICES
         World.tile_voices = new VoiceItem[VOICES];
         for(int i = 0; i < VOICES; i++) {
-            World.tile_voices[i] = new VoiceItem(0,
-                      VOICE_ICONS[i], COLOR_VOICES );
+            World.tile_voices[i] = new VoiceItem(VOICE_ICONS[i], COLOR_VOICES );
         }
 
         // tools
         World.tile_tools = new PressItem[TOOLS];
         for(int i = 0; i < TOOLS; i++) {
-            World.tile_tools[i] = new PressItem(TILE_BUTTON0_1, 0, 0);
+            World.tile_tools[i] = new PressItem(TILE_BUTTON0, 0, 0);
         }
 
         // selectors
         World.tile_selectors = new PressItem[SELECTORS];
         for(int i = 0; i < SELECTORS; i++) {
-            World.tile_selectors[i] = new PressItem(TILE_BUTTON0_1,
+            World.tile_selectors[i] = new PressItem(TILE_BUTTON0,
                       SELECTOR_ICONS[i], COLOR_SELECTORS[i]
                       );
         }
@@ -139,7 +138,7 @@ public class DrumScene extends Scene
         int t0, t1, t2, t3, i0, i1, i2, i3;
 
         v0 = v1 = v2 = v3 = false;
-        t0 = t1 = t2 = t3 = TILE_BUTTON0_1;
+        t0 = t1 = t2 = t3 = TILE_BUTTON0;
 
         i0 = TOOL_ICONS[SELECTORS * mode + 0];
         i1 = TOOL_ICONS[SELECTORS * mode + 1];
@@ -185,7 +184,6 @@ public class DrumScene extends Scene
         if(next >= max) next = 0;
 
         World.prog.setSampleVariant(voice, next);
-        World.tile_voices[voice].setVariant(next);
     }
 
     private void voice_set_voice(int voice)
@@ -224,12 +222,21 @@ public class DrumScene extends Scene
     {
         final int voice =  World.prog.getVoice();
         World.tile_pads[tile].setTile( World.prog.get(voice, tile) );
+
     }
 
     private void voice_tile_update_all()
     {
         for(int i = 0; i < PADS; i++)
             voice_tile_update(i);
+
+        for(int i = 0; i < VOICES; i++) {
+            World.tile_voices[i].setVoiceVariant(
+                      World.prog.getSampleVariant(i),
+                      World.prog.getBank(i)
+                      );
+        }
+
     }
 
     // ------------------------------------------------
@@ -361,7 +368,7 @@ public class DrumScene extends Scene
                 World.tiles[index].setImmediate(BaseItem.ITEM_X, World.tile_x0 + World.tile_stripe * x);
 
                 final float r = ServiceProvider.getRandom(0.35f, 0.5f);
-                World.tiles[index].pause(BaseItem.ITEM_Y, y0 +h, 0.8f)
+                World.tiles[index].pause(BaseItem.ITEM_Y, y0 +h, 0.6f + (8-y) * 0.1f)
                       .tail(y0).configure(r, TweenEquation.BACK_OUT);
             }
         }

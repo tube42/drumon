@@ -58,7 +58,7 @@ public class PressItem extends BaseItem
     public void change(int color, int icon,
               boolean active, boolean animate)
     {
-        int new_tile = active ? TILE_BUTTON1 : TILE_BUTTON0_1;
+        int new_tile = active ? TILE_BUTTON1 : TILE_BUTTON0;
         setColor(color);
         setIcon(icon);
         setTile(new_tile);
@@ -82,12 +82,10 @@ public class PressItem extends BaseItem
         final float w2 = w / 2;
         final float h2 = h / 2;
 
-
         // draw tile
         if(tile != -1) {
-            final TextureRegion tr = World.tex_tiles[tile];
             sb.setColor(cr, cg, cb, a);
-            sb.draw(tr,
+            sb.draw(World.tex_tiles[tile],
                     x + 0.5f, y + 0.5f,
                     w2, h2,
                     w, h,

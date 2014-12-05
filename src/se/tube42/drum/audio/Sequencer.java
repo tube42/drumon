@@ -87,6 +87,11 @@ public class Sequencer
 
     public boolean update(int samples)
     {
+        if(pause) {
+            // tcnt = 0;
+            return true;
+        }
+
         final int max = 60 * World.freq;
 
         tcnt += samples * prog.getTempo() * prog.getTempoMultiplier();

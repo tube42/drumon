@@ -27,6 +27,7 @@ public final class World extends UIC
     public static BitmapFont font;
     public static TextureRegion []tex_tiles;
     public static TextureRegion []tex_icons;
+    public static TextureRegion []tex_decals;
 
     // misc
 	public static Item bgc; // background color

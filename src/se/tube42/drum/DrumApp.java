@@ -91,6 +91,13 @@ public class DrumApp extends BaseApp
                   World.s_scale_bin * 16,
                   World.s_scale_bin * 16);
 
+        tmp = ServiceProvider.loadTexture(base + "/decals.png", true);
+        World.tex_decals =  ServiceProvider.divideTexture(tmp,
+                  World.s_scale_bin * 16,
+                  World.s_scale_bin * 16);
+
+        System.out.println("-->" + World.tex_decals.length);
+
         World.font = ServiceProvider.loadFont(base + "/font1");
         World.font.setScale(1f / World.s_scale_bin);
 

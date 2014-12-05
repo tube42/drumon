@@ -91,7 +91,7 @@ implements Runnable, Disposable
         final Output output = this.output;
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(1500);
         } catch(Exception exx) {}
 
         output.open();
@@ -99,11 +99,6 @@ implements Runnable, Disposable
         while(!stopped) {
             for(int i = 0; i < buffer_size; i++) {
                 buffer[i] = 0;
-            }
-
-            while(World.seq.isPaused()) {
-                if(stopped || !output.write(buffer, 0, buffer_size))
-                    break;
             }
 
             int cnt = World.seq.nextBeat();

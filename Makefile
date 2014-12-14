@@ -1,5 +1,5 @@
 #
-# Makefile is used for asset, because we are too cool for ant
+# Makefile is used for assets, because we are too cool for ant
 #
 
 INKSCAPE=inkscape
@@ -58,5 +58,6 @@ clean:
 	rm -rf assets/1
 	rm -rf assets/2
 	rm -rf assets/4
+	rm -rf assets/samples	
 	rm -rf $(CLEAN_ADD)
 	

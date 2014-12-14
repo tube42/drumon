@@ -1,7 +1,7 @@
 <project name="drum" default="help">
   <property name="proj" value="drum" />
   <property name="apkplz" value="drum-release.apk" />
-  <property name="site" location="../tube42.github.io/drumon/bin" />
+  <property name="site" location="../tube42.github.io/drumon" />
 
   <target name="setup">
     <mkdir dir="libs" />
@@ -9,18 +9,20 @@
     <mkdir dir="libs/pc" />
     <mkdir dir="libs/bin" />
 
-    <!-- download needed files -->
-    <get skipexisting="true" src="http://tube42.github.io/marm/bin/marm_app.jar" dest="libs/bin/marm_app.jar" />    
-    <get skipexisting="true" src="http://tube42.github.io/ks/bin/Kickstarter_lib.jar" dest="libs/Kickstarter_lib.jar" />
-    <get skipexisting="true" src="http://tube42.github.io/tweeny/bin/Tweeny_lib.jar" dest="libs/Tweeny_lib.jar" />
-    <!--
-	<get skipexisting="true" src="http://libgdx.badlogicgames.com/releases/libgdx-1.2.0.zip" dest="libs/dl/gdx.zip" />
-	-->
+    <!-- download needed files -->    
+    <get skipexisting="false" src="http://tube42.github.io/marm/bin/marm_app.jar" dest="libs/bin/marm_app.jar" />    
+    <get skipexisting="false" src="http://tube42.github.io/ks/bin/Kickstarter_lib.jar" dest="libs/Kickstarter_lib.jar" />
+    <get skipexisting="false" src="http://tube42.github.io/tweeny/bin/Tweeny_lib.jar" dest="libs/Tweeny_lib.jar" />    
+    <get skipexisting="false" src="http://tube42.github.io/drumon/assets/assets.zip" dest="libs/dl/assets.zip" />    
+   
+    <get skipexisting="true" src="http://libgdx.badlogicgames.com/releases/libgdx-1.5.0.zip" dest="libs/dl/gdx.zip" />
+    <!-- 
+	<get skipexisting="true" src="http://libgdx.badlogicgames.com/nightlies/libgdx-nightly-latest.zip" dest="libs/dl/gdx.zip" />
+    -->
     
-    <!-- TODO: replace this with the next release after 1.4.1! -->
-    <get skipexisting="true" src="http://libgdx.badlogicgames.com/nightlies/libgdx-nightly-latest.zip" dest="libs/dl/gdx.zip" />
-    
-    
+    <!-- unpack assets right into the project -->
+    <unzip src="libs/dl/assets.zip" dest="./"/>
+	
     <!-- unpack gdx -->
     <unzip src="libs/dl/gdx.zip" dest="libs/tmp"/>
 
@@ -104,14 +106,24 @@
       <classpath refid="cp" />
     </java>
   </target>
-
+  
+  
   <target name="publish" depends="release" >
-    <copy file="bin/${apkplz}" todir="${site}"/>
+    <!-- the comiled assets -->
+    <zip destfile="${site}/assets/assets.zip" >
+      <zipfileset dir="assets" prefix="assets"/>  
+      <zipfileset dir="res" prefix="res" />
+    </zip>    
+    
+    <!-- the APK -->
+    <copy file="bin/${apkplz}" todir="${site}/bin"/>
+    
+    <!-- add them to git, commit them and finally push the repo-->
     <exec executable="git" dir="${site}">
-      <arg line="add ${apkplz}"/>
+      <arg line="add bin/${apkplz} assets/assets.zip"/>
     </exec>
     <exec executable="git" dir="${site}">
-      <arg line="commit ${apkplz} -m 'published ${apkplz} from custom_rules.xml'"/>
+      <arg line="commit . -m 'published ${apkplz} and assets from custom_rules.xml'"/>
     </exec>
     <exec executable="git" dir="${site}">
       <arg line="push"/>

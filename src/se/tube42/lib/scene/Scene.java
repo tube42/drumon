@@ -9,6 +9,7 @@ public class Scene
 {
 	private LayerList layers;
     private String name;
+    protected int sw, sh;
 
     public Scene(String name)
     {
@@ -49,7 +50,8 @@ public class Scene
 
     public void resize(int w, int h)
     {
-
+        this.sw = w;
+        this.sh = h;
     }
 
     public final void update(float dt)

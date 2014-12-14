@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 
 import se.tube42.lib.tweeny.*;
 import se.tube42.lib.scene.*;
+import se.tube42.lib.util.*;
 
 public class SpriteItem extends BaseItem
 {
@@ -41,11 +42,12 @@ public class SpriteItem extends BaseItem
         final float r = getRotation();
         final float w2 = w / 2;
         final float h2 = h / 2;
+        final float hp = UIC.halfpixel;
 
         sb.setColor( cr, cg, cb, a);
 
         sb.draw(textures[index],
-                x + 0.5f, y + 0.5f,
+                x + hp, y + hp,
                 w2, h2,
                 w, h,
                 s, s, r);

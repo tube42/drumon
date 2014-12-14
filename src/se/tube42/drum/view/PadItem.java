@@ -55,6 +55,7 @@ public class PadItem extends BaseItem
         final float r = getRotation();
         final float w2 = w / 2;
         final float h2 = h / 2;
+        final float hp = World.halfpixel;
 
 
         // draw tile
@@ -62,7 +63,7 @@ public class PadItem extends BaseItem
             final TextureRegion tr = World.tex_tiles[tile];
             sb.setColor( cr, cg, cb, a);
             sb.draw(tr,
-                    x + 0.5f, y + 0.5f,
+                    x + hp, y + hp,
                     w2, h2,
                     w, h,
                     s, s, r);

@@ -108,10 +108,15 @@ public class Sequencer
 
             for(int i = 0; i < VOICES; i++) {
                 if(prog.get(i, bcnt) != 0) {
-                    final float var = ServiceProvider.getRandom(
-                              1 - AMP_VARIATION, 1 + AMP_VARIATION);
-                    final float amp = prog.getAmp(i) * var;
+                    float amp = prog.getVolume(i);
                     final int variant = prog.getSampleVariant(i);
+
+                    // check if there is any volume variation
+                    final int max_var = prog.getVolumeVariation(i);
+                    if(max_var > 0) {
+                        final int rand_var = 100 - max_var + ServiceProvider.getRandomInt(2 * max_var);
+                        amp *=  rand_var / 100f;
+                    }
 
                     World.sounds[i].start(variant, amp);
                     started[i] = true;

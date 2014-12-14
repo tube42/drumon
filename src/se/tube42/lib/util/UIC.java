@@ -23,22 +23,53 @@ public class UIC
           ;
 
     // general stuff
-    public static int dpi, dpi_class, dpi_scale;
+    public static int wanted_w, wanted_h;
+    public static int dpi = -1, dpi_class, dpi_scale;
     public static int sw, sh, s_scale, s_scale_bin;
+    public static float halfpixel;
 
     // -----------------------------------------------------
 
-    public static void init()
+    public static void init(int wanted_w, int wanted_h)
     {
-        dpi = (int)(160 * Gdx.graphics.getDensity());
-        dpi_scale = (int)Math.min(4, Math.max(1, dpi / 240));
+        UIC.wanted_w = wanted_w;
+        UIC.wanted_h = wanted_h;
 
-        dpi_class = DPU_TO_CLASS[DPU_TO_CLASS.length-1];
-        for(int i = 0; i < DPU_TO_CLASS.length; i++)
-            if( dpi_class < DPU_TO_CLASS[i] * 1.2f)
-                dpi_class = i;
+    }
 
-        System.out.println("DPI: " + dpi + "/" + dpi_class + " DPI_SCALE=" + dpi_scale);
+    public static void resize(int w, int h)
+    {
+        if(dpi == -1) {
+            dpi = (int)(160 * Gdx.graphics.getDensity());
+            dpi_scale = (int)Math.min(4, Math.max(1, dpi / 240));
+
+            dpi_class = DPU_TO_CLASS[DPU_TO_CLASS.length-1];
+            for(int i = 0; i < DPU_TO_CLASS.length; i++)
+                if( dpi_class < DPU_TO_CLASS[i] * 1.2f)
+                    dpi_class = i;
+                System.out.println("DPI: " + dpi + "/" + dpi_class + " DPI_SCALE=" + dpi_scale);
+        }
+
+        if(wanted_w > 2 && wanted_h > 1) {
+            s_scale = Math.max(1, Math.min(w / wanted_w, h / wanted_h));
+            s_scale_bin = Math.min(4, s_scale);
+            if(s_scale_bin == 3)
+                s_scale_bin = 2;
+
+        } else {
+            s_scale = 1;
+        }
+
+
+        w /= s_scale;
+        h /= s_scale;
+
+        UIC.sw = w;
+        UIC.sh = h;
+        halfpixel = 1f / s_scale;
+
+        System.out.println("resize (" + w + ", " + h + ") => (" + sw + ", " + sh + " ) * " + s_scale
+                  + " halfpixel=" + halfpixel);
 
     }
 }

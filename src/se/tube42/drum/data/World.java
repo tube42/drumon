@@ -25,12 +25,16 @@ public final class World extends UIC
 
     // assets
     public static BitmapFont font;
+    public static TextureRegion []tex_rect;
     public static TextureRegion []tex_tiles;
     public static TextureRegion []tex_icons;
     public static TextureRegion []tex_decals;
 
     // misc
+    public static SceneManager mgr;
 	public static Item bgc; // background color
+    public static DrumScene scene_drum;
+    public static ChoiceScene scene_choice;
 
     // world
     public static BaseItem [] tiles;

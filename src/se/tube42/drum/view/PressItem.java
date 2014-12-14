@@ -81,12 +81,13 @@ public class PressItem extends BaseItem
         final float r = getRotation();
         final float w2 = w / 2;
         final float h2 = h / 2;
+        final float hp = World.halfpixel;
 
         // draw tile
         if(tile != -1) {
             sb.setColor(cr, cg, cb, a);
             sb.draw(World.tex_tiles[tile],
-                    x + 0.5f, y + 0.5f,
+                    x + hp, y + hp,
                     w2, h2,
                     w, h,
                     s, s, r);
@@ -100,7 +101,7 @@ public class PressItem extends BaseItem
 
             sb.setColor(1, 1, 1, a);
             sb.draw(tr,
-                    w4 + x + 0.5f, h4 + y + 0.5f,
+                    w4 + x + hp, h4 + y + hp,
                     w4, h4,
                     w2, h2,
                     s, s, r);

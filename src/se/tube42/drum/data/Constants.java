@@ -8,8 +8,14 @@ public final class Constants
           ;
 
     public static final int
-          MAX_TEMPO = 340,
+          MAX_TEMPO = 300,
           MIN_TEMPO = 40,
+          MAX_VARIATION = 60,
+          MIN_VARIATION = 0,
+          DEFAULT_VARIATION = 20,
+
+          MAX_VOLUME = 300, // %
+          MIN_VOLUME = 0, // %
           SIMD_WIDTH = 4
           ;
 
@@ -66,14 +72,17 @@ public final class Constants
           ICON_ECHO = 26,
           ICON_COMPRESS = 27,
 
-          ICON_AUDIO_LESS = 28,
-          ICON_AUDIO_MORE = 29,
+          ICON_VOLUME = 28,
+          ICON_VARIATION = 29,
 
           ICON_QUESTION = 31
           ;
 
-    public final static float
-          AMP_VARIATION = 0.15f;
+    public final static int
+          CHOICE_TEMPO = 0,
+          CHOICE_VOLUME = 1,
+          CHOICE_VARIATION = 2
+          ;
 
     // ---------------------------------------
     // samples
@@ -114,7 +123,7 @@ public final class Constants
     // ---------------------------------------
     public static final int [] TOOL_ICONS = {
         // timing
-        ICON_DOWN, ICON_DOT, ICON_UP, ICON_NOTE4,
+        ICON_NOTE4, ICON_DOT, ICON_METRONOME, -1,
 
         // sequence
         ICON_PAUSE, ICON_A, ICON_MIX, ICON_DEL,
@@ -123,7 +132,7 @@ public final class Constants
         ICON_CRUSH, ICON_LPFILTER, ICON_ECHO, ICON_COMPRESS,
 
         // settings
-        ICON_AUDIO_LESS, ICON_AUDIO_MORE, -1, -1
+        ICON_VOLUME, ICON_VARIATION, -1, -1
     };
 
     // ---------------------------------------

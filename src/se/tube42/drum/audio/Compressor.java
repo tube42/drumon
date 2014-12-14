@@ -14,6 +14,12 @@ public final class Compressor
 
     public Compressor(float src, float dst)
     {
+        configure(src, dst);
+    }
+
+
+    public void configure(float src, float dst)
+    {
         // avoid div by zero
         src = Math.max(0.001f, src);
         dst = Math.max(0.001f, dst);

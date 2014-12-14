@@ -12,20 +12,24 @@ public class Program
     private int [][]data;
     private int [] banks;
     private int [] sample_variants;
-    private float [] sample_amps;
+    private float [] sample_vol;
+    private int [] sample_vol_variation;
 
     private int tempo, tmul;
     private int voice;
+
     public Program(float [] amps)
     {
         this.data = new int[VOICES][PADS * BANKS];
         this.banks = new int[VOICES];
         this.sample_variants = new int[VOICES];
-        this.sample_amps = new float[VOICES];
+        this.sample_vol = new float[VOICES];
+        this.sample_vol_variation = new int[VOICES];
 
         // set default amps
         for(int i = 0; i < VOICES; i++) {
-            sample_amps[i] = amps[i];
+            sample_vol[i] = amps[i];
+            sample_vol_variation[i] = DEFAULT_VARIATION;
         }
 
         setTempoMultiplier(1);
@@ -59,22 +63,38 @@ public class Program
     }
 
     //
-    public float getAmp(int voice)
+
+    public int getVolumeVariation(int voice)
     {
-        return sample_amps[voice];
+        return sample_vol_variation[voice];
     }
 
-    public boolean setAmp(int voice, float v)
+    public boolean setVolumeVariation(int voice, int var)
+    {
+        if(var < MIN_VARIATION || var > MAX_VARIATION)
+            return false;
+
+        sample_vol_variation[voice] = var;
+        return true;
+    }
+
+    public float getVolume(int voice)
+    {
+        return sample_vol[voice];
+    }
+
+    public boolean setVolume(int voice, float v)
     {
         if(v < 0.1f || v > 2.8f)
             return false;
 
-        sample_amps[voice] = v;
+        sample_vol[voice] = v;
         return true;
     }
 
     //
     public int getBank(int voice){ return banks[voice]; }
+
     public void setBank(int voice, int b)
     {
         if(b >= 0 && b < BANKS)

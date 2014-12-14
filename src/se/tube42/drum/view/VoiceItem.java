@@ -57,6 +57,7 @@ public class VoiceItem extends PressItem
     public void draw(SpriteBatch sb)
     {
         super.draw(sb);
+        final float hp = World.halfpixel;
 
         if(dec0 != -1 || dec1 != -1) {
             final float a = getAlpha();
@@ -71,7 +72,7 @@ public class VoiceItem extends PressItem
 
             if(dec0 != -1) {
                 sb.draw(World.tex_decals[dec0],
-                        x + 0.5f, h2 + y + 0.5f,
+                        x + hp, h2 + y + hp,
                         w4, h4,
                         w2, h2,
                         s, s, r);
@@ -79,7 +80,7 @@ public class VoiceItem extends PressItem
 
             if(dec1 != -1) {
                 sb.draw(World.tex_decals[dec1],
-                        w2 + x + 0.5f, y + 0.5f,
+                        w2 + x + hp, y + hp,
                         w4, h4,
                         w2, h2,
                         s, s, r);

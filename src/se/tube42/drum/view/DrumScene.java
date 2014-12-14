@@ -20,7 +20,9 @@ import static se.tube42.drum.data.Constants.*;
 
 public class DrumScene extends Scene
 {
+
     private Layer layer_tiles;
+
     private BaseText item_msg;
     private int last_hit, first_hit;
     private int mode;
@@ -72,6 +74,7 @@ public class DrumScene extends Scene
 
         World.marker = new MarkerItem();
         World.marker.setColor(COLOR_MARKER);
+        World.marker.flags &= ~BaseItem.FLAG_VISIBLE;
         getLayer(2).add(World.marker);
 
         item_msg = new BaseText(World.font);
@@ -86,7 +89,9 @@ public class DrumScene extends Scene
         msg_show("", 0, 0);
     }
 
+
     // ------------------------------------------------
+
     private void msg_show(String str, int sx, int sy)
     {
         final int x0 = World.sw / 2;
@@ -109,6 +114,7 @@ public class DrumScene extends Scene
               .pause(1)
               .tail(0).configure(0.2f, null);
     }
+
     // ------------------------------------------------
 
     private void all_update()
@@ -149,11 +155,11 @@ public class DrumScene extends Scene
         switch(mode) {
         case 0:
             if(prog.getTempoMultiplier() == 4) {
-                i3 = ICON_NOTE16;
+                i0 = ICON_NOTE16;
             } else if(prog.getTempoMultiplier() == 2) {
-                i3 = ICON_NOTE8;
+                i0 = ICON_NOTE8;
             } else {
-                i3 = ICON_NOTE4;
+                i0 = ICON_NOTE4;
             }
             break;
         case 1:
@@ -239,6 +245,12 @@ public class DrumScene extends Scene
 
     }
 
+    private void get_choice(int choice, int id)
+    {
+        World.scene_choice.setChoice(choice, id);
+        World.mgr.setScene(World.scene_choice);
+    }
+
     // ------------------------------------------------
 
     private void button_sound_select(int id)
@@ -263,24 +275,20 @@ public class DrumScene extends Scene
         switch(op) {
             // mode = 0, timing
         case 0:
-            World.prog.setTempo( World.prog.getTempo() - 2);
-            msg_show("" + World.prog.getTempo(), -1, 0);
+            int n = World.prog.getTempoMultiplier() * 2;
+            if(n > 4) n = 1;
+            World.prog.setTempoMultiplier(n);
             break;
+
         case 1:
             if(World.td.add()) {
                 World.prog.setTempo( World.td.get() );
                 msg_show("" + World.td.get(), 0, -1);
             }
             break;
-        case 2:
-            World.prog.setTempo( World.prog.getTempo() + 2);
-            msg_show("" + World.prog.getTempo(), +1, 0);
-            break;
 
-        case 3:
-            int n = World.prog.getTempoMultiplier() * 2;
-            if(n > 4) n = 1;
-            World.prog.setTempoMultiplier(n);
+        case 2:
+            get_choice(CHOICE_TEMPO, 0);
             break;
 
             // mode = 1, sequence
@@ -331,17 +339,12 @@ public class DrumScene extends Scene
 
             // mode = 3, settings
         case 12:
-            if( World.prog.setAmp(voice, World.prog.getAmp(voice) - 0.1f))
-                msg_show("" + (int)(0.5f + 100 *
-                          World.prog.getAmp(voice)) + "%", 0, +2);
+            get_choice(CHOICE_VOLUME, voice);
             break;
 
         case 13:
-            if(World.prog.setAmp(voice, World.prog.getAmp(voice) + 0.1f))
-                msg_show("" + (int)(0.5f + 100 *
-                          World.prog.getAmp(voice)) + "%", 0, -2);
+            get_choice(CHOICE_VARIATION, voice);
             break;
-
         }
 
 
@@ -352,6 +355,8 @@ public class DrumScene extends Scene
 
     public void resize(int w, int h)
     {
+        if(w == sw && h == sh) return;
+
     	super.resize(w, h);
 
         for(int y = 0; y < 8; y++) {
@@ -377,6 +382,7 @@ public class DrumScene extends Scene
     }
 
 
+
     // ----------------------------------------------------------
 
     public void onUpdate(float dt)
@@ -384,6 +390,7 @@ public class DrumScene extends Scene
         // update the marker
         int beat = World.seq.getBeat();
         World.marker.setBeat(beat);
+        World.marker.flags |= BaseItem.FLAG_VISIBLE;
 
         for(int i = 0; i < VOICES; i++) {
             if(World.seq.checkStarted(i)) {
@@ -394,18 +401,20 @@ public class DrumScene extends Scene
 
     public boolean type(int key, boolean down)
     {
-        if (key == Keys.BACK || key == Keys.ESCAPE) {
-            // TODO
-            Gdx.app.exit();
-            return true;
+        if(down) {
+            if (key == Keys.BACK || key == Keys.ESCAPE) {
+                Gdx.app.exit();
+                return true;
+            }
         }
+
         return false;
     }
 
 
     public boolean touch(int x, int y, boolean down, boolean drag)
     {
-        int idx = get_item_at(x, y);
+        int idx = get_tile_at(x, y);
         if(down && !drag) {
             last_hit = -1;
             first_hit = idx;
@@ -438,7 +447,7 @@ public class DrumScene extends Scene
     }
 
     // --------------------------------------------------
-    private int get_item_at(int x, int y)
+    private int get_tile_at(int x, int y)
     {
         for(int i = 0; i < World.tiles.length; i++) {
             if(World.tiles[i].hit(x, y))

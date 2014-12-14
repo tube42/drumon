@@ -23,22 +23,15 @@ implements ApplicationListener, InputProcessor
     public abstract void onResize(int sw, int sh);
     public abstract void onUpdate(float dt, long dtl);
 
-    private int wanted_w, wanted_h;
 
     public BaseApp()
     {
-        init_(-1, -1);
+        UIC.init(-1, -1);
     }
 
     public BaseApp(int w, int h)
     {
-        init_(w, h);
-    }
-
-    private final void init_(int w, int h)
-    {
-        this.wanted_w = w;
-        this.wanted_h = h;
+        UIC.init(w, h);
     }
 
 
@@ -64,8 +57,8 @@ implements ApplicationListener, InputProcessor
     @Override
     public void create()
     {
-        // init UI constants
-        UIC.init();
+        // make sure screen sizes are valid before we continue
+        UIC.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         // create initial objects
         this.batch = new SpriteBatch();
@@ -75,7 +68,6 @@ implements ApplicationListener, InputProcessor
         // init major objects
 
         // make sure UIC is valid before app starts
-        resize_scale(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         TweenManager.allowEmptyTweens(true);
         onCreate(mgr, bgc);
@@ -87,41 +79,8 @@ implements ApplicationListener, InputProcessor
 
     @Override public void resize(final int w, final int h)
     {
-        resize_scale(w, h);
+        UIC.resize(w, h);
         resize_scene();
-    }
-
-    // one this can be called before client is created
-    private final void resize_scale(int w, int h)
-    {
-        int sw = w;
-        int sh = h;
-
-        if(wanted_w > 2 && wanted_h > 1) {
-            /*
-            for(UIC.s_scale = 1;
-                 wanted_w * (UIC.s_scale + 1) < sw && wanted_h * (UIC.s_scale + 1) < sh;
-                UIC.s_scale++)
-               ; */
-
-            UIC.s_scale = Math.max(1,
-                      Math.min(sw / wanted_w, sh / wanted_h));
-
-            UIC.s_scale_bin = Math.min(4, UIC.s_scale);
-            if(UIC.s_scale_bin == 3)
-                UIC.s_scale_bin = 2;
-
-        } else {
-            UIC.s_scale = 1;
-        }
-
-
-        sw /= UIC.s_scale;
-        sh /= UIC.s_scale;
-        System.out.println("resize (" + w + ", " + h + ") => (" + sw + ", " + sh + " ) * " + UIC.s_scale);
-
-        UIC.sw = sw;
-        UIC.sh = sh;
     }
 
     private final void resize_scene()

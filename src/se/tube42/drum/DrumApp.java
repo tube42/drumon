@@ -46,8 +46,11 @@ public class DrumApp extends BaseApp
         // set the default amps
 
 
+        World.scene_drum = new DrumScene();
+        World.scene_choice = new ChoiceScene();
+        World.mgr = mgr;
 
-        mgr.setScene( new DrumScene());
+        World.mgr.setScene(World.scene_drum);
 
     	// TEMP until we fix the code handling back:
 		Gdx.input.setCatchBackKey(false);
@@ -85,6 +88,9 @@ public class DrumApp extends BaseApp
         World.tex_tiles =  ServiceProvider.divideTexture(tmp,
                   World.s_scale_bin * 32,
                   World.s_scale_bin * 32);
+
+        tmp = ServiceProvider.loadTexture(base + "/rect.png", false);
+        World.tex_rect =  ServiceProvider.divideTexture(tmp, 4, 4);
 
         tmp = ServiceProvider.loadTexture(base + "/icons.png", true);
         World.tex_icons =  ServiceProvider.divideTexture(tmp,

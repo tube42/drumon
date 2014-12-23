@@ -1,7 +1,5 @@
 TODO
 
- * add 2D choice scene
- * use 2D choice to change Compressor breakpoint   
  * re-write the low-pass to decrease load
   
 DONE
@@ -22,6 +20,8 @@ DONE
  * see if the resampling code can be imporved
  * replace GDX nighlies with 1.4.2 release when its here!
  * add base and random velocity to each voice 
+ * add 2D choice scene
+ * use 2D choice to change Compressor breakpoint   
  
 
 

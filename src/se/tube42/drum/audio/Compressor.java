@@ -10,14 +10,18 @@ import static se.tube42.drum.data.Constants.*;
 
 public final class Compressor
 {
-    private float src, mul1, mul2, add2;
+    private float src, dst;
+    private float mul1, mul2, add2;
 
     public Compressor(float src, float dst)
     {
         configure(src, dst);
     }
 
-
+    
+    public float getSource() { return src; }
+    public float getDest() { return dst; }
+    
     public void configure(float src, float dst)
     {
         // avoid div by zero
@@ -27,6 +31,7 @@ public final class Compressor
         dst = Math.min(0.999f, dst);
 
         this.src = src;
+        this.dst = dst;
         this.mul1 = dst / src;
         this.mul2 = (1 - dst) / (1 - src);
         this.add2 = dst - src * mul2;

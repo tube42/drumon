@@ -35,6 +35,7 @@ public final class World extends UIC
 	public static Item bgc; // background color
     public static DrumScene scene_drum;
     public static ChoiceScene scene_choice;
+    public static Choice2Scene scene_choice2;
 
     // world
     public static BaseItem [] tiles;

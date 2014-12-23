@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="se.tube42.drum.android"
-      android:versionCode="5"
-      android:versionName="0.0.5">
+      android:versionCode="10"
+      android:versionName="0.1">
       
       <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="19" />
       

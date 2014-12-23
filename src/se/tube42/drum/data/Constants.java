@@ -53,8 +53,6 @@ public final class Constants
           ICON_B = 9,
           ICON_DEL = 10,
           ICON_SETTINGS = 11,
-          ICON_UP = 12,
-          ICON_DOWN = 13,
           ICON_PAUSE = 14,
           ICON_PLAY = 15,
           ICON_METRONOME = 16,
@@ -73,9 +71,7 @@ public final class Constants
           ICON_COMPRESS = 27,
 
           ICON_VOLUME = 28,
-          ICON_VARIATION = 29,
-
-          ICON_QUESTION = 31
+          ICON_VARIATION = 29
           ;
 
     public final static int
@@ -83,7 +79,11 @@ public final class Constants
           CHOICE_VOLUME = 1,
           CHOICE_VARIATION = 2
           ;
-
+    
+    public final static int
+          CHOICE2_COMPRESS = 0
+          ;
+    
     // ---------------------------------------
     // samples
     // ---------------------------------------
@@ -132,7 +132,7 @@ public final class Constants
         ICON_CRUSH, ICON_LPFILTER, ICON_ECHO, ICON_COMPRESS,
 
         // settings
-        ICON_VOLUME, ICON_VARIATION, -1, -1
+        ICON_VOLUME, ICON_VARIATION, ICON_COMPRESS, -1
     };
 
     // ---------------------------------------

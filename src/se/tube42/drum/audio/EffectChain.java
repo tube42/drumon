@@ -30,8 +30,16 @@ public class EffectChain
         for(int i = 0; i < iir.getSize(); i++)
             iir.set(i, 1f / 7);
     }
-
-
+    
+    // ------------------------------------------
+    
+    public Compressor getCompressor()
+    {
+        return comp;
+    }
+    
+    // ------------------------------------------
+    
     public boolean isEnabled(int n)
     {
         return (n >= 0 && n < SIZE) ? enabled[n] : false;

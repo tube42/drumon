@@ -51,8 +51,6 @@ public class ChoiceScene extends Scene
 
         getLayer(1).add(desc0);
         getLayer(1).add(desc1);
-
-        setChoice(CHOICE_TEMPO, -1);
     }
 
     // ------------------------------------------------

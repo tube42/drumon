@@ -250,7 +250,14 @@ public class DrumScene extends Scene
         World.scene_choice.setChoice(choice, id);
         World.mgr.setScene(World.scene_choice);
     }
-
+    
+    
+    private void get_choice2(int choice, int id)
+    {
+        World.scene_choice2.setChoice(choice, id);
+        World.mgr.setScene(World.scene_choice2);
+    }
+    
     // ------------------------------------------------
 
     private void button_sound_select(int id)
@@ -345,6 +352,9 @@ public class DrumScene extends Scene
         case 13:
             get_choice(CHOICE_VARIATION, voice);
             break;
+        case 14:
+            get_choice2(CHOICE2_COMPRESS, -1);            
+            break;
         }
 
 
@@ -368,13 +378,19 @@ public class DrumScene extends Scene
 
             for(int x = 0; x < 4; x++) {
                 final int index = x + y * 4;
-                World.tiles[index].setSize(World.tile_size, World.tile_size);
-
-                World.tiles[index].setImmediate(BaseItem.ITEM_X, World.tile_x0 + World.tile_stripe * x);
-
-                final float r = ServiceProvider.getRandom(0.35f, 0.5f);
-                World.tiles[index].pause(BaseItem.ITEM_Y, y0 +h, 0.6f + (8-y) * 0.1f)
-                      .tail(y0).configure(r, TweenEquation.BACK_OUT);
+                final float x0 = World.tile_x0 + World.tile_stripe * x;                
+                final float x1 = (x0 < w / 2) ? x0 - w : x0 + w;
+                final float y1 = (y0 < h / 2) ? y0 - h : y0 + h;                                
+                final float p = 0.8f + (8-y) * 0.05f;
+                final float t = ServiceProvider.getRandom(0.35f, 0.5f);
+                
+                
+                World.tiles[index].setSize(World.tile_size, World.tile_size);                
+                World.tiles[index].pause(BaseItem.ITEM_X, x1, p)
+                      .tail(x0).configure(t, TweenEquation.QUAD_OUT);
+                
+                World.tiles[index].pause(BaseItem.ITEM_Y, y1, p)
+                      .tail(y0).configure(t, TweenEquation.QUAD_OUT);
             }
         }
 

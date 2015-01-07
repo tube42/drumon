@@ -25,7 +25,7 @@ implements Runnable, Disposable
 
     private int buffer_size;
     private float [] buffer;
-    private boolean stopped;
+    private volatile boolean stopped;
 
     private Profiler prof;
 

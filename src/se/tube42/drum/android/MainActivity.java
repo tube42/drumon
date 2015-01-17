@@ -25,16 +25,20 @@ public class MainActivity extends AndroidApplication
         super.onCreate(savedInstanceState);
 
         {
-            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            String s1 = am.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
-            String s2 = am.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER);
+            try {
+                AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                String s1 = am.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
+                String s2 = am.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER);
 
-            if(s1 != null && s2 != null) {
-                World.freq = Integer.parseInt(s1);
-                World.samples = Integer.parseInt(s2);
+                if(s1 != null && s2 != null) {
+                    World.freq = Integer.parseInt(s1);
+                    World.samples = Integer.parseInt(s2);
 
-                System.out.println("AudioManager suggested fs=" + World.freq +
-                          ", samples=" + World.samples);
+                    System.out.println("AudioManager suggested fs=" + World.freq +
+                              ", samples=" + World.samples);
+                }
+            } catch(Exception exx) {
+                System.err.println("Could not get device defaults: " + exx);
             }
         }
 

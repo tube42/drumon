@@ -22,23 +22,23 @@ public class Choice2Scene extends Scene
     private SpriteItem icon;
 
     private boolean hit_canvas;
-    
+
     private int choice, id;
     private float x0, y0, xd, yd;
 
     public Choice2Scene()
     {
         super("choice2");
-        
-        // default value to avoid div by zero for now        
-        this.yd = 1; 
+
+        // default value to avoid div by zero for now
+        this.yd = 1;
         this.xd = 1;
 
         canvas = new SpriteItem(World.tex_rect);
         canvas.setColor(0xFFFFFF);
         canvas.setIndex(0);
         icon = new SpriteItem(World.tex_icons);
-        mark = new SpriteItem(World.tex_rect);       
+        mark = new SpriteItem(World.tex_rect);
         mark.setColor(0xA01010);
 
         getLayer(0).add(canvas);
@@ -64,18 +64,18 @@ public class Choice2Scene extends Scene
     private void configure(
               int x_min, int x_max, int x,
               int y_min, int y_max, int y)
-    {        
-        // avoid div by zero        
-        if(x_min == x_max) x_max++; 
+    {
+        // avoid div by zero
+        if(x_min == x_max) x_max++;
         if(y_min == y_max) y_max++;
-        
+
         this.x_min = x_min;
         this.x_max = x_max;
         this.y_min = y_min;
         this.y_max = y_max;
-        
+
         this.x = Math.min(x_max, Math.max(x_min, x));
-        this.y = Math.min(y_max, Math.max(y_min, y));        
+        this.y = Math.min(y_max, Math.max(y_min, y));
         update();
     }
 
@@ -87,15 +87,15 @@ public class Choice2Scene extends Scene
 
         final float xn = (x - x0) / xd;
         final float yn = (y - y0) / yd;
-        final float xm = x_min + xn * (x_max - x_min);        
+        final float xm = x_min + xn * (x_max - x_min);
         final float ym = y_min + yn * (y_max - y_min);
         final int xc = Math.max(x_min, Math.min(x_max, (int)(xm + 0.5f)));
         final int yc = Math.max(y_min, Math.min(y_max, (int)(ym + 0.5f)));
-        
-        
+
+
         if(xc != x || yc != y) {
             this.x = xc;
-            this.y = yc;        
+            this.y = yc;
             update();
         }
         return true;
@@ -105,15 +105,15 @@ public class Choice2Scene extends Scene
 
     public void resize(int w, int h)
     {
-
+        final int s = Math.min(w, h) - World.tile_size;
         mark.setSize(World.tile_size, World.tile_size);
-        canvas.setSize(w - World.tile_size, h - World.tile_size);
-        canvas.setPosition(World.tile_size / 2, World.tile_size / 2);
+        canvas.setSize(s, s);
+        canvas.setPosition((w - s) / 2, (h - s) / 2);
         icon.setSize(World.tile_size / 2, World.tile_size / 2);
-        
+
         x0 = canvas.getX() + mark.getW() / 2 + 1;
         y0 = canvas.getY() + mark.getH() / 2 + 1;
-        xd = Math.max(1, canvas.getW() - mark.getW() - 2);        
+        xd = Math.max(1, canvas.getW() - mark.getW() - 2);
         yd = Math.max(1, canvas.getH() - mark.getH() - 2);
 
         update();
@@ -154,9 +154,9 @@ public class Choice2Scene extends Scene
     private void update()
     {
         // uppdate view
-        final float xn = (x - x_min) / (float) (x_max - x_min);        
+        final float xn = (x - x_min) / (float) (x_max - x_min);
         final float yn = (y - y_min) / (float) (y_max - y_min);
-        final float x1 = x0 + xd * xn;        
+        final float x1 = x0 + xd * xn;
         final float y1 = y0 + yd * yn;
         mark.setImmediate(BaseItem.ITEM_X, x1 - mark.getW() / 2);
         mark.setImmediate(BaseItem.ITEM_Y, y1 - mark.getH() / 2);
@@ -169,7 +169,7 @@ public class Choice2Scene extends Scene
         // update world
         switch(choice) {
         case CHOICE2_COMPRESS:
-            Compressor comp = World.mixer.getEffectChain().getCompressor();            
+            Compressor comp = World.mixer.getEffectChain().getCompressor();
             comp.configure(x / 100f, y / 100f);
             break;
 

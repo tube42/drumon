@@ -79,11 +79,11 @@ public final class Constants
           CHOICE_VOLUME = 1,
           CHOICE_VARIATION = 2
           ;
-    
+
     public final static int
           CHOICE2_COMPRESS = 0
           ;
-    
+
     // ---------------------------------------
     // samples
     // ---------------------------------------

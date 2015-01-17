@@ -18,10 +18,10 @@ public final class Compressor
         configure(src, dst);
     }
 
-    
+
     public float getSource() { return src; }
     public float getDest() { return dst; }
-    
+
     public void configure(float src, float dst)
     {
         // avoid div by zero

@@ -37,8 +37,8 @@ public class MainActivity extends AndroidApplication
                     System.out.println("AudioManager suggested fs=" + World.freq +
                               ", samples=" + World.samples);
                 }
-            } catch(Exception exx) {
-                System.err.println("Could not get device defaults: " + exx);
+            } catch(Throwable t) {
+                System.err.println("Could not get device defaults: " + t.toString() );
             }
         }
 

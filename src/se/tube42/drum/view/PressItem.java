@@ -17,9 +17,16 @@ import se.tube42.drum.logic.*;
 import static se.tube42.drum.data.Constants.*;
 
 
-public class PressItem extends BaseItem
+public class PressItem
+extends BaseItem
+implements TweenListener
 {
+    private static final int
+          MSG_UPDATE = 0
+          ;
+
     private int tile, icon;
+    private int new_tile, new_icon, new_color;
 
     public PressItem(int tile, int icon, int color)
     {
@@ -58,15 +65,32 @@ public class PressItem extends BaseItem
     public void change(int color, int icon,
               boolean active, boolean animate)
     {
-        int new_tile = active ? TILE_BUTTON1 : TILE_BUTTON0;
-        setColor(color);
-        setIcon(icon);
-        setTile(new_tile);
+        new_tile = active ? TILE_BUTTON1 : TILE_BUTTON0;
 
-        if(animate) {
-            final float r = ServiceProvider.getRandom(0.20f, 0.30f);
-            set(ITEM_V, -World.sw, 0)
-                  .configure(r, TweenEquation.BACK_OUT);
+
+        if(!animate) {
+            setColor(color);
+            setIcon(icon);
+            setTile(new_tile);
+       } else {
+           new_color = color;
+           new_icon = icon;
+
+           final float r = ServiceProvider.getRandom(0.2f, 0.25f);
+
+           set(ITEM_S, 1, 0.1f).configure(r, null).finish(this,MSG_UPDATE)
+                 .tail(1).configure(r, null);
+
+           set(ITEM_A, 1, 0).configure(r / 2, null)
+                 .pause(r)
+                 .tail(1).configure(r / 2, null);
+
+           set(ITEM_R, 0, +30).configure(r, null)
+                 .tail(0).configure(r, null);
+
+           set(ITEM_V, 0, -w * 2).configure(r, TweenEquation.QUAD_OUT)
+                 .tail(0).configure(r, null);
+
         }
     }
 
@@ -107,6 +131,16 @@ public class PressItem extends BaseItem
                     s, s, r);
 
         }
+    }
 
+    public void onFinish(Item item, int index, int msg)
+    {
+        switch(msg) {
+        case MSG_UPDATE:
+            setColor(new_color);
+            setIcon(new_icon);
+            setTile(new_tile);
+            break;
+        }
     }
 }

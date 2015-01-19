@@ -1,8 +1,6 @@
 
 package se.tube42.lib.scene;
 
-import java.util.*;
-
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 
@@ -11,61 +9,72 @@ import se.tube42.lib.item.*;
 
 public class LayerList
 {
-    private ArrayList<Layer> list;
+    private Layer [] list;
+    private int list_cnt;
     private Layer list_hit;
 
     public LayerList()
     {
-        this.list = new ArrayList<Layer>();
+        this.list = new Layer[6];
+        this.list_cnt = 0;
         this.list_hit = null;
     }
 
     public int getSize()
     {
-        return list.size();
+        return list_cnt;
     }
 
     public Layer get(int index)
     {
-        while(index >= list.size())
-            list.add( new Layer());
+        while(index >= getSize())
+            add( new Layer());
 
-        return list.get(index);
+        return list[index];
     }
 
     public Layer add(Layer l)
     {
-        list.add(l);
+        if(list_cnt == list.length)
+            grow();
+
+        list[list_cnt++] = l;
         return l;
+    }
+
+    private void grow()
+    {
+        Layer [] tmp = new Layer[list.length * 2 + 4];
+        for(int i = 0; i < list.length; i++)
+            tmp[i] = list[i];
+        list = tmp;
     }
 
     // ---------------------------------------
 
     public void update(float dt)
     {
-        final int len = getSize();
+        final int len = list_cnt;
         for(int i = 0; i < len; i++)
-            get(i).update(dt);
+            list[i].update(dt);
     }
 
     public void draw(SpriteBatch sb)
     {
-        final int len = getSize();
-        draw(sb, 0, len);
+        draw(sb, 0, list_cnt);
     }
 
     public void draw(SpriteBatch sb, int start, int count)
     {
         final int end = Math.min(getSize(), start + count);
         for(int i = start; i < end; i++)
-            get(i).draw(sb);
+            list[i].draw(sb);
     }
 
     public BaseItem hit(float x, float y)
     {
-        final int len = getSize();
-        for(int i = 0; i < len; i++) {
-            final Layer l = get(len - i - 1); // reverse order
+        for(int i = list_cnt; i >= 0; ) { // reverse order
+            final Layer l = list[--i];
             BaseItem bi = l.hit(x, y);
             if(bi != null) {
                 list_hit = l;

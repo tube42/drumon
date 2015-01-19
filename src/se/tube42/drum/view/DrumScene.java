@@ -82,10 +82,12 @@ public class DrumScene extends Scene
         getLayer(2).add(item_msg);
 
         // init
-        sel_set_mode(0, false);
-        voice_set_voice(1);
-        voice_set_voice(0);
-        voice_tile_update_all();
+        this.mode = -1; // force update
+        select_mode(0);
+        select_sound(1); // force update
+        select_sound(0);
+
+        update(true, true, true, true);
         msg_show("", 0, 0);
     }
 
@@ -116,25 +118,68 @@ public class DrumScene extends Scene
     }
 
     // ------------------------------------------------
-
-    private void all_update()
+    // PADS
+    private void update_pad(int pad)
     {
-        voice_tile_update_all();
-        tools_update_all(false);
-        voice_tile_update_all();
+        final int voice =  World.prog.getVoice();
+        World.tile_pads[pad].setTile( World.prog.get(voice, pad) );
     }
 
-    private void sel_set_mode(int mode, boolean byuser)
+    private void update_pads()
     {
-        this.mode = mode;
-
-        for(int i = 0; i < SELECTORS; i++)
-            World.tile_selectors[ i].setActive(i == mode);
-
-        tools_update_all(byuser);
+        for(int i = 0; i < PADS; i++)
+            update_pad(i);
     }
 
-    private void tools_update_all(boolean modechange)
+    private void select_pad(int pad)
+    {
+        final int voice =  World.prog.getVoice();
+        World.prog.set(voice, pad, World.prog.get(voice, pad) ^ 1);
+        World.tile_pads[pad].mark0();
+        update_pad(pad);
+    }
+
+    // ------------------------------------------------
+    // SOUNDS
+
+    private void update_sounds()
+    {
+        for(int i = 0; i < VOICES; i++) {
+            World.tile_voices[i].setVoiceVariant(
+                      World.prog.getSampleVariant(i),
+                      World.prog.getBank(i) );
+        }
+    }
+
+    private void select_sound(int voice)
+    {
+        final int old_voice = World.prog.getVoice();
+
+        if(old_voice == voice) {
+            final int max = World.sounds[voice].getNumOfVariants();
+            int next = 1 + World.prog.getSampleVariant(voice);
+            if(next >= max) next = 0;
+            World.prog.setSampleVariant(voice, next);
+        } else {
+            World.prog.setVoice(voice);
+            for(int i = 0; i < VOICES ; i++)
+                World.tile_voices[i].setAlpha(i == voice ? 1f : 0.4f);
+
+            final int c = COLOR_PADS[voice];
+            ServiceProvider.setColorItem(c, World.bgc, 0f, 0.4f, 0.7f);
+
+            for(int i = 0; i < PADS; i++)
+                World.tile_pads[i].setColor(c);
+        }
+
+        World.tile_voices[voice].mark0();
+        update(false, true, false, false);
+    }
+
+    // ------------------------------------------------
+    // TOOLS
+
+    private void update_tools(boolean modechange)
     {
         final Sequencer seq = World.seq;
         final Program prog = World.prog;
@@ -150,7 +195,6 @@ public class DrumScene extends Scene
         i1 = TOOL_ICONS[SELECTORS * mode + 1];
         i2 = TOOL_ICONS[SELECTORS * mode + 2];
         i3 = TOOL_ICONS[SELECTORS * mode + 3];
-
 
         switch(mode) {
         case 0:
@@ -183,96 +227,7 @@ public class DrumScene extends Scene
         World.tile_tools[3].change(color, i3, v3, modechange);
     }
 
-    private void voice_variant_next(int voice)
-    {
-        final int max = World.sounds[voice].getNumOfVariants();
-        int next = 1 + World.prog.getSampleVariant(voice);
-        if(next >= max) next = 0;
-
-        World.prog.setSampleVariant(voice, next);
-    }
-
-    private void voice_set_voice(int voice)
-    {
-        final int old_voice = World.prog.getVoice();
-
-        if(old_voice == voice) {
-            voice_variant_next(voice);
-        } else {
-            World.prog.setVoice(voice);
-            for(int i = 0; i < VOICES ; i++)
-                World.tile_voices[i].setAlpha(i == voice ? 1f : 0.4f);
-
-            final int color = COLOR_PADS[voice];
-            ServiceProvider.setColorItem(color, World.bgc,
-                  0f, 0.4f, 0.7f);
-
-            for(int i = 0; i < PADS; i++)
-                World.tile_pads[i].setColor(color);
-
-        }
-
-        World.tile_voices[voice].mark0();
-        voice_tile_update_all();
-    }
-
-    private void voice_tile_toggle(int tile)
-    {
-        final int voice =  World.prog.getVoice();
-        World.prog.set(voice, tile, World.prog.get(voice, tile) ^ 1);
-        World.tile_pads[tile].mark0();
-        voice_tile_update(tile);
-    }
-
-    private void voice_tile_update(int tile)
-    {
-        final int voice =  World.prog.getVoice();
-        World.tile_pads[tile].setTile( World.prog.get(voice, tile) );
-
-    }
-
-    private void voice_tile_update_all()
-    {
-        for(int i = 0; i < PADS; i++)
-            voice_tile_update(i);
-
-        for(int i = 0; i < VOICES; i++) {
-            World.tile_voices[i].setVoiceVariant(
-                      World.prog.getSampleVariant(i),
-                      World.prog.getBank(i)
-                      );
-        }
-
-    }
-
-    private void get_choice(int choice, int id)
-    {
-        World.scene_choice.setChoice(choice, id);
-        World.mgr.setScene(World.scene_choice);
-    }
-
-
-    private void get_choice2(int choice, int id)
-    {
-        World.scene_choice2.setChoice(choice, id);
-        World.mgr.setScene(World.scene_choice2);
-    }
-
-    // ------------------------------------------------
-
-    private void button_sound_select(int id)
-    {
-        voice_set_voice(id);
-        all_update();
-    }
-
-    private void button_selector_select(int id)
-    {
-        sel_set_mode(id, true);
-        all_update();
-    }
-
-    private void button_tool_select(int id)
+    private void select_tool(int id)
     {
         final int voice = World.prog.getVoice();
         final int op = TOOLS * mode + id;
@@ -315,8 +270,8 @@ public class DrumScene extends Scene
 
                 if(World.prog.get(voice, a) != 0 &&
                    World.prog.get(voice, b) == 0) {
-                    voice_tile_toggle(a);
-                    voice_tile_toggle(b);
+                    select_pad(a);
+                    select_pad(b);
                 }
             }
             break;
@@ -357,9 +312,57 @@ public class DrumScene extends Scene
             break;
         }
 
-
-        all_update();
+        update(false, false, true, false);
     }
+
+    // ------------------------------------------------
+    // MODE
+
+    private void update_mode()
+    {
+        for(int i = 0; i < SELECTORS; i++)
+            World.tile_selectors[ i].setActive(i == this.mode);
+    }
+
+    private void select_mode(int mode)
+    {
+        if(this.mode != mode) {
+            this.mode = mode;
+            update(false, false, false, true);
+        }
+    }
+
+    // ------------------------------------------------
+    // ALL
+
+    private void update(boolean pads, boolean sounds,
+              boolean tools, boolean mode)
+    {
+        if(pads || sounds || tools) update_pads();
+        if(sounds || tools) update_sounds();
+        if(tools || sounds || mode) update_tools(mode);
+        if(mode) update_mode();
+    }
+
+
+    // ------------------------------------------------
+    // Choices
+
+    private void get_choice(int choice, int id)
+    {
+        World.scene_choice.setChoice(choice, id);
+        World.mgr.setScene(World.scene_choice);
+    }
+
+    private void get_choice2(int choice, int id)
+    {
+        World.scene_choice2.setChoice(choice, id);
+        World.mgr.setScene(World.scene_choice2);
+    }
+
+
+
+
 
     // ------------------------------------------------
 
@@ -396,8 +399,6 @@ public class DrumScene extends Scene
 
         World.marker.setSize(World.tile_size, World.tile_size);
     }
-
-
 
     // ----------------------------------------------------------
 
@@ -441,7 +442,7 @@ public class DrumScene extends Scene
             last_hit = idx;
 
             if(idx < PADS) {
-                voice_tile_toggle(idx);
+                select_pad(idx);
             }
         }
 
@@ -451,12 +452,11 @@ public class DrumScene extends Scene
             final int i3 = i2 - TOOLS;
 
             if(i1 >= 0 && i1 < VOICES)
-                button_sound_select(i1);
+                select_sound(i1);
             else if(i2 >= 0 && i2 < TOOLS)
-                button_tool_select(i2);
+                select_tool(i2);
             else if(i3 >= 0 && i3 < SELECTORS)
-                button_selector_select(i3);
-
+                select_mode(i3);
         }
 
         return true;

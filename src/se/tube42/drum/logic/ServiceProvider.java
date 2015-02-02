@@ -85,39 +85,37 @@ public class ServiceProvider
 
     // ------------------------------------------------
     // Fonts
-
-    public static BitmapFont loadFont(String name)
+    
+    public static BitmapFont [] createFonts(String filename,
+              String charset, int... sizes)
     {
-        return AssetService.loadFont(name);
-    }
-
-
-    // ------------------------------------------------
-    // NinePatch
-    public static NinePatch loadPatch(String filename)
-    {
-        return AssetService.loadPatch(filename);
+        return AssetService.createFonts(filename, charset, sizes);
     }
 
     // ------------------------------------------------
-    // Textures
-    public static Texture loadTexture(String filename, boolean filter)
+    // Atlas
+    
+    public static TextureAtlas loadAtlas(String name)
     {
-        return AssetService.load(filename, filter);
+        return AssetService.loadAtlas(name);
     }
 
-    public static TextureRegion [] divideTexture(Texture t, int w, int h)
+    public static TextureRegion [] extractRegions(TextureAtlas atlas, String name)
     {
-        return AssetService.divide(t, w, h);
+        return AssetService.extractRegions(atlas, name);
     }
 
-    public static TextureRegion [] divideRegion(TextureRegion t,
-              int w, int h, boolean fix)
+    public static void setFilter(TextureAtlas atlas, boolean linear)
     {
-        return AssetService.divide(t, w, h, fix);
+        AssetService.setFilter(atlas, linear);
     }
-
-
+    
+    public static TextureRegion [] divide(TextureRegion t,
+              int cw, int ch, boolean correct_borders)
+    {
+        return AssetService.divide(t, cw, ch, correct_borders);
+    }
+    
     // ------------------------------------------------
     // RandomService
     public static float getRandom()

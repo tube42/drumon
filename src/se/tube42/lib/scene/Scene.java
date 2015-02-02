@@ -3,18 +3,21 @@ package se.tube42.lib.scene;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.g2d.*;
 
-import  se.tube42.lib.item.*;
+import se.tube42.lib.item.*;
+
 
 public class Scene
 {
 	private LayerList layers;
     private String name;
-    protected int sw, sh;
+    private int _w, _h;
 
     public Scene(String name)
     {
         this.name = name;
         this.layers = new LayerList();
+        this._w = -1;
+        this._h = -1;
     }
 
     // -----------------------------------------------
@@ -47,11 +50,18 @@ public class Scene
     }
 
     // ------------------------------------------------
+    /* package */ void resizeIfChanged(int w, int h)
+    {
+        if(_w != w || h != _h) {
+            resize(w, h);
+            _w = w;
+            _h = h;
+        }
+    }
 
     public void resize(int w, int h)
     {
-        this.sw = w;
-        this.sh = h;
+
     }
 
     public final void update(float dt)

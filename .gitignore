@@ -4,3 +4,4 @@ gen
 libs/*
 local.*
 assets
+tmp

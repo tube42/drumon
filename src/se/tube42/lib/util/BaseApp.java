@@ -26,12 +26,6 @@ implements ApplicationListener, InputProcessor
 
     public BaseApp()
     {
-        UIC.init(-1, -1);
-    }
-
-    public BaseApp(int w, int h)
-    {
-        UIC.init(w, h);
     }
 
 
@@ -57,17 +51,16 @@ implements ApplicationListener, InputProcessor
     @Override
     public void create()
     {
-        // make sure screen sizes are valid before we continue
-        UIC.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
         // create initial objects
         this.batch = new SpriteBatch();
         this.camera = new OrthographicCamera();
         this.mgr = new SceneManager();
         this.bgc = new Item(3);
-        // init major objects
+        
+        
+        // make sure screen sizes are valid before we continue
+        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        // make sure UIC is valid before app starts
 
         TweenManager.allowEmptyTweens(true);
         onCreate(mgr, bgc);
@@ -85,7 +78,6 @@ implements ApplicationListener, InputProcessor
 
     private final void resize_scene()
     {
-
         camera.setToOrtho(false, UIC.sw, UIC.sh);
         camera.update();
 

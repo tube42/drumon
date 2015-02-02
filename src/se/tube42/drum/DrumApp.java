@@ -22,7 +22,7 @@ public class DrumApp extends BaseApp
 
     public DrumApp()
     {
-        super(200, 300);
+        
     }
 
 
@@ -31,12 +31,15 @@ public class DrumApp extends BaseApp
     	ServiceProvider.init();
 
 
-        // force one first resize!
+        // set size before loading assets
         onResize(World.sw, World.sh);
-
+        
         World.bgc = bgc;
         load_assets();
-
+        
+        // update size once more
+        onResize(World.sw, World.sh);
+        
         // create mixer
         World.prog = new Program(DEF_AMPS);
         World.seq = new Sequencer(World.prog);
@@ -69,45 +72,53 @@ public class DrumApp extends BaseApp
 
     public void onResize(int w, int h)
     {
+        World.ui_scale = Math.max(1, Math.min(World.sw / 200, World.sh / 300));
+        World.ui_gap = Math.min(32, 4 * World.ui_scale);
+        
         final int s1 = ~1 & (int)Math.min( World.sw / 4, World.sh / 8);
-        final int s2 = ~3 & (int)(s1 * 0.98f);
+        final int s2 = ~(8 * World.ui_scale - 1) & (int)(s1 * 0.98f);
         World.tile_stripe = s1;
         World.tile_size = s2;
         World.tile_x0 = ((int)(World.sw - s1 * 4 + s1 - s2)) / 2;
-        World.tile_y0 = ((int)(World.sh - s1 * 8 + s1 - s2)) / 2;
+        World.tile_y0 = ((int)(World.sh - s1 * 8 + s1 - s2)) / 2;        
+        
+        System.out.println("RESIZE " + w + "x" + h + " -> " + 
+                  World.ui_scale + ":" + World.ui_gap);
     }
 
     // ----------------------------------------------
 
     private void load_assets()
     {
-        System.out.println("Asset scale: " + World.s_scale_bin);
+        int ascale = World.ui_scale;
+        if(ascale == 3) ascale = 2;
+        if(ascale > 4)  ascale = 4;
 
-        final String base = "" + World.s_scale_bin;
+        String aname = "atlas/" + ascale;
+        System.out.println("USING " + aname);
+        
+        final TextureAtlas atlas = ServiceProvider.loadAtlas(aname);
+        ServiceProvider.setFilter(atlas, false);
+        TextureRegion [] tmp;
+        
+        
+        tmp = ServiceProvider.extractRegions(atlas, "tiles");
+        World.tex_tiles = ServiceProvider.divide(tmp[0], 4, 2, true);                
+        
+        tmp = ServiceProvider.extractRegions(atlas, "icons");
+        World.tex_icons = ServiceProvider.divide(tmp[0], 4, 8, true);                
+        
+        tmp = ServiceProvider.extractRegions(atlas, "decals");
+        World.tex_decals = ServiceProvider.divide(tmp[0], 4, 2, true);                
+        
+        World.tex_rect = ServiceProvider.extractRegions(atlas, "rect");        
+        
 
-        Texture tmp = ServiceProvider.loadTexture(base + "/tiles.png", true);
-        World.tex_tiles =  ServiceProvider.divideTexture(tmp,
-                  World.s_scale_bin * 32,
-                  World.s_scale_bin * 32);
-
-        tmp = ServiceProvider.loadTexture(base + "/rect.png", false);
-        World.tex_rect =  ServiceProvider.divideTexture(tmp, 4, 4);
-
-        tmp = ServiceProvider.loadTexture(base + "/icons.png", true);
-        World.tex_icons =  ServiceProvider.divideTexture(tmp,
-                  World.s_scale_bin * 16,
-                  World.s_scale_bin * 16);
-
-        tmp = ServiceProvider.loadTexture(base + "/decals.png", true);
-        World.tex_decals =  ServiceProvider.divideTexture(tmp,
-                  World.s_scale_bin * 16,
-                  World.s_scale_bin * 16);
-
-        System.out.println("-->" + World.tex_decals.length);
-
-        World.font = ServiceProvider.loadFont(base + "/font1");
-        World.font.setScale(1f / World.s_scale_bin);
-
+        World.font = ServiceProvider.createFonts(
+                  "fonts/Roboto-Regular.ttf",
+                  CHARSET, ascale * 16)[0];
+        
+        
         try {
             World.sounds = new Sample[VOICES];
             for(int i = 0; i < VOICES ; i++) {

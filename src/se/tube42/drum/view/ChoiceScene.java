@@ -66,7 +66,18 @@ public class ChoiceScene extends Scene
         text.set(BaseItem.ITEM_A, 0, 1).configure(0.8f, null);
     }
 
+    
+    public void onHide()
+    {
+        super.onShow();
 
+        canvas.set(BaseItem.ITEM_A, 1, 0).configure(0.3f, null);
+        canvas.set(BaseItem.ITEM_S, 1, 1.4f).configure(0.1f, null);
+
+        mark.set(BaseItem.ITEM_A, 1, 0).configure(0.5f, null);
+        text.set(BaseItem.ITEM_A, 1, 0).configure(0.8f, null);
+    }
+    
     // ------------------------------------------------
 
     private void configure(int min, int max, int curr)
@@ -208,7 +219,7 @@ public class ChoiceScene extends Scene
 
     public void go_back()
     {
-        World.mgr.setScene(World.scene_drum);
+        World.mgr.setScene(World.scene_drum, 200);
     }
 
     public boolean type(int key, boolean down)

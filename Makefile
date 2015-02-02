@@ -27,13 +27,16 @@ samples:
 	make -C extra/samples clean all
 
 marm:
-	rm -rf assets/1
-	rm -rf assets/2
-	rm -rf assets/4
-	$(MARM) resize extra/fonts assets
-	$(MARM) resize extra/textures assets
-	rm -rf assets/.temp
+	rm -rf tmp
+	rm -rf assets/atlas
+	mkdir tmp
 
+	-mkdir -p assets/atlas
+	$(MARM) resize extra/textures tmp
+	$(MARM) pack tmp/1 assets/atlas 1
+	$(MARM) pack tmp/2 assets/atlas 2
+	$(MARM) pack tmp/4 assets/atlas 4
+	rm -rf tmp
 
 ##
 

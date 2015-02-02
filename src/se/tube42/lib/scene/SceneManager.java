@@ -4,11 +4,27 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.g2d.*;
 
 
+
+import se.tube42.lib.ks.*;
+import se.tube42.lib.service.*;
+
 public class SceneManager
+implements MessageListener
 {
+    public static final long
+          TIME_DEFAULT_CHANGE = 500
+          ;
+
+    private static final int
+          MSG_SET_SCENE = 0
+          ;
+
+    // ---------------------------------------------
+
     private boolean touch_ignore;
     private Scene bg, fg, scene;
     private int sw, sh;
+    private boolean disable_input;
 
     public SceneManager()
     {
@@ -16,6 +32,7 @@ public class SceneManager
         this.scene = null;
         this.bg = null;
         this.fg = null;
+        this.disable_input = false;
         sw = sh = 1;
     }
 
@@ -55,24 +72,41 @@ public class SceneManager
     public int getHeight() {  return sh; }
     public Scene getScene() { return scene; }
 
-    public synchronized void setScene(Scene s)
+    public void setScene(Scene s)
+    {
+        setScene(s, TIME_DEFAULT_CHANGE);
+    }
+
+    public synchronized void setScene(Scene s, long time)
     {
         System.out.println("[setScene] " + scene + " ==> " + s); // DEBUG
 
         if(s == scene) return;
 
-        final Scene tmp = scene;
+        if(this.scene != null && time > 0) {
+            /* hide old one */
+            this.scene.onHide();
 
-        this.scene = s;
-        if(scene != null) {
-            scene.onShow();
-            scene.resize(sw, sh);
+            /* show new one */
+            disable_input = true;
+            JobService.add(this, time,
+                      MSG_SET_SCENE, 0, s, this);
+        } else {
+            set_scene_now(s);
         }
 
-        if(tmp != null) {
-            tmp.onHide();
-        }
     }
+
+    private void set_scene_now(Scene scene)
+    {
+        this.scene = scene;
+        if(scene != null) {
+            scene.resizeIfChanged(sw, sh);
+            scene.onShow();
+        }
+        disable_input = false;
+    }
+
     // ---------------------------------------------------
 
     public void render(SpriteBatch batch)
@@ -121,6 +155,8 @@ public class SceneManager
 
     public boolean touch(int x, int y, boolean down, boolean drag)
     {
+        if(disable_input) return false;
+
         if(down && !drag)
             touch_ignore = false;
         else if(touch_ignore)
@@ -135,6 +171,8 @@ public class SceneManager
 
     public boolean type(int key, boolean down)
     {
+        if(disable_input) return false;
+
         boolean ret = (scene == null) ? false : scene.type(key, down);
 
         if(!ret && bg != null)
@@ -143,4 +181,16 @@ public class SceneManager
         return ret;
 
     }
+
+    public void onMessage(int msg, int data0,
+              Object data1, Object sender)
+    {
+        switch(msg) {
+        case MSG_SET_SCENE:
+            set_scene_now((Scene) data1);
+            break;
+        }
+    }
+
 }
+

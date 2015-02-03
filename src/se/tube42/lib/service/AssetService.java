@@ -6,64 +6,48 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.graphics.g2d.freetype.*;
-import com.badlogic.gdx.utils.*;
 
 import java.util.*;
 
-
 public class AssetService
 {
-    private static HashMap<String, TextureRegion []>
-          db = new HashMap<String, TextureRegion [] >();
-    
+
     // -------------------------------------------------------------------
     // atlas
 
-    public static TextureAtlas loadAtlas(String name)
+    public static Texture load(String filename, boolean filter)
     {
-        String filename = name + ".atlas";
-        return new TextureAtlas(Gdx.files.internal(filename));
-    }
-
-    public static void setFilter(TextureAtlas atlas, boolean linear)
-    {
-        Texture.TextureFilter tf = linear ?
+        final Texture texture = new Texture( Gdx.files.internal(filename));
+        final Texture.TextureFilter tf = filter ?
               Texture.TextureFilter.Linear : Texture.TextureFilter.Nearest;
-        for(Texture t : atlas.getTextures())
-            t.setFilter(tf, tf);
+        texture.setFilter(tf, tf);
+        return texture;
     }
 
-    public static TextureRegion [] extractRegions(TextureAtlas atlas, String name)
+
+    public static TextureRegion [] divide(Texture t, int cw, int ch)
     {
-        TextureRegion [] ret = db.get(name);
-        if(ret != null) return ret;
+        final int tw = t.getWidth();
+        final int th = t.getHeight();
+        final int w = tw / cw;
+        final int h = th / ch;
 
-        Array tmp = atlas.findRegions(name);
-        if(tmp == null) {
-            db.put(name, null);
-            return null;
+        if(w < 1 || h < 1) return null;
+
+        final TextureRegion [] ret = new TextureRegion[cw * ch];
+
+        for(int a = 0; a < ch; a++) {
+            for(int b = 0; b < cw; b++) {
+                TextureRegion t2 = new TextureRegion(t, b * w, a * h, w, h);
+                ret[b + a * cw] = t2;
+            }
         }
 
-        ret = new TextureRegion[tmp.size];
-        for(int i = 0; i < ret.length; i++) {
-            TextureAtlas.AtlasRegion ar = (TextureAtlas.AtlasRegion) tmp.items[i];
-
-            ret[i] = (TextureRegion) tmp.items[i];
-
-            
-            // XXX: libgdx bugfix??
-            ar.setRegionWidth(ar.originalWidth);
-            ar.setRegionHeight(ar.originalHeight);
-            
-
-            // fix region borders
-            correctRegionBorders(ar);
-
-        }
-
-        db.put(name, ret);
+        for(int i = 0; i < ret.length; i++)
+            correctRegionBorders(ret[i]);
         return ret;
     }
+
 
     public static void correctRegionBorders(TextureRegion tr)
     {
@@ -81,31 +65,6 @@ public class AssetService
         tr.setV ( tr.getV () + hph);
         tr.setU2( tr.getU2() - hpw);
         tr.setV2( tr.getV2() - hph);
-    }
-
-    public static TextureRegion [] divide(TextureRegion t,
-              int cw, int ch, boolean correct_borders)
-    {
-        final int tw = t.getRegionWidth();
-        final int th = t.getRegionHeight();
-        final int w = tw / cw;
-        final int h = th / ch;
-        if(cw < 1 || ch < 1) return null;
-
-        final TextureRegion [][] tmp = t.split(w, h);
-        final TextureRegion [] ret = new TextureRegion[cw * ch];
-        for(int y = 0; y < ch; y++) {
-            for(int x = 0; x < cw; x++) {
-                ret[x + y * cw] = tmp[y][x];
-            }
-        }
-
-        if(correct_borders) {
-            for(int i = 0; i < ret.length; i++)
-                correctRegionBorders(ret[i]);
-        }
-
-        return ret;
     }
 
 

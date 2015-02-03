@@ -92,29 +92,6 @@ public class ServiceProvider
         return AssetService.createFonts(filename, charset, sizes);
     }
 
-    // ------------------------------------------------
-    // Atlas
-    
-    public static TextureAtlas loadAtlas(String name)
-    {
-        return AssetService.loadAtlas(name);
-    }
-
-    public static TextureRegion [] extractRegions(TextureAtlas atlas, String name)
-    {
-        return AssetService.extractRegions(atlas, name);
-    }
-
-    public static void setFilter(TextureAtlas atlas, boolean linear)
-    {
-        AssetService.setFilter(atlas, linear);
-    }
-    
-    public static TextureRegion [] divide(TextureRegion t,
-              int cw, int ch, boolean correct_borders)
-    {
-        return AssetService.divide(t, cw, ch, correct_borders);
-    }
     
     // ------------------------------------------------
     // RandomService

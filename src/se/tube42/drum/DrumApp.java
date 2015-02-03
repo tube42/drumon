@@ -9,6 +9,7 @@ import se.tube42.lib.tweeny.*;
 import se.tube42.lib.ks.*;
 import se.tube42.lib.scene.*;
 import se.tube42.lib.util.*;
+import se.tube42.lib.service.*;
 
 
 import se.tube42.drum.view.*;
@@ -94,30 +95,28 @@ public class DrumApp extends BaseApp
         if(ascale == 3) ascale = 2;
         if(ascale > 4)  ascale = 4;
 
-        String aname = "atlas/" + ascale;
+        String aname = "" + ascale;
         System.out.println("USING " + aname);
         
-        final TextureAtlas atlas = ServiceProvider.loadAtlas(aname);
-        ServiceProvider.setFilter(atlas, false);
-        TextureRegion [] tmp;
         
+        Texture tmp;
+        tmp = AssetService.load(aname + "/tiles.png", true);
+        World.tex_tiles = AssetService.divide(tmp, 4, 2);
         
-        tmp = ServiceProvider.extractRegions(atlas, "tiles");
-        World.tex_tiles = ServiceProvider.divide(tmp[0], 4, 2, true);                
+        tmp = AssetService.load(aname + "/icons.png", true);
+        World.tex_icons = AssetService.divide(tmp, 4, 8);
         
-        tmp = ServiceProvider.extractRegions(atlas, "icons");
-        World.tex_icons = ServiceProvider.divide(tmp[0], 4, 8, true);                
+        tmp = AssetService.load(aname + "/decals.png", true);        
+        World.tex_decals = AssetService.divide(tmp, 4, 2);
         
-        tmp = ServiceProvider.extractRegions(atlas, "decals");
-        World.tex_decals = ServiceProvider.divide(tmp[0], 4, 2, true);                
-        
-        World.tex_rect = ServiceProvider.extractRegions(atlas, "rect");        
+        tmp = AssetService.load(aname + "/rect.png", false);        
+        World.tex_rect = new TextureRegion[1];
+        World.tex_rect[0] = new TextureRegion(tmp);
         
 
         World.font = ServiceProvider.createFonts(
                   "fonts/Roboto-Regular.ttf",
-                  CHARSET, ascale * 16)[0];
-        
+                  CHARSET, ascale * 16)[0];        
         
         try {
             World.sounds = new Sample[VOICES];

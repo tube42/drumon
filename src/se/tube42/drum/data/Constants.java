@@ -6,11 +6,11 @@ public final class Constants
     public static final boolean
           DEBUG = false
           ;
-    
+
     public static final String
           CHARSET = "0123456789%"
           ;
-    
+
     public static final int
           MAX_TEMPO = 300,
           MIN_TEMPO = 40,

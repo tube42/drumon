@@ -66,7 +66,7 @@ public class ChoiceScene extends Scene
         text.set(BaseItem.ITEM_A, 0, 1).configure(0.8f, null);
     }
 
-    
+
     public void onHide()
     {
         super.onShow();
@@ -77,7 +77,7 @@ public class ChoiceScene extends Scene
         mark.set(BaseItem.ITEM_A, 1, 0).configure(0.5f, null);
         text.set(BaseItem.ITEM_A, 1, 0).configure(0.8f, null);
     }
-    
+
     // ------------------------------------------------
 
     private void configure(int min, int max, int curr)

@@ -21,5 +21,5 @@ public class UIC
         UIC.sh = h;
         UIC.halfpixel = 0.5f;
         System.out.println("UIC resize: " + sw + "x" + sh + " " + halfpixel);
-    }    
+    }
 }

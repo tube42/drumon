@@ -56,8 +56,8 @@ implements ApplicationListener, InputProcessor
         this.camera = new OrthographicCamera();
         this.mgr = new SceneManager();
         this.bgc = new Item(3);
-        
-        
+
+
         // make sure screen sizes are valid before we continue
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 

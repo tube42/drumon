@@ -57,7 +57,7 @@ public class Choice2Scene extends Scene
 
         mark.set(BaseItem.ITEM_A, 0, 1).configure(0.8f, null);
     }
-    
+
     public void onHide()
     {
         super.onShow();
@@ -67,7 +67,7 @@ public class Choice2Scene extends Scene
 
         mark.set(BaseItem.ITEM_A, 1, 0).configure(0.5f, null);
     }
-    
+
 
     // ------------------------------------------------
 

@@ -85,14 +85,14 @@ public class ServiceProvider
 
     // ------------------------------------------------
     // Fonts
-    
+
     public static BitmapFont [] createFonts(String filename,
               String charset, int... sizes)
     {
         return AssetService.createFonts(filename, charset, sizes);
     }
 
-    
+
     // ------------------------------------------------
     // RandomService
     public static float getRandom()

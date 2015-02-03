@@ -19,11 +19,11 @@ public final class World extends UIC
     // prefered configuration. this is filled by platform code
     public static int freq = 44100;
     public static int samples = 512;
-    
+
     // UI
     public static int ui_scale, ui_gap;
     public static int tile_stripe, tile_size, tile_x0, tile_y0;
-        
+
     // assets
     public static BitmapFont font;
     public static TextureRegion []tex_rect;

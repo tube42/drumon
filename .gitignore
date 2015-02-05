@@ -3,5 +3,4 @@ build
 gen
 libs/*
 local.*
-assets
 tmp

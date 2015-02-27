@@ -1,0 +1,25 @@
+language: android
+android:
+  components:
+    - build-tools-19.1.0
+    - android-19
+    - tools
+    - platform-tools
+  licenses:
+    - 'android-sdk-license-.+'
+
+script:
+    - ant setup
+    - ant compile_local
+    - ant debug
+
+branches:
+  only:
+    - master
+    - /^rel-.*$/
+    
+#addons:
+#  artifacts:
+#    paths:
+#      - bin/*-debug.apk
+#      - ./*.jar

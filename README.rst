@@ -45,3 +45,14 @@ To build the assets, you should do
 * make
 
 Note that "ant setup" will overwrite your generated assets.
+
+
+Continuous Whatever...
+----------------------
+
+Automatic builds on TravisCI: 
+
+.. image:: https://travis-ci.org/tube42/Drum-On.svg
+    :target: https://travis-ci.org/tube42/Drum-On
+
+We cant compile our assets on a CI server yet, so beware that artifacts may use old assets...

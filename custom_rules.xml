@@ -112,14 +112,27 @@
   </target>
   
   
-  <target name="publish" depends="release" >
-    <!-- the comiled assets -->
+  <!-- check if this is the master branch -->  
+  <target name="check_master" >
+    <exec executable="git" outputproperty="git.branch" failifexecutionfails="true">
+      <arg line="rev-parse --abbrev-ref HEAD"/>
+    </exec>
+    <condition property="is.master">
+      <equals arg1="${git.branch}" arg2="master" />
+    </condition>
+    <echo>Current git branch is ${git.branch}</echo>
+  </target>
+  
+  <target name="publish" depends="check_master" if="is.master" >
+    <!-- compile and save assets -->
+    <exec executable="make" failifexecutionfails="true" />
     <zip destfile="${site}/assets/assets.zip" >
-      <zipfileset dir="assets" prefix="assets"/>  
+      <zipfileset dir="assets" prefix="assets"/>
       <zipfileset dir="res" prefix="res" />
-    </zip>    
+    </zip>
     
-    <!-- the APK -->
+    <!-- build release and save APK-->
+    <antcall target="release" />
     <copy file="bin/${apkplz}" todir="${site}/bin"/>
     
     <!-- add them to git, commit them and finally push the repo-->

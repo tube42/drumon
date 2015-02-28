@@ -11,6 +11,7 @@ android:
 script:
     - ant setup
     - ant compile_local
+    - ant dist
     - ant debug
 
 cache:

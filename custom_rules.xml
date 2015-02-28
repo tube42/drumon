@@ -111,6 +111,22 @@
     </java>
   </target>
   
+  <!-- create jar for the desktop -->
+  <target name="dist" depends="compile_local" >    
+    <jar jarfile="libs/bin/app.jar">
+      <fileset dir="assets"/>      
+      <fileset dir="build"/>
+      <manifest>
+        <attribute name="Main-Class" value="se.tube42.${proj}.desktop.DesktopMain"/>
+      </manifest>       
+    </jar>
+    
+    <zip destfile="${proj}_app.jar">
+      <zipgroupfileset dir="libs" includes="*.jar"/>
+      <zipgroupfileset dir="libs/pc" includes="*.jar"/>
+      <zipgroupfileset dir="libs/bin" includes="app.jar"/>
+    </zip>        
+  </target>
   
   <!-- check if this is the master branch -->  
   <target name="check_master" >

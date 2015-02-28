@@ -13,6 +13,10 @@ script:
     - ant compile_local
     - ant debug
 
+cache:
+  directories:
+    - $HOME/.android
+
 branches:
   only:
     - master

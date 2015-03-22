@@ -1,0 +1,12 @@
+[submodule "submodules/kickstarter"]
+	path = submodules/kickstarter
+	url = https://github.com/tube42/kickstarter
+[submodule "submodules/tweeny"]
+	path = submodules/tweeny
+	url = https://github.com/tube42/tweeny
+[submodule "submodules/marm"]
+	path = submodules/marm
+	url = https://github.com/tube42/marm
+[submodule "submodules/composition"]
+	path = submodules/composition
+	url = https://github.com/tube42/composition

@@ -4,5 +4,6 @@ gen
 libs/*
 local.*
 tmp
+*.dl
 *~
 *_app.jar

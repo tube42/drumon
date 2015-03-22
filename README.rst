@@ -1,13 +1,18 @@
 DRUM ON
 =======
 
+.. image:: https://travis-ci.org/tube42/Drum-On.svg
+    :target: https://travis-ci.org/tube42/Drum-On
+
 This is a FOSS drum app for Android. 
 
-.. image:: http://tube42.github.io/drumon/img/img00.png
+.. image:: http://tube42.github.io/drum/img/img00.png
 
+Downloads:
 
-To download, go to https://play.google.com/store/apps/details?id=se.tube42.drum.android
-
+* `Google Play <https://play.google.com/store/apps/details?id=se.tube42.drum.android>`_
+* `F-Droid <https://...>`_ (working on it...)
+* `APK <https://tube42.github.io/drum/bin/drum-release.apk>`_ (signed with Play key)
 
 
 Building
@@ -45,14 +50,3 @@ To build the assets, you should do
 * make
 
 Note that "ant setup" will overwrite your generated assets.
-
-
-Continuous Whatever...
-----------------------
-
-Automatic builds on TravisCI: 
-
-.. image:: https://travis-ci.org/tube42/Drum-On.svg
-    :target: https://travis-ci.org/tube42/Drum-On
-
-We cant compile our assets on a CI server yet, so beware that artifacts may use old assets...

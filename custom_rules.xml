@@ -33,11 +33,6 @@
       <fileset dir="submodules/tweeny" includes="*_lib.jar"/>
     </copy>
     
-    <copy todir="libs/bin" >
-      <fileset dir="submodules/composition" includes="*_app.jar"/>
-      <fileset dir="submodules/marm" includes="*_app.jar"/>
-    </copy>
-    
     
     <!-- download assets and unpack them into the project these are pre-compiled assets. 
         You also can build these from source if you have the tools (see Makefile) -->
@@ -47,8 +42,9 @@
     
 	
     <!-- download and unpack libgdx -->
+    <get skipexisting="true" src="http://libgdx.badlogicgames.com/releases/libgdx-${gdx_version}.zip"
+      dest="${user.home}/.android/.dl/gdx-${gdx_version}.zip" />
     <unzip src="${user.home}/.android/.dl/gdx-${gdx_version}.zip" dest="libs/tmp"/>
-
     <unjar src="libs/tmp/gdx.jar" dest="libs/common" />
     <unjar src="libs/tmp/extensions/gdx-freetype/gdx-freetype.jar" dest="libs/common" />
 

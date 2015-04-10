@@ -82,17 +82,6 @@ public class ServiceProvider
         return fh == null ? null : fh.read();
     }
 
-
-    // ------------------------------------------------
-    // Fonts
-
-    public static BitmapFont [] createFonts(String filename,
-              String charset, int... sizes)
-    {
-        return AssetService.createFonts(filename, charset, sizes);
-    }
-
-
     // ------------------------------------------------
     // RandomService
     public static float getRandom()

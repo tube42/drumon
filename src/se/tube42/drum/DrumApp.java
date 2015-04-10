@@ -114,7 +114,7 @@ public class DrumApp extends BaseApp
         World.tex_rect[0] = new TextureRegion(tmp);
 
 
-        World.font = ServiceProvider.createFonts(
+        World.font = AssetService.createFonts(
                   "fonts/Roboto-Regular.ttf",
                   CHARSET, ascale * 16)[0];
 

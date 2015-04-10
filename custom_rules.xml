@@ -1,9 +1,12 @@
 <project name="drum" default="help">
   <property name="proj" value="drum" />
   <property name="apkplz" value="drum-release.apk" />
-  <property name="gdx_version" value="1.5.4" />  
   <property name="site" location="../tube42.github.io/drum" />
-
+  
+  <property name="gdx_version" value="1.5.4" />
+  <property name="gdx_checksum" value="158d2faeddb36e0656119ad586885a0fc53b02e3fe5b3ffcf7bb8b783db15f22" />
+  
+  
   <target name="setup">
     <mkdir dir="${user.home}/.android" />    
     <mkdir dir="${user.home}/.android/.dl" />
@@ -16,7 +19,7 @@
     <mkdir dir="libs/bin" />
     
     
-    <!-- update submodules and build them  -->        
+    <!-- update submodules and build them  -->
     <exec executable="git" failifexecutionfails="true">
       <arg line="submodule update --remote --init"/>
     </exec>    
@@ -41,9 +44,22 @@
     <unzip src=".dl/assets.zip" dest="./"/>
     
 	
-    <!-- download and unpack libgdx -->
+    <!-- download libgdx -->
     <get skipexisting="true" src="http://libgdx.badlogicgames.com/releases/libgdx-${gdx_version}.zip"
       dest="${user.home}/.android/.dl/gdx-${gdx_version}.zip" />
+    
+    <!-- verify libgdx file -->
+    <checksum file="${user.home}/.android/.dl/gdx-${gdx_version}.zip"
+      algorithm="SHA-256" property="gdx_checksum_computed" />
+    <condition property="gdx_verify" >
+      <not>
+        <equals arg1="${gdx_checksum_computed}" arg2="${gdx_checksum}" forcestring="true" />
+      </not>
+    </condition>
+    <fail message="libGDX damadged! ${gdx_checksum} != ${gdx_checksum_computed}"
+      if="${gdx_verify}" />
+    
+    <!-- and unpack it to a temporary dir -->
     <unzip src="${user.home}/.android/.dl/gdx-${gdx_version}.zip" dest="libs/tmp"/>
     <unjar src="libs/tmp/gdx.jar" dest="libs/common" />
     <unjar src="libs/tmp/extensions/gdx-freetype/gdx-freetype.jar" dest="libs/common" />

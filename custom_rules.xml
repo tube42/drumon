@@ -19,13 +19,10 @@
     <mkdir dir="libs/bin" />
     
     
-    <!-- update submodules and build them  -->
+    <!-- update submodules, build them and copy the jars -->
     <exec executable="git" failifexecutionfails="true">
-      <arg line="submodule update --remote --init"/>
+      <arg line="submodule update --init"/>
     </exec>    
-    <exec executable="git" failifexecutionfails="true">
-      <arg line="submodule foreach git pull origin master"/>
-    </exec>
     <exec executable="git" failifexecutionfails="true">
       <arg line="submodule foreach ant dist"/>
     </exec>

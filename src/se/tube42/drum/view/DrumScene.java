@@ -11,6 +11,7 @@ import se.tube42.lib.ks.*;
 import se.tube42.lib.scene.*;
 import se.tube42.lib.util.*;
 import se.tube42.lib.item.*;
+import se.tube42.lib.service.*;
 
 import se.tube42.drum.data.*;
 import se.tube42.drum.audio.*;
@@ -20,6 +21,7 @@ import static se.tube42.drum.data.Constants.*;
 
 public class DrumScene extends Scene implements SequencerListener
 {
+	private ParticleLayer layer_particles;
     private Layer layer_tiles;
 
     private BaseText item_msg;
@@ -68,6 +70,8 @@ public class DrumScene extends Scene implements SequencerListener
         for(BaseItem bi : World.tile_voices) World.tiles[index++] = bi;
         for(BaseItem bi : World.tile_tools) World.tiles[index++] = bi;
         for(BaseItem bi : World.tile_selectors) World.tiles[index++] = bi;
+
+        addLayer( layer_particles = new ParticleLayer());
 
         layer_tiles = getLayer(1);
         layer_tiles.add(World.tiles);
@@ -419,6 +423,7 @@ public class DrumScene extends Scene implements SequencerListener
 
 
 	// ------------------------------------------------
+	// SequencerListener
 
 	public void onBeatStart(int beat)
 	{
@@ -428,7 +433,25 @@ public class DrumScene extends Scene implements SequencerListener
 
 	public void onSampleStart(int beat, int sample)
 	{
-		World.tile_voices[sample].mark1();
+		final VoiceItem vi = World.tile_voices[sample];
+		final PadItem pi = World.tile_pads[beat];
+		vi.mark1();
+
+		final float speed = Math.min(World.sw, World.sh) / 2;
+		final boolean curr = sample == World.prog.getVoice();
+		final int color = COLOR_PADS[sample] | (curr ? 0x30000000 : 0x10000000);
+
+		for(int i = curr ? 5 : 1; i > 0; --i) {
+			final Particle p0 = layer_particles.create(0.1f, 1f);
+			p0.attach(pi);
+			p0.configure(World.tex_tiles, TILE_PAD0, color);
+			// p0.configure(World.tex_rect, 0, color);
+			p0.setAcceleration(0, -speed * 4, 0);
+			p0.setVelocity(
+				RandomService.get(-1, +1) * speed,
+				RandomService.get( 0, +1) * speed,
+				RandomService.get(-1, +1) * 90);
+		}
 	}
 
     // ----------------------------------------------------------

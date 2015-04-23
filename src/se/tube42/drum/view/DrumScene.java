@@ -28,6 +28,7 @@ public class DrumScene extends Scene implements SequencerListener
     private int last_hit, first_hit;
     private int mode;
     private boolean first;
+    private volatile int mb_beat, mb_sample; // seq state posted from the other thread
 
     public DrumScene()
     {
@@ -100,6 +101,9 @@ public class DrumScene extends Scene implements SequencerListener
 
     public void onShow()
     {
+    	 this.mb_beat = -1;
+    	 this.mb_sample = 0;
+
         if(first) {
             first = false;
             reposition(true);
@@ -423,51 +427,69 @@ public class DrumScene extends Scene implements SequencerListener
 
 
 	// ------------------------------------------------
-	// SequencerListener
+	// SequencerListener interface:
+	//
+	// to avoid multi-thread madness we will just copy it variables in audio
+	// thread and handle them in our own thread
+
 
 	public void onBeatStart(int beat)
 	{
-		World.marker.setBeat(beat);
-        World.marker.flags |= BaseItem.FLAG_VISIBLE;
+		 mb_beat = beat;
 	}
 
 	public void onSampleStart(int beat, int sample)
 	{
-		final VoiceItem vi = World.tile_voices[sample];
-		final PadItem pi = World.tile_pads[beat];
-		vi.mark1();
-
-		final float speed = Math.min(World.sw, World.sh) / 2;
-		final boolean curr = sample == World.prog.getVoice();
-		final int color = COLOR_PADS[sample] | (curr ? 0x30000000 : 0x10000000);
-
-		for(int i = curr ? 5 : 1; i > 0; --i) {
-			final Particle p0 = layer_particles.create(0.1f, 1f);
-			p0.attach(pi);
-			p0.configure(World.tex_tiles, TILE_PAD0, color);
-			// p0.configure(World.tex_rect, 0, color);
-			p0.setAcceleration(0, -speed * 4, 0);
-			p0.setVelocity(
-				RandomService.get(-1, +1) * speed,
-				RandomService.get( 0, +1) * speed,
-				RandomService.get(-1, +1) * 90);
-		}
+		mb_sample |= 1 << sample;
 	}
 
-    // ----------------------------------------------------------
+    public void onUpdate(float dt)
+    {
+    	if(mb_beat != -1) {
+    		// copy it and reset the source
+    		final int beat = mb_beat;
+    		final int samples = mb_sample;
+    		mb_beat = -1;
+    		mb_sample = 0;
+
+    		// udpate beat marker
+			World.marker.setBeat(beat);
+        	World.marker.flags |= BaseItem.FLAG_VISIBLE;
+
+        	// add particle to any pads we just activated
+        	final float speed = Math.min(World.sw, World.sh) / 2;
+        	final PadItem pi = World.tile_pads[beat];
+
+        	for(int i = 0; i < VOICES; i++) {
+        		if( (samples & (1 << i)) == 0) continue;
+    			final boolean curr = i == World.prog.getVoice();
+				final VoiceItem vi = World.tile_voices[i];
+				final int color = COLOR_PADS[i] | (curr ? 0x30000000 : 0x10000000);
+
+				vi.mark1();
+
+				for(int j = curr ? 4 : 1; j > 0; --j) {
+					final Particle p0 = layer_particles.create(0.1f, 1f);
+					p0.attach(pi);
+					p0.configure(World.tex_tiles, TILE_PAD0, color);
+					p0.setAcceleration(0, -speed * 4, 0);
+					p0.setVelocity(
+						RandomService.get(-1, +1) * speed,
+						RandomService.get( 0, +1) * speed,
+						RandomService.get(-1, +1) * 90);
+				}
+        	}
+    	}
+    }
+
+
+	// ----------------------------------------------------------
 
     public void resize(int w, int h)
     {
     	super.resize(w, h);
         World.marker.setSize(World.tile_size, World.tile_size);
         reposition(false);
-    }
-
-    // ----------------------------------------------------------
-
-    public void onUpdate(float dt)
-    {
-
     }
 
     public boolean type(int key, boolean down)

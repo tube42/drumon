@@ -18,12 +18,13 @@ public class Sequencer
 {
     private int tcnt, bcnt;
     private boolean pause;
-    private boolean [] started;
     private Program prog;
+	private SequencerListener listener;
+
 
     public Sequencer(Program prog)
     {
-        this.started = new boolean[VOICES];
+        this.listener = null;
 
         setProgram(prog);
         setPause(false);
@@ -31,6 +32,11 @@ public class Sequencer
 
         bcnt = 15; // next will be 0
     }
+
+	public void setListener(SequencerListener listener)
+	{
+		this.listener = listener;
+	}
 
     public void reset()
     {
@@ -52,18 +58,8 @@ public class Sequencer
 
     //
 
-    public boolean checkStarted(int voice)
-    {
-        if(started[voice]) {
-            started[voice] = false;
-            return true;
-        }
-        return false;
-    }
-    //
     public boolean isPaused() { return pause; }
     public void setPause(boolean p) { this.pause = p; }
-
 
     //
 
@@ -106,6 +102,9 @@ public class Sequencer
 
             bcnt = (bcnt + 1) & 15;
 
+            if(listener != null)
+            	listener.onBeatStart(bcnt);
+
             for(int i = 0; i < VOICES; i++) {
                 if(prog.get(i, bcnt) != 0) {
                     float amp = prog.getVolume(i);
@@ -119,7 +118,8 @@ public class Sequencer
                     }
 
                     World.sounds[i].start(variant, amp);
-                    started[i] = true;
+                    if(listener != null)
+            			listener.onSampleStart(bcnt, i);
                 }
             }
             return true;

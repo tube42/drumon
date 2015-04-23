@@ -18,9 +18,8 @@ import se.tube42.drum.logic.*;
 
 import static se.tube42.drum.data.Constants.*;
 
-public class DrumScene extends Scene
+public class DrumScene extends Scene implements SequencerListener
 {
-
     private Layer layer_tiles;
 
     private BaseText item_msg;
@@ -32,8 +31,9 @@ public class DrumScene extends Scene
     {
         super("drum");
 
-        ServiceProvider.setColorItem(COLOR_BG, World.bgc,
-                  0f, 1f, 2f);
+		World.seq.setListener(this);
+
+        ServiceProvider.setColorItem(COLOR_BG, World.bgc, 0f, 1f, 2f);
 
         // PADS
         World.tile_pads = new PadItem[PADS];
@@ -68,7 +68,6 @@ public class DrumScene extends Scene
         for(BaseItem bi : World.tile_voices) World.tiles[index++] = bi;
         for(BaseItem bi : World.tile_tools) World.tiles[index++] = bi;
         for(BaseItem bi : World.tile_selectors) World.tiles[index++] = bi;
-
 
         layer_tiles = getLayer(1);
         layer_tiles.add(World.tiles);
@@ -419,9 +418,20 @@ public class DrumScene extends Scene
 
 
 
+	// ------------------------------------------------
 
+	public void onBeatStart(int beat)
+	{
+		World.marker.setBeat(beat);
+        World.marker.flags |= BaseItem.FLAG_VISIBLE;
+	}
 
-    // ------------------------------------------------
+	public void onSampleStart(int beat, int sample)
+	{
+		World.tile_voices[sample].mark1();
+	}
+
+    // ----------------------------------------------------------
 
     public void resize(int w, int h)
     {
@@ -434,16 +444,7 @@ public class DrumScene extends Scene
 
     public void onUpdate(float dt)
     {
-        // update the marker
-        int beat = World.seq.getBeat();
-        World.marker.setBeat(beat);
-        World.marker.flags |= BaseItem.FLAG_VISIBLE;
 
-        for(int i = 0; i < VOICES; i++) {
-            if(World.seq.checkStarted(i)) {
-                World.tile_voices[i].mark1();
-            }
-        }
     }
 
     public boolean type(int key, boolean down)

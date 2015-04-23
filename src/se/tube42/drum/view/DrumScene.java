@@ -471,7 +471,7 @@ public class DrumScene extends Scene implements SequencerListener
 				for(int j = curr ? 4 : 1; j > 0; --j) {
 					final Particle p0 = layer_particles.create(0.1f, 1f);
 					p0.attach(pi);
-					p0.configure(World.tex_tiles, TILE_PAD0, color);
+					p0.configure(World.tex_tiles, TILE_PAD1, color);
 					p0.setAcceleration(0, -speed * 4, 0);
 					p0.setVelocity(
 						RandomService.get(-1, +1) * speed,

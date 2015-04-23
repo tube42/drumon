@@ -32,8 +32,8 @@ public final class Constants
           ;
 
     public static final int
-          TILE_PAD1 = 0,
-          TILE_PAD0 = 1,
+          TILE_PAD0 = 0,
+          TILE_PAD1 = 1,
           TILE_MARKER = 2,
           TILE_BUTTON0 = 4,
           TILE_BUTTON1 = 5

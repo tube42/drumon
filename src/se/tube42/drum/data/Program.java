@@ -32,7 +32,7 @@ public class Program
             sample_vol_variation[i] = DEFAULT_VARIATION;
         }
 
-        setTempoMultiplier(1);
+        setTempoMultiplier(2);
         setTempo(120);
         setVoice(0);
         reset();

@@ -21,7 +21,6 @@ import static se.tube42.drum.data.Constants.*;
 
 public class DrumScene extends Scene implements SequencerListener
 {
-	private ParticleLayer layer_particles;
     private Layer layer_tiles;
 
     private BaseText item_msg;
@@ -71,8 +70,6 @@ public class DrumScene extends Scene implements SequencerListener
         for(BaseItem bi : World.tile_voices) World.tiles[index++] = bi;
         for(BaseItem bi : World.tile_tools) World.tiles[index++] = bi;
         for(BaseItem bi : World.tile_selectors) World.tiles[index++] = bi;
-
-        addLayer( layer_particles = new ParticleLayer());
 
         layer_tiles = getLayer(1);
         layer_tiles.add(World.tiles);
@@ -456,30 +453,18 @@ public class DrumScene extends Scene implements SequencerListener
 			World.marker.setBeat(beat);
         	World.marker.flags |= BaseItem.FLAG_VISIBLE;
 
-        	// add particle to any pads we just activated
-        	final float speed = Math.min(World.sw, World.sh) / 2;
-        	final PadItem pi = World.tile_pads[beat];
+			// mark played pad
+			if(samples != 0) {
+				final int mask = 1 << World.prog.getVoice();
+				World.tile_pads[beat].mark1((samples & mask) == 0 ? 1.1f : 1.2f);
+			}
 
-        	for(int i = 0; i < VOICES; i++) {
-        		if( (samples & (1 << i)) == 0) continue;
-    			final boolean curr = i == World.prog.getVoice();
-				final VoiceItem vi = World.tile_voices[i];
-				final int color = COLOR_PADS[i] | (curr ? 0x30000000 : 0x10000000);
-
-				vi.mark1();
-
-				for(int j = curr ? 4 : 1; j > 0; --j) {
-					final Particle p0 = layer_particles.create(0.1f, 1f);
-					p0.attach(pi);
-					p0.configure(World.tex_tiles, TILE_PAD1, color);
-					p0.setAcceleration(0, -speed * 4, 0);
-					p0.setVelocity(
-						RandomService.get(-1, +1) * speed,
-						RandomService.get( 0, +1) * speed,
-						RandomService.get(-1, +1) * 90);
-				}
-        	}
-    	}
+			// mark played sound
+			for(int i = 0; i < VOICES; i++) {
+				if( (samples & (1 << i)) != 0)
+					World.tile_voices[i].mark1();
+			}
+		}
     }
 
 

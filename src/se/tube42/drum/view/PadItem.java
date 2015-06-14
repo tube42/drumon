@@ -29,7 +29,6 @@ public class PadItem extends BaseItem
     }
 
     //
-
     public void mark0()
     {
         final float r = ServiceProvider.getRandom(0.08f, 0.12f);
@@ -37,6 +36,12 @@ public class PadItem extends BaseItem
         set(ITEM_S, 0.9f).configure(1 * r, null)
               .tail(1.1f).configure(2 * r, null)
               .tail(1.0f).configure(1 * r, null);
+    }
+
+    public void mark1(float scale)
+    {
+		set(BaseItem.ITEM_S, 1, scale).configure(0.15f,null)
+			.tail(1).configure(0.1f, null);
     }
 
     //

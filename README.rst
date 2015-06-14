@@ -1,10 +1,10 @@
 DRUM ON
 =======
 
-.. image:: https://travis-ci.org/tube42/Drum-On.svg
-    :target: https://travis-ci.org/tube42/Drum-On
+.. image:: https://travis-ci.org/tube42/drumon.svg
+    :target: https://travis-ci.org/tube42/drumon
 
-This is a FOSS drum app for Android. 
+This is a FOSS drum app for Android.
 
 .. image:: http://tube42.github.io/drum/img/img00.png
 

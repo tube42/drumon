@@ -106,7 +106,7 @@ public class DrumScene extends Scene implements SequencerListener
             reposition(true);
         } else {
             for(int i = 0; i < World.tiles.length; i++) {
-                final float t = ServiceProvider.getRandom(0.35f, 0.5f);
+                final float t = ServiceProvider.getRandom(0.2f, 0.3f);
                 World.tiles[i].set(BaseItem.ITEM_A, 0, 1).configure(t, null);
             }
         }
@@ -115,7 +115,7 @@ public class DrumScene extends Scene implements SequencerListener
     public void onHide()
     {
         for(int i = 0; i < World.tiles.length; i++) {
-            final float t = ServiceProvider.getRandom(0.35f, 0.5f);
+            final float t = ServiceProvider.getRandom(0.2f, 0.3f);
             World.tiles[i].set(BaseItem.ITEM_A, 1, 0).configure(t, null);
         }
     }
@@ -412,13 +412,13 @@ public class DrumScene extends Scene implements SequencerListener
     private void get_choice(int choice, int id)
     {
         World.scene_choice.setChoice(choice, id);
-        World.mgr.setScene(World.scene_choice);
+        World.mgr.setScene(World.scene_choice, 120);
     }
 
     private void get_choice2(int choice, int id)
     {
         World.scene_choice2.setChoice(choice, id);
-        World.mgr.setScene(World.scene_choice2);
+        World.mgr.setScene(World.scene_choice2, 120);
     }
 
 

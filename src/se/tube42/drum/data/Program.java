@@ -9,19 +9,18 @@ import static se.tube42.drum.data.Constants.*;
 
 public class Program
 {
-    private int [][]data;
-    private int [] banks;
+    private int []data;
+    private int bank_active;
     private int [] sample_variants;
     private float [] sample_vol;
     private int [] sample_vol_variation;
 
     private int tempo, tmul;
     private int voice;
-
+    
     public Program(float [] amps)
     {
-        this.data = new int[VOICES][PADS * BANKS];
-        this.banks = new int[VOICES];
+        this.data = new int[VOICES];
         this.sample_variants = new int[VOICES];
         this.sample_vol = new float[VOICES];
         this.sample_vol_variation = new int[VOICES];
@@ -41,7 +40,7 @@ public class Program
     public void reset()
     {
         for(int i = 0; i < VOICES; i++) {
-            setBank(i, 0);
+            setBank(i, false);
             setSampleVariant(i, 0);
         }
     }
@@ -49,7 +48,6 @@ public class Program
     //
     public int numOfVoices() { return VOICES; }
     public int numOfSteps() { return PADS; }
-    public int numOfBanks() { return BANKS; }
 
     //
     public int getSampleVariant(int voice)
@@ -93,12 +91,14 @@ public class Program
     }
 
     //
-    public int getBank(int voice){ return banks[voice]; }
-
-    public void setBank(int voice, int b)
+    public boolean getBank(int voice)
     {
-        if(b >= 0 && b < BANKS)
-            this.banks[voice] = b;
+        return get_bit(bank_active, voice);
+    }
+
+    public void setBank(int voice, boolean b)
+    {
+        bank_active = set_bit(bank_active, voice, b);
     }
 
     //
@@ -134,15 +134,30 @@ public class Program
 
     //
 
-    public int get(int voice, int step)
+    public boolean get(int voice, int step)
     {
-        final int off = banks[voice] * PADS;
-        return data[voice][step + off];
+        final int off = getBank(voice) ? 0 : PADS;
+        return get_bit(data[voice], step + off);
     }
 
-    public void set(int voice, int step, int val)
+    public void set(int voice, int step, boolean set)
     {
-        final int off = banks[voice] * PADS;
-        data[voice][step + off] = val;
+        final int off = getBank(voice) ? 0 : PADS;
+        data[voice] = set_bit(data[voice], step + off, set);
+    }
+    
+    
+    // some bitfield helpers to make the code above more clean
+    private static final boolean get_bit(int data, int bit)
+    {
+        final int mask = 1 << bit;
+        return (data & mask) != 0;
+    }
+    private static final int set_bit(int data, int bit, boolean set)
+    {
+        final int mask = 1 << bit;
+        if(set) data |= mask;
+        else data &= ~ mask;
+        return data;
     }
 }

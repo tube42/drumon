@@ -24,7 +24,6 @@ public final class Constants
           ;
 
     public static final int
-          BANKS = 2,
           SELECTORS = 4,
           TOOLS = 4,
           VOICES = 8,

@@ -47,10 +47,10 @@ public class VoiceItem extends PressItem
 
     }
 
-    public void setVoiceVariant(int voice, int pattern)
+    public void setVoiceVariant(int voice, boolean bank)
     {
         dec0 = voice == 0 ? -1 : DECALS_NUM + voice;
-        dec1 = pattern == 0 ? -1 : DECALS_ALPHA + pattern;
+        dec1 = bank ? DECALS_ALPHA + 1 : -1;
     }
 
 

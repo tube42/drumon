@@ -106,7 +106,7 @@ public class Sequencer
             	listener.onBeatStart(bcnt);
 
             for(int i = 0; i < VOICES; i++) {
-                if(prog.get(i, bcnt) != 0) {
+                if(prog.get(i, bcnt)) {
                     float amp = prog.getVolume(i);
                     final int variant = prog.getSampleVariant(i);
 

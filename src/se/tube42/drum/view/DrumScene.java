@@ -183,7 +183,8 @@ public class DrumScene extends Scene implements SequencerListener
     private void update_pad(int pad)
     {
         final int voice =  World.prog.getVoice();
-        World.tile_pads[pad].setTile( World.prog.get(voice, pad) );
+        World.tile_pads[pad].setTile( World.prog.get(voice, pad) 
+                  ? TILE_PAD1 : TILE_PAD0 );
     }
 
     private void update_pads()
@@ -195,7 +196,7 @@ public class DrumScene extends Scene implements SequencerListener
     private void select_pad(int pad)
     {
         final int voice =  World.prog.getVoice();
-        World.prog.set(voice, pad, World.prog.get(voice, pad) ^ 1);
+        World.prog.set(voice, pad, !World.prog.get(voice, pad));
         World.tile_pads[pad].mark0();
         update_pad(pad);
     }
@@ -269,7 +270,7 @@ public class DrumScene extends Scene implements SequencerListener
             break;
         case 1:
             i0 = seq.isPaused() ? ICON_PLAY : ICON_PAUSE;
-            i1 = prog.getBank(voice) == 0 ? ICON_A : ICON_B;
+            i1 = prog.getBank(voice) ? ICON_B : ICON_A;
             break;
         case 2:
             v0 = World.mixer.getEffectChain().isEnabled(0);
@@ -320,7 +321,7 @@ public class DrumScene extends Scene implements SequencerListener
             break;
 
         case 5:
-            World.prog.setBank(voice, 1 ^ World.prog.getBank(voice));
+            World.prog.setBank(voice, !World.prog.getBank(voice));
             break;
 
         case 6:
@@ -329,8 +330,7 @@ public class DrumScene extends Scene implements SequencerListener
                 int a = ServiceProvider.getRandomInt(PADS);
                 int b = ServiceProvider.getRandomInt(PADS);
 
-                if(World.prog.get(voice, a) != 0 &&
-                   World.prog.get(voice, b) == 0) {
+                if(World.prog.get(voice, a) && !World.prog.get(voice, b)) {
                     select_pad(a);
                     select_pad(b);
                 }
@@ -340,7 +340,7 @@ public class DrumScene extends Scene implements SequencerListener
         case 7:
             // clear one
             for(int i = 0; i < PADS; i++)
-                World.prog.set(voice, i, 0);
+                World.prog.set(voice, i, false);
             break;
 
             // mode = 2, waveform

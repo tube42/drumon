@@ -83,16 +83,22 @@ public class DrumScene extends Scene implements SequencerListener
         item_msg.setAlignment(-0.5f, -0.5f);
         getLayer(2).add(item_msg);
 
+        
+        // if available, load the latest saved program
+        ServiceProvider.autoLoad();
+        
+        
+        // update all inclduing possible auto-save
+        
         // init
         this.first = true;
         this.mode = -1; // force update
         select_mode(0);
         select_sound(1); // force update
         select_sound(0);
-
+        
         update(true, true, true, true);
         msg_show("", 0, 0);
-
     }
 
 

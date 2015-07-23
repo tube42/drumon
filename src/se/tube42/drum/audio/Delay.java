@@ -8,7 +8,7 @@ import static se.tube42.drum.data.Constants.*;
  * simple delay effect
  */
 
-public final class Delay
+public final class Delay extends Effect
 {
     private float amp;
     private float []buffer;

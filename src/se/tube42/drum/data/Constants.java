@@ -29,7 +29,15 @@ public final class Constants
           VOICES = 8,
           PADS = 4 * 4
           ;
-
+    
+    // effect chain
+    public static final int
+          FX_CRUSH = 0,
+          FX_FILTER = 1,
+          FX_DELAY = 2,
+          FX_COMP = 3
+          ;    
+    
     public static final int
           TILE_PAD0 = 0,
           TILE_PAD1 = 1,

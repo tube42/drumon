@@ -9,7 +9,7 @@ import static se.tube42.drum.data.Constants.*;
  * by removing information from the sounds
  */
 
-public final class Crusher
+public final class Crusher extends Effect
 {
 
     public Crusher()

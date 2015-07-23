@@ -8,21 +8,22 @@ import static se.tube42.drum.data.Constants.*;
  * simple and dirty compressor with no memory
  */
 
-public final class Compressor
+public final class Compressor extends Effect
 {
+    public static final int
+          CONFIG_SRC = 0,
+          CONFIG_DST = 1;
+    
     private float src, dst;
     private float mul1, mul2, add2;
 
     public Compressor(float src, float dst)
     {
-        configure(src, dst);
+        setConfig(CONFIG_DST, dst);
+        setConfig(CONFIG_SRC, src);
     }
-
-
-    public float getSource() { return src; }
-    public float getDest() { return dst; }
-
-    public void configure(float src, float dst)
+    
+    public void update()
     {
         // avoid div by zero
         src = Math.max(0.001f, src);
@@ -30,8 +31,6 @@ public final class Compressor
         src = Math.min(0.999f, src);
         dst = Math.min(0.999f, dst);
 
-        this.src = src;
-        this.dst = dst;
         this.mul1 = dst / src;
         this.mul2 = (1 - dst) / (1 - src);
         this.add2 = dst - src * mul2;
@@ -62,4 +61,42 @@ public final class Compressor
             data[offset++] = b1;
         }
     }
+    
+    
+    // configuration
+    public int getConfigSize()
+    {
+        return 2; // nothing
+    }
+    
+    public void setConfig(int index, float f)
+    {
+        switch(index) {
+        case CONFIG_SRC: 
+            src = f;
+            update();            
+            break;
+            
+        case CONFIG_DST:
+            dst = f;
+            update();
+            break;
+        }
+    }
+    
+    public float getConfig(int index)
+    {
+        switch(index) {
+        case CONFIG_SRC: 
+            return src;
+        
+        case CONFIG_DST:
+            return dst;
+            
+        default:
+            return 0;
+        }
+    }        
+        
+    
 }

@@ -7,13 +7,13 @@ import se.tube42.drum.data.*;
  * simple averaging filter
  */
 
-public final class IIRFilter
+public final class FIRFilter extends Effect
 {
     private int size;
     private float []v;
     private Ring ring;
 
-    public IIRFilter(int size)
+    public FIRFilter(int size)
     {
         this.size = size;
         this.v = new float[size];
@@ -35,9 +35,10 @@ public final class IIRFilter
 
     public void set(int index, float val)
     {
-        this.v[index] = val;
+        if(index >= 0 && index < v.length)
+            v[index] = val;
     }
-
+        
     public float process(float in)
     {
         ring.write(in);

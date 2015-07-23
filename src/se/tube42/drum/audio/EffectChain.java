@@ -9,66 +9,74 @@ import com.badlogic.gdx.utils.*;
 
 import se.tube42.drum.data.*;
 
+import static se.tube42.drum.data.Constants.*;
+
+
 public class EffectChain
 {
     public static final int SIZE = 4;
 
-    private boolean [] enabled;
-    private IIRFilter iir;
-    private Compressor comp;
-    private Delay delay;
-    private Crusher crush;
-
+    private int enabled;
+    private Effect [] effects;
+    
     public EffectChain()
     {
-        enabled = new boolean[SIZE];
-
-        crush = new Crusher();
-        delay = new Delay(World.freq, 0.32f, 0.2f);
-        comp = new Compressor(0.2f, 0.8f);
-        iir = new IIRFilter(7);
-        for(int i = 0; i < iir.getSize(); i++)
-            iir.set(i, 1f / 7);
+        enabled = 0;
+        
+        // configure our FIR filter
+        FIRFilter fir = new FIRFilter(7);
+        for(int i = 0; i < 7; i++)
+            fir.set(i, 1f / 7);
+        
+        
+        // build the chain
+        effects = new Effect[SIZE];
+        effects[FX_CRUSH] = new Crusher();
+        effects[FX_FILTER] = fir;
+        effects[FX_DELAY] = new Delay(World.freq, 0.32f, 0.2f);
+        effects[FX_COMP] = new Compressor(0.2f, 0.8f);        
     }
 
     // ------------------------------------------
-
-    public Compressor getCompressor()
+    
+    public Effect [] getEffects()
     {
-        return comp;
+        return effects;
     }
-
+    
+    public Effect getEffect(int index)
+    {
+        return effects[index];
+    }
+    
     // ------------------------------------------
-
+        
+    public int getEnabledRaw() // for serialization
+    {
+        return enabled;
+    }
+    
+    public void setEnabledRaw(int e) // for serialization
+    {
+        enabled = e;
+    }
+    
     public boolean isEnabled(int n)
     {
-        return (n >= 0 && n < SIZE) ? enabled[n] : false;
-
+        return (enabled  & (1 << n)) != 0;
     }
+    
     public void toggle(int n)
     {
-        if(n >= 0 && n < SIZE)
-            enabled[n] = !enabled[n];
-
+        enabled ^= 1 << n;
     }
 
 
     public void process(float [] data, int offset, int size)
     {
-        if(isEnabled(0)) {
-            crush.process(data, offset, size);
-        }
-
-        if(isEnabled(1)) {
-            iir.process(data, offset, size);
-        }
-
-        if(isEnabled(2)) {
-            delay.process(data, offset, size);
-        }
-
-        if(isEnabled(3)) {
-            comp.process(data, offset, size);
+        for(int i = 0; i < effects.length; i++) {            
+            if(isEnabled(i))
+                effects[i].process(data, offset, size);
         }
     }
 }

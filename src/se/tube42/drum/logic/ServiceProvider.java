@@ -15,6 +15,7 @@ import se.tube42.lib.tweeny.*;
 import se.tube42.lib.item.*;
 import se.tube42.lib.service.*;
 
+import se.tube42.drum.data.*;
 import static se.tube42.drum.data.Constants.*;
 
 public class ServiceProvider
@@ -24,7 +25,25 @@ public class ServiceProvider
     {
         StorageService.init("drum.0");
     }
-
+    
+    
+    
+    // ------------------------------------------------
+    // load / save helpers
+    
+    public static void autoLoad()
+    {  
+        if(World.prog != null)
+            SaveService.load(-1);
+    }
+    
+    public static void autoSave()
+    {        
+        if(World.prog != null)
+            SaveService.save(-1);
+    }
+    
+    
     // ------------------------------------------------
     // StorageService
 

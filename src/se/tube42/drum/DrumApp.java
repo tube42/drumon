@@ -31,7 +31,6 @@ public class DrumApp extends BaseApp
     {
     	ServiceProvider.init();
 
-
         // set size before loading assets
         onResize(World.sw, World.sh);
 
@@ -138,13 +137,16 @@ public class DrumApp extends BaseApp
         }
     }
 
-    /*
+    
     @Override public void pause()
     {
-        World.mixer.stop();
+        ServiceProvider.autoSave();
+        
+//        World.mixer.stop();
         super.pause();
     }
-
+    
+    /*
     @Override public void resume()
     {
         World.mixer.start();
@@ -152,7 +154,7 @@ public class DrumApp extends BaseApp
     */
     public void dispose()
     {
-        System.out.println("Disposing...\n");
+        System.out.println("Disposing...\n");        
         World.mixer.dispose();
         super.dispose();
     }

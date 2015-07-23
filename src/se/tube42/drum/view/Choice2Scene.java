@@ -154,9 +154,9 @@ public class Choice2Scene extends Scene
         // get initial configuration and values
         switch(choice) {
         case CHOICE2_COMPRESS:
-            Compressor comp = World.mixer.getEffectChain().getCompressor();
-            configure(0, 100, (int)(100 * comp.getSource() + 0.5f),
-                      0, 100, (int)(100 * comp.getDest() + 0.5f));
+            Effect comp = World.mixer.getEffectChain().getEffect(FX_COMP);
+            configure(0, 100, (int)(100 * comp.getConfig(Compressor.CONFIG_SRC) + 0.5f),
+                      0, 100, (int)(100 * comp.getConfig(Compressor.CONFIG_DST) + 0.5f));
             break;
         }
     }
@@ -179,8 +179,9 @@ public class Choice2Scene extends Scene
         // update world
         switch(choice) {
         case CHOICE2_COMPRESS:
-            Compressor comp = World.mixer.getEffectChain().getCompressor();
-            comp.configure(x / 100f, y / 100f);
+            Effect comp = World.mixer.getEffectChain().getEffect(FX_COMP);
+            comp.setConfig(Compressor.CONFIG_SRC, x / 100f);
+            comp.setConfig(Compressor.CONFIG_DST, y / 100f);
             break;
 
         }

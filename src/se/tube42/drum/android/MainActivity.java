@@ -12,6 +12,9 @@ import android.media.*;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
+
+import se.tube42.lib.service.*;
+
 import se.tube42.drum.*;
 import se.tube42.drum.logic.*;
 import se.tube42.drum.data.*;
@@ -62,7 +65,7 @@ public class MainActivity extends AndroidApplication
     public void onPause()
     {
         super.onPause();
-        ServiceProvider.flushStorage();
+        StorageService.flush();
     }
 
     public void onDestroy()

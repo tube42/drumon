@@ -22,7 +22,8 @@ public class Choice2Scene extends Scene
     private SpriteItem icon;
 
     private boolean hit_canvas;
-
+    
+    private Object target;
     private int choice, id;
     private float x0, y0, xd, yd;
 
@@ -86,7 +87,7 @@ public class Choice2Scene extends Scene
 
         this.x = Math.min(x_max, Math.max(x_min, x));
         this.y = Math.min(y_max, Math.max(y_min, y));
-        update();
+        choice_update();
     }
 
 
@@ -101,12 +102,11 @@ public class Choice2Scene extends Scene
         final float ym = y_min + yn * (y_max - y_min);
         final int xc = Math.max(x_min, Math.min(x_max, (int)(xm + 0.5f)));
         final int yc = Math.max(y_min, Math.min(y_max, (int)(ym + 0.5f)));
-
-
-        if(xc != x || yc != y) {
+        
+        if(xc != this.x || yc != this.y) {
             this.x = xc;
             this.y = yc;
-            update();
+            choice_update();
         }
         return true;
     }
@@ -126,42 +126,64 @@ public class Choice2Scene extends Scene
         xd = Math.max(1, canvas.getW() - mark.getW() - 2);
         yd = Math.max(1, canvas.getH() - mark.getH() - 2);
 
-        update();
+        choice_update();
     }
 
     // ----------------------------------------------------------
-    public void setChoice(int choice, int id)
+    public void setChoice(Object target, int choice, int id)
     {
+        this.target = target;;
         this.choice = choice;
         this.id = id;
 
         // update UI
-        int t0 = -1;
-
-        switch(choice) {
-        case CHOICE2_COMPRESS:
-            t0 = ICON_COMPRESS;
-            break;
-        }
-
+        int t0 = choice_get_icon();
         if(t0 != -1) {
             icon.setIndex(t0);
             icon.flags |= BaseItem.FLAG_VISIBLE;
         } else {
             icon.flags &= ~BaseItem.FLAG_VISIBLE;
         }
-
-        // get initial configuration and values
+        
+        // set initial values
+        choice_init();
+    }
+    
+    // ----------------------------------------------------------
+    
+    private int choice_get_icon()
+    {
         switch(choice) {
         case CHOICE2_COMPRESS:
-            Effect comp = World.mixer.getEffectChain().getEffect(FX_COMP);
+            return ICON_COMPRESS;
+        case CHOICE2_VOLUME:
+            return ICON_VOLUME;
+        default:
+            return -1;
+        }
+    }
+    
+    private void choice_init()
+    {
+        // get initial configuration and values
+        switch(choice) {
+        case CHOICE2_VOLUME:
+            Program prog = (Program) target;
+            // note 1: mirror x axis => the no variation point is in middle of screen => happy user
+            configure(-MAX_VARIATION, MAX_VARIATION, prog.getVolumeVariation(id),
+                      MIN_VOLUME, MAX_VOLUME, (int)(100f * prog.getVolume(id))
+                      );
+            break;
+            
+        case CHOICE2_COMPRESS:
+            Effect comp = (Effect) target;
             configure(0, 100, (int)(100 * comp.getConfig(Compressor.CONFIG_SRC) + 0.5f),
                       0, 100, (int)(100 * comp.getConfig(Compressor.CONFIG_DST) + 0.5f));
             break;
         }
     }
-
-    private void update()
+    
+    private void choice_update()
     {
         // uppdate view
         final float xn = (x - x_min) / (float) (x_max - x_min);
@@ -175,11 +197,16 @@ public class Choice2Scene extends Scene
                   mark.getX() - (icon.getW() - mark.getW()) / 2,
                   mark.getY() - (icon.getH() - mark.getH()) / 2
                   );
-
+        
         // update world
         switch(choice) {
+        case CHOICE2_VOLUME:
+            Program prog = (Program) target;
+            prog.setVolumeVariation(id, Math.abs(x)); // see note 1
+            prog.setVolume(id, y / 100f);
+            break;
         case CHOICE2_COMPRESS:
-            Effect comp = World.mixer.getEffectChain().getEffect(FX_COMP);
+            Effect comp = (Effect) target;
             comp.setConfig(Compressor.CONFIG_SRC, x / 100f);
             comp.setConfig(Compressor.CONFIG_DST, y / 100f);
             break;
@@ -216,7 +243,7 @@ public class Choice2Scene extends Scene
             set(x, y);
         }
 
-        /* klicked outside ? */
+        /* clicked outside ? */
         if(!down) {
             if(!hit_canvas && !canvas.hit(x, y))
                 go_back();

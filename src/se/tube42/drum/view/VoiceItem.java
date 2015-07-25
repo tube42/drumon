@@ -47,9 +47,9 @@ public class VoiceItem extends PressItem
 
     }
 
-    public void setVoiceVariant(int voice, boolean bank)
+    public void setVariant(int sample, boolean bank)
     {
-        dec0 = voice == 0 ? -1 : DECALS_NUM + voice;
+        dec0 = sample == 0 ? -1 : DECALS_NUM + sample;
         dec1 = bank ? DECALS_ALPHA + 1 : -1;
     }
 
@@ -58,7 +58,7 @@ public class VoiceItem extends PressItem
     {
         super.draw(sb);
         final float hp = World.halfpixel;
-
+        
         if(dec0 != -1 || dec1 != -1) {
             final float a = getAlpha();
             final float s = getScale();

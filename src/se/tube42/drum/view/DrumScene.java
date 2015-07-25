@@ -213,7 +213,7 @@ public class DrumScene extends Scene implements SequencerListener
     private void update_sounds()
     {
         for(int i = 0; i < VOICES; i++) {
-            World.tile_voices[i].setVoiceVariant(
+            World.tile_voices[i].setVariant(
                       World.prog.getSampleVariant(i),
                       World.prog.getBank(i) );
         }
@@ -318,7 +318,7 @@ public class DrumScene extends Scene implements SequencerListener
             break;
 
         case 2:
-            get_choice(CHOICE_TEMPO, 0);
+            get_choice(World.prog, CHOICE_TEMPO, 0);
             break;
 
             // mode = 1, sequence
@@ -368,14 +368,13 @@ public class DrumScene extends Scene implements SequencerListener
 
             // mode = 3, settings
         case 12:
-            get_choice(CHOICE_VOLUME, voice);
+            get_choice2(World.prog, CHOICE2_VOLUME, voice);
             break;
-
         case 13:
-            get_choice(CHOICE_VARIATION, voice);
-            break;
-        case 14:
-            get_choice2(CHOICE2_COMPRESS, -1);
+            get_choice2(World.mixer.getEffectChain().getEffect(FX_COMP),
+                      CHOICE2_COMPRESS, -1);
+        case 15:
+            // TODO: save
             break;
         }
 
@@ -415,15 +414,15 @@ public class DrumScene extends Scene implements SequencerListener
     // ------------------------------------------------
     // Choices
 
-    private void get_choice(int choice, int id)
+    private void get_choice(Object target, int choice, int id)
     {
-        World.scene_choice.setChoice(choice, id);
+        World.scene_choice.setChoice(target, choice, id);
         World.mgr.setScene(World.scene_choice, 120);
     }
 
-    private void get_choice2(int choice, int id)
+    private void get_choice2(Object target, int choice, int id)
     {
-        World.scene_choice2.setChoice(choice, id);
+        World.scene_choice2.setChoice(target, choice, id);
         World.mgr.setScene(World.scene_choice2, 120);
     }
 

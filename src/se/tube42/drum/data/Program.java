@@ -54,7 +54,10 @@ public class Program
 
     public void setSampleVariant(int voice, int v)
     {
-        sample_variants[voice] = v;
+        if(World.sounds[voice].hasVariant(v))
+            sample_variants[voice] = v;
+        else
+            System.err.println("Sample variant out of range");
     }
 
     //
@@ -80,7 +83,7 @@ public class Program
 
     public boolean setVolume(int voice, float v)
     {
-        if(v < 0.1f || v > 2.8f)
+        if(v < MIN_VOLUME / 100f || v > MAX_VOLUME / 100f)
             return false;
 
         sample_vol[voice] = v;

@@ -14,7 +14,7 @@ import static se.tube42.drum.data.Constants.*;
 public final class SaveService
 {
     private final static String 
-          HEADER = "drum-save-v0.1",
+          HEADER = "drum-save-v0.2",
           TAIL = "drum-done",
           SAVE_NAME = "PREF-" + HEADER
           ;

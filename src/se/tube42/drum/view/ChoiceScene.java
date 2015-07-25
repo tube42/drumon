@@ -14,13 +14,15 @@ import static se.tube42.drum.data.Constants.*;
 
 public class ChoiceScene extends Scene
 {
-    private int min, max, curr;
+    private int y_min, y_max, y;
 
     private SpriteItem canvas, mark;
     private SpriteItem desc0, desc1;
 
     private BaseText text;
     private boolean hit_canvas;
+    
+    private Object target;
     private int choice, id;
     private float y0, yd;
 
@@ -83,29 +85,28 @@ public class ChoiceScene extends Scene
     private void configure(int min, int max, int curr)
     {
         if(min == max) max++; // avoid div by zero
-        this.min = min;
-        this.max = max;
-        this.curr = Math.min(max, Math.max(min, curr));
-        update();
+        this.y_min = min;
+        this.y_max = max;
+        this.y = Math.min(y_max, Math.max(y_min, curr));
+        choice_update();
     }
-
+    
+    /*
     public int getValue()
     {
-        return curr;
-    }
+        return y;
+    }*/
 
     private boolean set(int x, int y)
     {
-        if(!canvas.hit(x, y))
-            return false;
-
-        final float n = (y - y0) / yd;
-        final float m = min + n * (max - min);
-        final int c = Math.max(min, Math.min(max, (int)(m + 0.5f)));
-
-        if(c != curr) {
-            curr = c;
-            update();
+        
+        final float yn = (y - y0) / yd;
+        final float ym = y_min + yn * (y_max - y_min);
+        final int yc = Math.max(y_min, Math.min(y_max, (int)(ym + 0.5f)));
+        
+        if(this.y != yc) {
+            this.y = yc;
+            choice_update();
         }
         return true;
     }
@@ -137,36 +138,23 @@ public class ChoiceScene extends Scene
 
         text.setPosition( w / 2, h / 2);
 
-        // y0 = canvas.getY() + mark.getH() / 2 + 1;
-        this.y0 = y0;
+        this.y0 = y0 + mark.getH() / 2 + 1;
         this.yd = Math.max(1, canvas.getH() - mark.getH() - 2);
 
-        update();
+        choice_update();
     }
 
     // ----------------------------------------------------------
-    public void setChoice(int choice, int id)
+    public void setChoice(Object target, int choice, int id)
     {
+        this.target = target;
         this.choice = choice;
         this.id = id;
 
         // update UI
-        int t0 = -1, t1 = -1;
-
-        switch(choice) {
-        case CHOICE_TEMPO:
-            t0 = ICON_METRONOME;
-            break;
-        case CHOICE_VOLUME:
-            t0 = ICON_VOLUME;
-            t1 = VOICE_ICONS[id];
-            break;
-        case CHOICE_VARIATION:
-            t0 = ICON_VARIATION;
-            t1 = VOICE_ICONS[id];
-            break;
-        }
-
+        int t0 = choice_get_icon0();
+        int t1 = choice_get_icon1();
+        
         if(t0 != -1) {
             desc0.setIndex(t0);
             desc0.flags |= BaseItem.FLAG_VISIBLE;
@@ -182,33 +170,53 @@ public class ChoiceScene extends Scene
         }
 
 
+        choice_init();
+    }
+    
+    
+    // ----------------------------------------------------------
+    
+    private int choice_get_icon0()
+    {
 
+        switch(choice) {
+        case CHOICE_TEMPO:
+            return ICON_METRONOME;
+        default:
+            return -1;
+        }
+    }
+    
+    private int choice_get_icon1()
+    {
+        
+        switch(choice) {
+        default:
+            return -1;
+        }
+    }
+    
+    private void choice_init()
+    {
         // get initial configuration and values
         switch(choice) {
         case CHOICE_TEMPO:
-            configure(MIN_TEMPO, MAX_TEMPO, World.prog.getTempo());
-            break;
-        case CHOICE_VOLUME:
-            configure(MIN_VOLUME, MAX_VOLUME, (int)(100f *
-                      World.prog.getVolume(id)));
-            break;
-        case CHOICE_VARIATION:
-            configure(MIN_VARIATION, MAX_VARIATION,
-                      World.prog.getVolumeVariation(id));
+            Program prog = (Program) target;
+            configure(MIN_TEMPO, MAX_TEMPO, prog.getTempo());
             break;
         }
     }
-
-    private void update()
+    
+    private void choice_update()
     {
-        // uppdate view
-        final float n = (curr - min) / (float) (max - min);
-        float y = y0 + yd * n;
-
-        mark.setImmediate(BaseItem.ITEM_Y, y - mark.getH() / 2);
-        text.setImmediate(BaseItem.ITEM_Y, y);
-        text.setText("" + curr);
-
+        
+        final float yn = (y - y_min) / (float) (y_max - y_min);
+        final float y1 = y0 + yd * yn;
+        mark.setImmediate(BaseItem.ITEM_Y, y1 - mark.getH() / 2);
+        
+        text.setImmediate(BaseItem.ITEM_Y, y1);
+        text.setText("" + y);
+        
         final float yc = mark.getY() + (mark.getH() - desc0.getH()) / 2;
         desc0.setPosition(mark.getX() + desc0.getW() / 2, yc);
         desc1.setPosition(mark.getX() + mark.getW() - 1.5f * desc0.getW(), yc);
@@ -216,13 +224,8 @@ public class ChoiceScene extends Scene
         // update world
         switch(choice) {
         case CHOICE_TEMPO:
-            World.prog.setTempo(curr);
-            break;
-        case CHOICE_VOLUME:
-            World.prog.setVolume(id, curr / 100f);
-            break;
-        case CHOICE_VARIATION:
-            World.prog.setVolumeVariation(id, curr);
+            Program prog = (Program) target;
+            prog.setTempo(y);
             break;
         }
     }
@@ -256,7 +259,7 @@ public class ChoiceScene extends Scene
             set(x, y);
         }
 
-        /* klicked outside ? */
+        /* clicked outside ? */
         if(!down) {
             if(!hit_canvas && !canvas.hit(x, y))
                 go_back();

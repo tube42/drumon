@@ -12,13 +12,13 @@ public final class Constants
           ;
 
     public static final int
-          MAX_TEMPO = 300,
+          MAX_TEMPO = 260,
           MIN_TEMPO = 40,
-          MAX_VARIATION = 60,
+          MAX_VARIATION = 75,
           MIN_VARIATION = 0,
           DEFAULT_VARIATION = 20,
 
-          MAX_VOLUME = 300, // %
+          MAX_VOLUME = 400, // %
           MIN_VOLUME = 0, // %
           SIMD_WIDTH = 4
           ;
@@ -82,17 +82,16 @@ public final class Constants
           ICON_COMPRESS = 27,
 
           ICON_VOLUME = 28,
-          ICON_VARIATION = 29
+          ICON_SAVE = 29
           ;
 
     public final static int
-          CHOICE_TEMPO = 0,
-          CHOICE_VOLUME = 1,
-          CHOICE_VARIATION = 2
+          CHOICE_TEMPO = 0
           ;
 
     public final static int
-          CHOICE2_COMPRESS = 0
+          CHOICE2_VOLUME = 0,
+          CHOICE2_COMPRESS = 1
           ;
 
     // ---------------------------------------
@@ -143,7 +142,7 @@ public final class Constants
         ICON_CRUSH, ICON_LPFILTER, ICON_ECHO, ICON_COMPRESS,
 
         // settings
-        ICON_VOLUME, ICON_VARIATION, ICON_COMPRESS, -1
+        ICON_VOLUME, ICON_COMPRESS, -1, -1
     };
 
     // ---------------------------------------

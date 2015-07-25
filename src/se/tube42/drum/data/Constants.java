@@ -8,7 +8,8 @@ public final class Constants
           ;
 
     public static final String
-          CHARSET = "0123456789%"
+          CHARSET1 = "0123456789%",
+          CHARSET2 = "abcdefghijklmnopqrstuvwxyz!?"
           ;
 
     public static final int
@@ -17,7 +18,9 @@ public final class Constants
           MAX_VARIATION = 75,
           MIN_VARIATION = 0,
           DEFAULT_VARIATION = 20,
-
+          
+          NUM_SAVES = 16,
+          
           MAX_VOLUME = 400, // %
           MIN_VOLUME = 0, // %
           SIMD_WIDTH = 4
@@ -142,7 +145,7 @@ public final class Constants
         ICON_CRUSH, ICON_LPFILTER, ICON_ECHO, ICON_COMPRESS,
 
         // settings
-        ICON_VOLUME, ICON_COMPRESS, -1, -1
+        ICON_VOLUME, ICON_COMPRESS, -1, ICON_SAVE
     };
 
     // ---------------------------------------

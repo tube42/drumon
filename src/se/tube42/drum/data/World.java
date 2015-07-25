@@ -25,7 +25,7 @@ public final class World extends UIC
     public static int tile_stripe, tile_size, tile_x0, tile_y0;
 
     // assets
-    public static BitmapFont font;
+    public static BitmapFont font1, font2;
     public static TextureRegion []tex_rect;
     public static TextureRegion []tex_tiles;
     public static TextureRegion []tex_icons;
@@ -37,6 +37,7 @@ public final class World extends UIC
     public static DrumScene scene_drum;
     public static ChoiceScene scene_choice;
     public static Choice2Scene scene_choice2;
+    public static SaveScene scene_save;
 
     // world
     public static BaseItem [] tiles;

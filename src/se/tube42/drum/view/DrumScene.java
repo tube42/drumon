@@ -79,7 +79,7 @@ public class DrumScene extends Scene implements SequencerListener
         World.marker.flags &= ~BaseItem.FLAG_VISIBLE;
         getLayer(2).add(World.marker);
 
-        item_msg = new BaseText(World.font);
+        item_msg = new BaseText(World.font1);
         item_msg.setAlignment(-0.5f, -0.5f);
         getLayer(2).add(item_msg);
 
@@ -94,19 +94,16 @@ public class DrumScene extends Scene implements SequencerListener
         this.first = true;
         this.mode = -1; // force update
         select_mode(0);
-        select_sound(1); // force update
-        select_sound(0);
-        
         update(true, true, true, true);
-        msg_show("", 0, 0);
+
     }
 
 
     public void onShow()
     {
-    	 this.mb_beat = -1;
-    	 this.mb_sample = 0;
-
+        this.mb_beat = -1;
+        this.mb_sample = 0;
+                     
         if(first) {
             first = false;
             reposition(true);
@@ -116,6 +113,14 @@ public class DrumScene extends Scene implements SequencerListener
                 World.tiles[i].set(BaseItem.ITEM_A, 0, 1).configure(t, null);
             }
         }
+        
+        
+        // this will force screen to its initial state
+        select_sound(1); // force update
+        select_sound(0);
+        
+        update(true, true, false, true);
+        msg_show("", 0, 0);                   
     }
 
     public void onHide()
@@ -373,8 +378,10 @@ public class DrumScene extends Scene implements SequencerListener
         case 13:
             get_choice2(World.mixer.getEffectChain().getEffect(FX_COMP),
                       CHOICE2_COMPRESS, -1);
+            break;            
         case 15:
-            // TODO: save
+            // save
+            World.mgr.setScene(World.scene_save, 120);            
             break;
         }
 

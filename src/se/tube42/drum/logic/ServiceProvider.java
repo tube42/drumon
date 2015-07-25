@@ -43,55 +43,6 @@ public class ServiceProvider
             SaveService.save(-1);
     }
     
-    
-    // ------------------------------------------------
-    // StorageService
-
-    public static void flushStorage()
-    {
-        StorageService.flush();
-    }
-
-    public static void save(String key, String data)
-    {
-        StorageService.save(key, data);
-    }
-
-    public static void saveLong(String key, long data)
-    {
-        StorageService.saveLong(key, data);
-    }
-
-    public static void save(String key, int data)
-    {
-        StorageService.save(key, data);
-    }
-
-    public static void save(String key, boolean data)
-    {
-        StorageService.save(key, data);
-    }
-
-    public static String load(String key, String default_)
-    {
-        return StorageService.load(key, default_);
-    }
-
-    public static boolean load(String key, boolean default_)
-    {
-        return StorageService.load(key, default_);
-    }
-
-    public static int load(String key, int default_)
-    {
-        return StorageService.load(key, default_);
-    }
-
-    public static long loadLong(String key, long default_)
-    {
-        return StorageService.loadLong(key, default_);
-    }
-
 
     // ------------------------------------------------
     // IOService

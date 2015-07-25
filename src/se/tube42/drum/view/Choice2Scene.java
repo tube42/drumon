@@ -61,7 +61,7 @@ public class Choice2Scene extends Scene
 
     public void onHide()
     {
-        super.onShow();
+        super.onHide();
 
         canvas.set(BaseItem.ITEM_A, 1, 0).configure(0.2f, null);
         canvas.set(BaseItem.ITEM_S, 1, 1.4f).configure(0.1f, null);

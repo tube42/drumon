@@ -52,6 +52,7 @@ public class DrumApp extends BaseApp
         World.scene_drum = new DrumScene();
         World.scene_choice = new ChoiceScene();
         World.scene_choice2 = new Choice2Scene();
+        World.scene_save = new SaveScene();
         World.mgr = mgr;
 
         World.mgr.setScene(World.scene_drum);
@@ -113,10 +114,14 @@ public class DrumApp extends BaseApp
         World.tex_rect[0] = new TextureRegion(tmp);
 
 
-        World.font = AssetService.createFonts(
+        World.font1 = AssetService.createFonts(
                   "fonts/Roboto-Regular.ttf",
-                  CHARSET, ascale * 16)[0];
-
+                  CHARSET1, ascale * 16)[0];
+        
+        World.font2 = AssetService.createFonts(
+                  "fonts/RobotoCondensed-Light.ttf",
+                  CHARSET2, ascale * 12)[0];
+        
         try {
             World.sounds = new Sample[VOICES];
             for(int i = 0; i < VOICES ; i++) {

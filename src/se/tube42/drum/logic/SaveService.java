@@ -19,15 +19,20 @@ public final class SaveService
           SAVE_NAME = "PREF-" + HEADER
           ;
     
+    
+    // -----------------------------------------------------------
+    // storageAccess
+    // -----------------------------------------------------------
+    
     // ------------------------------------------------    
     //  helper functions
     
-    private static String get_save_string(int num)
+    public static String getSave(int num)
     {
         return StorageService.load(SAVE_NAME + "." + num, (String)null);
     }
     
-    private static void set_save_string(int num, String data)
+    public static void setSave(int num, String data)
     {
         if(data != null) {
             StorageService.save(SAVE_NAME + "." + num, data);
@@ -35,22 +40,18 @@ public final class SaveService
         }
     }
     
-    // ------------------------------------------------
-
-    // do we have a save in this slot?
-    public static boolean hasSave(int num)
-    {
-        return get_save_string(num) != null;
-    }
     
-        
-    // save this        
-    public static boolean save(int num)                    
-    {        
-        final Program p = World.prog;
-        final EffectChain fx = World.mixer.getEffectChain();
-              
+    // -----------------------------------------------------------
+    // serial / deserial
+    // -----------------------------------------------------------
+    
+    
+    // serialize current program
+    public static String currentToString() 
+    {
         try {
+            final Program p = World.prog;
+            final EffectChain fx = World.mixer.getEffectChain();           
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             DataOutputStream dos = new DataOutputStream(baos);
             
@@ -89,25 +90,23 @@ public final class SaveService
             // encode and save serialized data
             dos.flush();            
             final String str = EncodingService.encode( baos.toByteArray() );
-            set_save_string(num, str);            
-            
-            return true;
+            return str;
         } catch(Exception e) {
             System.err.println("SAVE ERROR: " + e);
-            return false;
-        }
+            return null;
+        }        
     }
     
-    
-    // load from a save
-    public static boolean load(int num)
+    // load current program from a string
+    public static boolean stringToCurrent(String str)
     {
-        final Program p = World.prog;
-        final EffectChain fx = World.mixer.getEffectChain();
-        
+        if(str == null)
+            return false;
+                        
         try {
-            final String str = get_save_string(num);
-            if(str == null) return false;
+            
+            final Program p = World.prog;
+            final EffectChain fx = World.mixer.getEffectChain();
             
             byte [] bytes = EncodingService.decode(str);
             if(bytes == null)  {
@@ -160,6 +159,31 @@ public final class SaveService
         } catch(Exception e) {
             System.err.println("LOAD ERROR: " + e);
             return false;
+        }        
+    }
+    
+    
+    // -----------------------------------------------------------
+    // load / save
+    // -----------------------------------------------------------
+    
+    // save this        
+    public static boolean save(int num)                    
+    {        
+        final String data = currentToString();
+        if(data != null) {
+            setSave(num, data);
+            return true;
+        } else {
+            return false;
         }
-    }    
+    }
+    
+    
+    // load from a save
+    public static boolean load(int num)
+    {
+        final String str = getSave(num);        
+        return str == null ? false : stringToCurrent(str);
+    }
 }

@@ -20,10 +20,18 @@ import static se.tube42.drum.data.Constants.*;
 public class PadItem extends BaseItem
 {
     private int tile;
-
+    private TextureRegion [] tex;
+    
     public PadItem(int tile)
     {
-
+        this(World.tex_tiles, tile);
+    }
+    
+    public PadItem(TextureRegion [] tex, int tile)
+    {
+        
+        this.tex = tex;
+        this.flags |= BaseItem.FLAG_TOUCHABLE;
         setColor(0xffffff);
         setTile(tile);
     }
@@ -65,7 +73,7 @@ public class PadItem extends BaseItem
 
         // draw tile
         if(tile != -1) {
-            final TextureRegion tr = World.tex_tiles[tile];
+            final TextureRegion tr = tex[tile];
             sb.setColor( cr, cg, cb, a);
             sb.draw(tr,
                     x + hp, y + hp,

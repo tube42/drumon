@@ -42,7 +42,7 @@ public class ChoiceScene extends Scene
         mark = new SpriteItem(World.tex_rect);
         mark.setColor(0xA01010);
 
-        text = new BaseText(World.font);
+        text = new BaseText(World.font1);
         text.setColor(0x000000);
         text.setAlignment(-0.5f, +0.5f);
 
@@ -71,7 +71,7 @@ public class ChoiceScene extends Scene
 
     public void onHide()
     {
-        super.onShow();
+        super.onHide();
 
         canvas.set(BaseItem.ITEM_A, 1, 0).configure(0.2f, null);
         canvas.set(BaseItem.ITEM_S, 1, 1.4f).configure(0.1f, null);

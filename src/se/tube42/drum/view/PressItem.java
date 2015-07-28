@@ -39,7 +39,7 @@ implements TweenListener
 
     public void setActive(boolean v)
     {
-        setAlpha(0.3f, v ? 1.0f : 0.5f);
+        setAlpha(0.3f, v ? 1 : ALPHA_INACTIVE);
     }
 
 

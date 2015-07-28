@@ -16,12 +16,12 @@ import static se.tube42.drum.data.Constants.*;
 public class SaveScene extends Scene
 {
     private static final int
-          BT_LOAD = 0,
-          BT_SAVE = 1,
+          BT_DEL = 0,
+          BT_CANCEL = 1,
           BT_IMPORT = 2,
           BT_EXPORT = 3,
-          BT_DEL = 4,
-          BT_CANCEL = 5
+          BT_LOAD = 4,
+          BT_SAVE = 5
           ;
           
           
@@ -103,9 +103,15 @@ public class SaveScene extends Scene
         final int stripe = World.tile_stripe;
         final int x0 = World.tile_x0;
         int x, y;
+                
+        // figure out how to place everything
+        final int hused = stripe * ((NUM_SAVES / 4) + 3);
+        final int hgap = (h - hused) / 3;
+        final int ysaves = h - stripe - hgap;
+        final int ybuttons = hgap;
         
         // position saves
-        y = h - World.tile_y0 - stripe; // same gap as bottom, but from top
+        y = ysaves;
         x = x0;              
         for(int i = 0; i < NUM_SAVES; i++) {
             if( i != 0 && (i & 3) == 0) {
@@ -119,11 +125,11 @@ public class SaveScene extends Scene
         }
         
         // position buttons
-        y = World.tile_y0 + 2 * stripe;
+        y = ybuttons;
         x = x0;              
         for(int i = 0; i < buttons.length; i++) {
             if( i != 0 && (i & 1) == 0) {
-                y -= stripe;
+                y += stripe;
                 x = x0;
             }
             buttons[i].setSize(size + stripe, size);
@@ -167,7 +173,8 @@ public class SaveScene extends Scene
     {
         buttons[BT_LOAD].setActive(temp_data != null);
         buttons[BT_SAVE].setActive(curr_save != -1);        
-        buttons[BT_SAVE].setColor(temp_data != null ? 0xFF8080 : 0xFFFFFF); // overwriting!
+        buttons[BT_SAVE].setColor(temp_data != null 
+                  ? COLOR_BUTTON_WARN : COLOR_BUTTON); // overwriting!
         
         // not implemented:
         buttons[BT_DEL].setActive(false);

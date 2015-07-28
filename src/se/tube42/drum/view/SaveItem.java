@@ -27,7 +27,7 @@ public class SaveItem extends PadItem
         super(-1);
         setActive(false);
         setData(null);
-        setColor(0xFFFFFF);
+        setColor(COLOR_SAVE);
     }
     
     
@@ -48,7 +48,7 @@ public class SaveItem extends PadItem
     {
         this.data = data;  
         
-        setAlpha(data == null ? 0.4f : 1);
+        setAlpha(data != null ? 1 : ALPHA_INACTIVE);
     }
     
     public String getData()

@@ -86,12 +86,9 @@ public class DrumScene extends Scene implements SequencerListener
         
         // if available, load the latest saved program
         ServiceProvider.autoLoad();
-        
-        
-        // update all inclduing possible auto-save
-        
-        // init
-        this.first = true;
+                              
+        // first time init
+        this.first = true; // to signal onShow()
         select_mode(0, true);
         select_sound(0, true);
         msg_show("", 0, 0);        
@@ -108,15 +105,22 @@ public class DrumScene extends Scene implements SequencerListener
         if(first) {
             first = false;
             reposition(true);
+            
+            // set beat to 0 on the first screen
+            World.marker.setBeat(0);            
         } else {
             for(int i = 0; i < World.tiles.length; i++) {
                 final float t = ServiceProvider.getRandom(0.2f, 0.3f);
                 World.tiles[i].set(BaseItem.ITEM_A, 0, 1).configure(t, null);
             }
+            
+            // update beat right away, dont wait until the next one
+            World.marker.setBeat( World.seq.getBeat() );            
         }
         
         // this is needed since the animation code above has removed or alpha change:
         select_sound(World.prog.getVoice(), true);
+        
         
     }
 
@@ -233,7 +237,7 @@ public class DrumScene extends Scene implements SequencerListener
         } else {
             World.prog.setVoice(voice);
             for(int i = 0; i < VOICES ; i++)
-                World.tile_voices[i].setAlpha(i == voice ? 1f : 0.4f);
+                World.tile_voices[i].setAlpha(i == voice ? 1 : ALPHA_INACTIVE);
 
             final int c = COLOR_PADS[voice];
             ServiceProvider.setColorItem(c, World.bgc, 0f, 0.4f, 0.7f);

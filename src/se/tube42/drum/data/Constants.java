@@ -157,12 +157,17 @@ public final class Constants
     };
 
 
-    //
-
+    // colors & alphas
     public static final int
           COLOR_BG = 0x505050,
           COLOR_MARKER = 0xA02032,
-          COLOR_VOICES = 0xC29968
+          COLOR_VOICES = 0xC29968,
+          
+          
+          COLOR_SAVE = 0xFFFFFF,
+          COLOR_BUTTON = 0xFFFFFF,
+          COLOR_BUTTON_WARN = 0xFF3030
+          
           ;
 
     public static final int [] COLOR_SELECTORS = {
@@ -172,7 +177,7 @@ public final class Constants
         0x808022,
     };
 
-
+        
     /* see
      * http://gamedev.stackexchange.com/questions/46463/is-there-an-optimum-set-of-colors-for-10-players/
      */
@@ -186,5 +191,11 @@ public final class Constants
         0x807fc7,
         0xff7fff,
     };
+    
+    public static final float
+          // ALPHA_NORMAL = 1,
+          ALPHA_DISABLED = 0.4f,
+          ALPHA_INACTIVE = 0.4f
+          ;
 
 }

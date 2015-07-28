@@ -30,7 +30,7 @@ public class ButtonItem extends PadItem
         
         this.font = World.font2;
         this.active = true;
-        setColor(0xFFFFFF);
+        setColor(COLOR_BUTTON);
         setText(text);
     }
         
@@ -44,7 +44,7 @@ public class ButtonItem extends PadItem
     public void setActive(boolean active)
     {
         this.active = active;
-        setAlpha(active ? 1 : 0.4f);
+        setAlpha(active ? 1 : ALPHA_DISABLED);
     }
         
     public void setText(String text)

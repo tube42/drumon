@@ -43,7 +43,7 @@ public class SaveScene extends Scene
         buttons[BT_LOAD] = new ButtonItem("Load");
         buttons[BT_SAVE] = new ButtonItem("Save");
         buttons[BT_IMPORT] = new ButtonItem("Import");
-        buttons[BT_EXPORT] = new ButtonItem("Exort");
+        buttons[BT_EXPORT] = new ButtonItem("Export");
         buttons[BT_DEL] = new ButtonItem("Delete");        
         buttons[BT_CANCEL] = new ButtonItem("Cancel");
                 

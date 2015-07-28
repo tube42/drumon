@@ -92,8 +92,9 @@ public class DrumScene extends Scene implements SequencerListener
         
         // init
         this.first = true;
-        this.mode = -1; // force update
-        select_mode(0);
+        select_mode(0, true);
+        select_sound(0, true);
+        msg_show("", 0, 0);        
         update(true, true, true, true);
 
     }
@@ -114,13 +115,9 @@ public class DrumScene extends Scene implements SequencerListener
             }
         }
         
+        // this is needed since the animation code above has removed or alpha change:
+        select_sound(World.prog.getVoice(), true);
         
-        // this will force screen to its initial state
-        select_sound(1); // force update
-        select_sound(0);
-        
-        update(true, true, false, true);
-        msg_show("", 0, 0);                   
     }
 
     public void onHide()
@@ -223,12 +220,12 @@ public class DrumScene extends Scene implements SequencerListener
                       World.prog.getBank(i) );
         }
     }
-
-    private void select_sound(int voice)
+    
+    private void select_sound(int voice, boolean force)
     {
         final int old_voice = World.prog.getVoice();
 
-        if(old_voice == voice) {
+        if(!force && old_voice == voice) {
             final int max = World.sounds[voice].getNumOfVariants();
             int next = 1 + World.prog.getSampleVariant(voice);
             if(next >= max) next = 0;
@@ -397,9 +394,9 @@ public class DrumScene extends Scene implements SequencerListener
             World.tile_selectors[ i].setActive(i == this.mode);
     }
 
-    private void select_mode(int mode)
+    private void select_mode(int mode, boolean force)
     {
-        if(this.mode != mode) {
+        if(force || this.mode != mode) {
             this.mode = mode;
             update(false, false, false, true);
         }
@@ -525,11 +522,11 @@ public class DrumScene extends Scene implements SequencerListener
             final int i3 = i2 - TOOLS;
 
             if(i1 >= 0 && i1 < VOICES)
-                select_sound(i1);
+                select_sound(i1, false);
             else if(i2 >= 0 && i2 < TOOLS)
                 select_tool(i2);
             else if(i3 >= 0 && i3 < SELECTORS)
-                select_mode(i3);
+                select_mode(i3, false);
         }
 
         return true;

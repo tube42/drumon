@@ -81,7 +81,7 @@ public class Sample
     {
         return data.length;
     }
-    
+
     public boolean hasVariant(int variant)
     {
         return variant >= 0 && variant < data.length;

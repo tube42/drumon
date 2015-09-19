@@ -77,6 +77,9 @@ public class Scene
     public void onShow() { }
     public void onHide() { }
 
+    public void onPause() { }
+    public void onResume() { }
+
     public boolean touch(int x, int y, boolean down, boolean drag)
     {
         return false;

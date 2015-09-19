@@ -22,7 +22,7 @@ public class Choice2Scene extends Scene
     private SpriteItem icon;
 
     private boolean hit_canvas;
-    
+
     private Object target;
     private int choice, id;
     private float x0, y0, xd, yd;
@@ -102,7 +102,7 @@ public class Choice2Scene extends Scene
         final float ym = y_min + yn * (y_max - y_min);
         final int xc = Math.max(x_min, Math.min(x_max, (int)(xm + 0.5f)));
         final int yc = Math.max(y_min, Math.min(y_max, (int)(ym + 0.5f)));
-        
+
         if(xc != this.x || yc != this.y) {
             this.x = xc;
             this.y = yc;
@@ -144,13 +144,13 @@ public class Choice2Scene extends Scene
         } else {
             icon.flags &= ~BaseItem.FLAG_VISIBLE;
         }
-        
+
         // set initial values
         choice_init();
     }
-    
+
     // ----------------------------------------------------------
-    
+
     private int choice_get_icon()
     {
         switch(choice) {
@@ -162,7 +162,7 @@ public class Choice2Scene extends Scene
             return -1;
         }
     }
-    
+
     private void choice_init()
     {
         // get initial configuration and values
@@ -174,7 +174,7 @@ public class Choice2Scene extends Scene
                       MIN_VOLUME, MAX_VOLUME, (int)(100f * prog.getVolume(id))
                       );
             break;
-            
+
         case CHOICE2_COMPRESS:
             Effect comp = (Effect) target;
             configure(0, 100, (int)(100 * comp.getConfig(Compressor.CONFIG_SRC) + 0.5f),
@@ -182,7 +182,7 @@ public class Choice2Scene extends Scene
             break;
         }
     }
-    
+
     private void choice_update()
     {
         // uppdate view
@@ -197,7 +197,7 @@ public class Choice2Scene extends Scene
                   mark.getX() - (icon.getW() - mark.getW()) / 2,
                   mark.getY() - (icon.getH() - mark.getH()) / 2
                   );
-        
+
         // update world
         switch(choice) {
         case CHOICE2_VOLUME:

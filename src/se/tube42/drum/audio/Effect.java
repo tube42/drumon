@@ -15,26 +15,26 @@ public abstract class Effect
     {
 
     }
-    
-    
+
+
     // processor logic goes here
     public abstract void process(final float [] data, int offset, int size);
-    
-    
+
+
     // configuration empty implementation
     public int getConfigSize()
     {
         return 0; // nothing
     }
-    
+
     public void setConfig(int index, float f)
     {
         // EMPTY
     }
-    
+
     public float getConfig(int index)
     {
         return 0; // EMPTY
-    }        
-    
+    }
+
 }

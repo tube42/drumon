@@ -38,7 +38,7 @@ public final class FIRFilter extends Effect
         if(index >= 0 && index < v.length)
             v[index] = val;
     }
-        
+
     public float process(float in)
     {
         ring.write(in);

@@ -25,24 +25,24 @@ public class ServiceProvider
     {
         StorageService.init("drum.0");
     }
-    
-    
-    
+
+
+
     // ------------------------------------------------
     // load / save helpers
-    
+
     public static void autoLoad()
-    {  
+    {
         if(World.prog != null)
             SaveService.load(-1);
     }
-    
+
     public static void autoSave()
-    {        
+    {
         if(World.prog != null)
             SaveService.save(-1);
     }
-    
+
 
     // ------------------------------------------------
     // IOService

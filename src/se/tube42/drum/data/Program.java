@@ -17,8 +17,8 @@ public class Program
 
     private int tempo, tmul;
     private int voice;
-    
-    
+
+
     public Program(float [] amps)
     {
         this.data = new int[VOICES];
@@ -44,8 +44,8 @@ public class Program
             setBank(i, false);
             setSampleVariant(i, 0);
         }
-    }        
-    
+    }
+
     //
     public int getSampleVariant(int voice)
     {
@@ -145,25 +145,25 @@ public class Program
         final int off = getBank(voice) ? 0 : PADS;
         data[voice] = set_bit(data[voice], step + off, set);
     }
-    
-    
+
+
     // these are used for serialization
     public int [] getRawPads()
     {
         return data;
     }
-    
+
     public int getRawBanks()
     {
         return bank_active;
     }
-    
+
     public void setRawBanks(int banks)
     {
         bank_active = banks;
     }
-    
-    
+
+
     // some bitfield helpers to make the code above more clean
     private static final boolean get_bit(int data, int bit)
     {

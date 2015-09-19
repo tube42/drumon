@@ -21,7 +21,7 @@ public class ChoiceScene extends Scene
 
     private BaseText text;
     private boolean hit_canvas;
-    
+
     private Object target;
     private int choice, id;
     private float y0, yd;
@@ -90,7 +90,7 @@ public class ChoiceScene extends Scene
         this.y = Math.min(y_max, Math.max(y_min, curr));
         choice_update();
     }
-    
+
     /*
     public int getValue()
     {
@@ -99,11 +99,11 @@ public class ChoiceScene extends Scene
 
     private boolean set(int x, int y)
     {
-        
+
         final float yn = (y - y0) / yd;
         final float ym = y_min + yn * (y_max - y_min);
         final int yc = Math.max(y_min, Math.min(y_max, (int)(ym + 0.5f)));
-        
+
         if(this.y != yc) {
             this.y = yc;
             choice_update();
@@ -154,7 +154,7 @@ public class ChoiceScene extends Scene
         // update UI
         int t0 = choice_get_icon0();
         int t1 = choice_get_icon1();
-        
+
         if(t0 != -1) {
             desc0.setIndex(t0);
             desc0.flags |= BaseItem.FLAG_VISIBLE;
@@ -172,10 +172,10 @@ public class ChoiceScene extends Scene
 
         choice_init();
     }
-    
-    
+
+
     // ----------------------------------------------------------
-    
+
     private int choice_get_icon0()
     {
 
@@ -186,16 +186,16 @@ public class ChoiceScene extends Scene
             return -1;
         }
     }
-    
+
     private int choice_get_icon1()
     {
-        
+
         switch(choice) {
         default:
             return -1;
         }
     }
-    
+
     private void choice_init()
     {
         // get initial configuration and values
@@ -206,17 +206,17 @@ public class ChoiceScene extends Scene
             break;
         }
     }
-    
+
     private void choice_update()
     {
-        
+
         final float yn = (y - y_min) / (float) (y_max - y_min);
         final float y1 = y0 + yd * yn;
         mark.setImmediate(BaseItem.ITEM_Y, y1 - mark.getH() / 2);
-        
+
         text.setImmediate(BaseItem.ITEM_Y, y1);
         text.setText("" + y);
-        
+
         final float yc = mark.getY() + (mark.getH() - desc0.getH()) / 2;
         desc0.setPosition(mark.getX() + desc0.getW() / 2, yc);
         desc1.setPosition(mark.getX() + mark.getW() - 1.5f * desc0.getW(), yc);

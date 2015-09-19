@@ -58,7 +58,7 @@ public class VoiceItem extends PressItem
     {
         super.draw(sb);
         final float hp = World.halfpixel;
-        
+
         if(dec0 != -1 || dec1 != -1) {
             final float a = getAlpha();
             final float s = getScale();

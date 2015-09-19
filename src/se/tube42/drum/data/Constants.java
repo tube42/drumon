@@ -18,9 +18,9 @@ public final class Constants
           MAX_VARIATION = 75,
           MIN_VARIATION = 0,
           DEFAULT_VARIATION = 20,
-          
+
           NUM_SAVES = 16,
-          
+
           MAX_VOLUME = 400, // %
           MIN_VOLUME = 0, // %
           SIMD_WIDTH = 4
@@ -32,15 +32,15 @@ public final class Constants
           VOICES = 8,
           PADS = 4 * 4
           ;
-    
+
     // effect chain
     public static final int
           FX_CRUSH = 0,
           FX_FILTER = 1,
           FX_DELAY = 2,
           FX_COMP = 3
-          ;    
-    
+          ;
+
     public static final int
           TILE_PAD0 = 0,
           TILE_PAD1 = 1,
@@ -162,12 +162,12 @@ public final class Constants
           COLOR_BG = 0x505050,
           COLOR_MARKER = 0xA02032,
           COLOR_VOICES = 0xC29968,
-          
-          
+
+
           COLOR_SAVE = 0xFFFFFF,
           COLOR_BUTTON = 0xFFFFFF,
           COLOR_BUTTON_WARN = 0xFF3030
-          
+
           ;
 
     public static final int [] COLOR_SELECTORS = {
@@ -177,7 +177,7 @@ public final class Constants
         0x808022,
     };
 
-        
+
     /* see
      * http://gamedev.stackexchange.com/questions/46463/is-there-an-optimum-set-of-colors-for-10-players/
      */
@@ -191,7 +191,7 @@ public final class Constants
         0x807fc7,
         0xff7fff,
     };
-    
+
     public static final float
           // ALPHA_NORMAL = 1,
           ALPHA_DISABLED = 0.4f,

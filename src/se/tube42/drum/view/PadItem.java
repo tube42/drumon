@@ -21,15 +21,15 @@ public class PadItem extends BaseItem
 {
     private int tile;
     private TextureRegion [] tex;
-    
+
     public PadItem(int tile)
     {
         this(World.tex_tiles, tile);
     }
-    
+
     public PadItem(TextureRegion [] tex, int tile)
     {
-        
+
         this.tex = tex;
         this.flags |= BaseItem.FLAG_TOUCHABLE;
         setColor(0xffffff);

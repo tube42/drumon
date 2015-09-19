@@ -62,9 +62,7 @@ public class DrumApp extends BaseApp
 
         // start the mixer!
         World.mixer.start();
-
     }
-
 
     public void onUpdate(float dt, long dtl)
     {
@@ -117,11 +115,11 @@ public class DrumApp extends BaseApp
         World.font1 = AssetService.createFonts(
                   "fonts/Roboto-Regular.ttf",
                   CHARSET1, ascale * 16)[0];
-        
+
         World.font2 = AssetService.createFonts(
                   "fonts/RobotoCondensed-Light.ttf",
                   CHARSET2, ascale * 12)[0];
-        
+
         try {
             World.sounds = new Sample[VOICES];
             for(int i = 0; i < VOICES ; i++) {
@@ -142,24 +140,27 @@ public class DrumApp extends BaseApp
         }
     }
 
-    
+
     @Override public void pause()
     {
         ServiceProvider.autoSave();
-        
+        World.mgr.onPause();
 //        World.mixer.stop();
         super.pause();
     }
-    
-    /*
+
+
     @Override public void resume()
     {
-        World.mixer.start();
+        super.resume();
+        // World.mixer.start();
+        World.mgr.onResume();
+
     }
-    */
+
     public void dispose()
     {
-        System.out.println("Disposing...\n");        
+        System.out.println("Disposing...\n");
         World.mixer.dispose();
         super.dispose();
     }

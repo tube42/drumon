@@ -169,6 +169,18 @@ implements MessageListener
         return ret;
     }
 
+    public void onPause()
+    {
+        if(scene != null)
+            scene.onPause();
+    }
+
+    public void onResume()
+    {
+        if(scene != null)
+            scene.onResume();
+    }
+
     public boolean type(int key, boolean down)
     {
         if(disable_input) return false;

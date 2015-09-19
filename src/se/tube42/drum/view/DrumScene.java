@@ -83,15 +83,15 @@ public class DrumScene extends Scene implements SequencerListener
         item_msg.setAlignment(-0.5f, -0.5f);
         getLayer(2).add(item_msg);
 
-        
+
         // if available, load the latest saved program
         ServiceProvider.autoLoad();
-                              
+
         // first time init
         this.first = true; // to signal onShow()
         select_mode(0, true);
         select_sound(0, true);
-        msg_show("", 0, 0);        
+        msg_show("", 0, 0);
         update(true, true, true, true);
 
     }
@@ -101,27 +101,27 @@ public class DrumScene extends Scene implements SequencerListener
     {
         this.mb_beat = -1;
         this.mb_sample = 0;
-                     
+
         if(first) {
             first = false;
             reposition(true);
-            
+
             // set beat to 0 on the first screen
-            World.marker.setBeat(0);            
+            World.marker.setBeat(0);
         } else {
             for(int i = 0; i < World.tiles.length; i++) {
                 final float t = ServiceProvider.getRandom(0.2f, 0.3f);
                 World.tiles[i].set(BaseItem.ITEM_A, 0, 1).configure(t, null);
             }
-            
+
             // update beat right away, dont wait until the next one
-            World.marker.setBeat( World.seq.getBeat() );            
+            World.marker.setBeat( World.seq.getBeat() );
         }
-        
+
         // this is needed since the animation code above has removed or alpha change:
         select_sound(World.prog.getVoice(), true);
-        
-        
+
+
     }
 
     public void onHide()
@@ -195,7 +195,7 @@ public class DrumScene extends Scene implements SequencerListener
     private void update_pad(int pad)
     {
         final int voice =  World.prog.getVoice();
-        World.tile_pads[pad].setTile( World.prog.get(voice, pad) 
+        World.tile_pads[pad].setTile( World.prog.get(voice, pad)
                   ? TILE_PAD1 : TILE_PAD0 );
     }
 
@@ -224,7 +224,7 @@ public class DrumScene extends Scene implements SequencerListener
                       World.prog.getBank(i) );
         }
     }
-    
+
     private void select_sound(int voice, boolean force)
     {
         final int old_voice = World.prog.getVoice();
@@ -379,10 +379,10 @@ public class DrumScene extends Scene implements SequencerListener
         case 13:
             get_choice2(World.mixer.getEffectChain().getEffect(FX_COMP),
                       CHOICE2_COMPRESS, -1);
-            break;            
+            break;
         case 15:
             // save
-            World.mgr.setScene(World.scene_save, 120);            
+            World.mgr.setScene(World.scene_save, 120);
             break;
         }
 

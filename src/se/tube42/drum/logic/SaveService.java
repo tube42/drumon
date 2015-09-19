@@ -14,13 +14,18 @@ import static se.tube42.drum.data.Constants.*;
 public final class SaveService
 {
     private final static String
-          HEADER_OLD = "drum-save-v0.2",
-          HEADER = "drumon-v3:",
+          HEADER = "drumon-",
           TAIL = "drum-done",
-          SAVE_NAME = "PREF-" + HEADER
+          SAVE_NAME = "DrumonSave-"
+          ;
+
+    private final static String
+          HEADER_OLD = "drum-save-v0.2",
+          SAVE_NAME_OLD = "PREF-" + HEADER_OLD
           ;
 
     private final static int
+          VERSION = 3,
           CHECKSUM_SIZE = 4,
           SAVE_SIZE = 1
           ;
@@ -29,12 +34,12 @@ public final class SaveService
     // storageAccess
     // -----------------------------------------------------------
 
-    // ------------------------------------------------
-    //  helper functions
-
     public static String getSave(int num)
     {
-        return StorageService.load(SAVE_NAME + "." + num, (String)null);
+        String s = StorageService.load(SAVE_NAME + "." + num, (String)null);;
+        if(s == null)
+            s = StorageService.load(SAVE_NAME_OLD + "." + num, (String)null);;
+        return s;
     }
 
     public static void setSave(int num, String data)
@@ -45,7 +50,10 @@ public final class SaveService
         }
     }
 
-   private static String calcChecksum(String str)
+    // ------------------------------------------------
+    //  helper functions
+
+    private static String calcChecksum(String str)
     {
         int sum = 0;
 
@@ -73,6 +81,8 @@ public final class SaveService
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             DataOutputStream dos = new DataOutputStream(baos);
 
+            // format
+            dos.writeByte(VERSION);
 
             // serialize p
             dos.writeInt(p.getRawBanks());
@@ -99,7 +109,6 @@ public final class SaveService
             dos.writeFloat( comp.getConfig(1));
 
             for(int i = 0; i < 4; i++) dos.writeFloat( 0); // reserved
-            // dos.writeUTF(TAIL);
 
 
             // encode and add checksum
@@ -155,10 +164,14 @@ public final class SaveService
                     System.err.println("Internal error: bad save header - " + header);
                     return false;
                 } else {
-                    System.out.println("reading the old format");
+                    System.out.println("NOTE: save file is in old format");
                 }
             }
 
+            // get version
+            int version = 0;
+            if(!oldformat)
+                version = dis.readByte();
 
             // deserialze to p
             p.setRawBanks( dis.readInt());

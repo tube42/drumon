@@ -28,9 +28,9 @@ public class SaveScene extends Scene
     private Layer layer;
     private SaveItem [] saves;
     private ButtonItem [] buttons;
-    private String restore_data, temp_data;
+    private String restore_data, temp_data, clipboard_data;
     private int curr_save;
-
+    
     public SaveScene()
     {
         super("save");
@@ -81,10 +81,12 @@ public class SaveScene extends Scene
             final float t = ServiceProvider.getRandom(0.2f, 0.5f);
             buttons[i].set(BaseItem.ITEM_S, 0.8f, 1f).configure(t, TweenEquation.BACK_OUT);
         }
-
+        
         // initial update
         update_saves();
         update_buttons();
+        update_clipboard();
+        
     }
 
 
@@ -94,7 +96,12 @@ public class SaveScene extends Scene
 
     }
 
-
+    
+    public void onResume() 
+    { 
+        update_clipboard();
+    }
+   
     // ------------------------------------------------
 
     public void resize(int w, int h)
@@ -138,7 +145,37 @@ public class SaveScene extends Scene
         }
     }
 
-
+    
+    
+    // ------------------------------------------------
+    
+    // is any text available in the clipboard and is it a valid save?
+    private void update_clipboard()
+    {
+        final SystemService sys = SystemService.getInstance();
+        
+        clipboard_data = sys.getClipboard();
+        if(clipboard_data != null) {
+            clipboard_data = clipboard_data.trim();
+            if(!SaveService.isValidSave(clipboard_data)) {
+                clipboard_data = null;
+            }
+        }
+        update_buttons();
+    }
+    
+    private void export_to_clipboard(String str)
+    {
+        final SystemService sys = SystemService.getInstance();
+        
+        
+        if(sys.setClipboard(str)) {
+            sys.showMessage("Data was copied to clipboard. You can now email it to your friends and enemies...");
+        } else {
+            sys.showMessage("Could not copy data to clipboard");
+        }
+    }
+         
 
     // ----------------------------------------------------------
     // save items
@@ -175,11 +212,12 @@ public class SaveScene extends Scene
         buttons[BT_SAVE].setActive(curr_save != -1);
         buttons[BT_SAVE].setColor(temp_data != null
                   ? COLOR_BUTTON_WARN : COLOR_BUTTON); // overwriting!
-
+        
+        buttons[BT_IMPORT].setActive(clipboard_data != null);
+        buttons[BT_EXPORT].setActive(true);
+        
         // not implemented:
         buttons[BT_DEL].setActive(false);
-        buttons[BT_IMPORT].setActive(false);
-        buttons[BT_EXPORT].setActive(false);
 
     }
 
@@ -204,7 +242,19 @@ public class SaveScene extends Scene
                 go_back();
             }
             break;
-
+            
+        case BT_IMPORT:
+            if(clipboard_data != null) {
+                restore_data = clipboard_data;
+                go_back();
+            }
+            break;
+            
+        case BT_EXPORT:
+            export_to_clipboard(restore_data);
+            update_clipboard(); // for testing...
+            break;
+            
         case BT_CANCEL:
             go_back();
             break;

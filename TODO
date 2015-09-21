@@ -22,7 +22,7 @@ DONE
  * add base and random velocity to each voice 
  * add 2D choice scene
  * use 2D choice to change Compressor breakpoint   
- 
+ * add import/export via the clipboard
 
 
 WONTFIX:

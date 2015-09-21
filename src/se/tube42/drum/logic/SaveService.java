@@ -62,7 +62,21 @@ public final class SaveService
 
         return EncodingService.shortToHex(sum & 0xFFFF);
     }
-
+    
+    // valid save data? works only for new format
+    public static boolean isValidSave(String str)
+    {
+        if(str == null) return false;
+        str = str.trim();
+        
+        if(str.startsWith(HEADER)) {
+            String s1 = str.substring(0, str.length() - CHECKSUM_SIZE);
+            String s2 = str.substring(str.length() - CHECKSUM_SIZE);
+            return s2.equals( calcChecksum(s1));
+        }
+        return false;        
+    }
+          
     // -----------------------------------------------------------
     // serial / deserial:
     //

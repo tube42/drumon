@@ -11,7 +11,7 @@ public class DesktopMain
     public static void main(String[] args )
     {
         DrumApp app = new DrumApp();
-        new LwjglApplication( app, "Drum On...", 480, 640);
+        new LwjglApplication( app, "Drum On...", 400, 640);
     }
 
 }

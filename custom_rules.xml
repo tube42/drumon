@@ -38,7 +38,7 @@
     </copy>
 
     <!-- download libgdx -->
-    <get skipexisting="true" src="http://libgdx.badlogicgames.com/releases/libgdx-${gdx_version}.zip"
+    <get skipexisting="true" src="https://libgdx.badlogicgames.com/releases/libgdx-${gdx_version}.zip"
       dest="${user.home}/.android/.dl/gdx-${gdx_version}.zip" />
 
     <!-- verify libgdx file -->

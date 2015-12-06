@@ -18,7 +18,7 @@ public final class Constants
           MAX_VARIATION = 75,
           MIN_VARIATION = 0,
           DEFAULT_VARIATION = 20,
-
+          LONGPRESS_DELAY = 1500,
           NUM_SAVES = 16,
 
           MAX_VOLUME = 400, // %
@@ -134,6 +134,23 @@ public final class Constants
     // ---------------------------------------
     // tools
     // ---------------------------------------
+    public static final int
+          TOOL_TEMPO_MUL = 0,
+          TOOL_TEMPO_DETECT = 1,
+          TOOL_TEMPO_SET = 2,
+          TOOL_SEQ_PAUSE = 4,
+          TOOL_SEQ_AB = 5,
+          TOOL_SEQ_SHUFFLE = 6,
+          TOOL_SEQ_CLEAR = 7,
+          TOOL_FX_LOFI = 8,
+          TOOL_FX_LOWPASS = 9,
+          TOOL_FX_ECHO = 10,
+          TOOL_FX_COMP = 11,
+          TOOL_MISC_VOL = 12,
+          TOOL_MISC_COMP = 13,
+          TOOL_MISC_SAVE = 15
+          ;
+
     public static final int [] TOOL_ICONS = {
         // timing
         ICON_NOTE4, ICON_DOT, ICON_METRONOME, -1,

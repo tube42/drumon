@@ -25,6 +25,10 @@ public class DrumScene extends Scene implements SequencerListener
     private int []last_hit = new int[MAX_TOUCH];
     private int []first_hit = new int[MAX_TOUCH];
 
+    // long press
+    private long last_time;
+    private int last_index;
+
     private Layer layer_tiles;
     private BaseText item_msg;
     private int mode;
@@ -103,6 +107,7 @@ public class DrumScene extends Scene implements SequencerListener
     {
         this.mb_beat = -1;
         this.mb_sample = 0;
+        this.last_time = -1;
 
         if(first) {
             first = false;
@@ -207,12 +212,35 @@ public class DrumScene extends Scene implements SequencerListener
             update_pad(i);
     }
 
-    private void select_pad(int pad)
+    private void clear_pads(int voice)
     {
-        final int voice =  World.prog.getVoice();
+        for(int i = 0; i < PADS; i++)
+            World.prog.set(voice, i, false);
+    }
+
+    private void shuffle_pads(int voice)
+    {
+        for(int i = 0; i < PADS * 5; i++) {
+            int a = ServiceProvider.getRandomInt(PADS);
+            int b = ServiceProvider.getRandomInt(PADS);
+            if(World.prog.get(voice, a) && !World.prog.get(voice, b)) {
+                select_pad(voice, a);
+                select_pad(voice, b);
+            }
+        }
+    }
+
+    private void select_pad(int voice, int pad)
+    {
         World.prog.set(voice, pad, !World.prog.get(voice, pad));
         World.tile_pads[pad].mark0();
-        update_pad(pad);
+        if(voice == World.prog.getVoice())
+            update_pad(pad);
+    }
+
+    private void longpress_pad(int pad)
+    {
+        // empty for now
     }
 
     // ------------------------------------------------
@@ -250,6 +278,11 @@ public class DrumScene extends Scene implements SequencerListener
 
         World.tile_voices[voice].mark0();
         update(false, true, false, false);
+    }
+
+    private void longpress_sound(int voice)
+    {
+        // empty for now
     }
 
     // ------------------------------------------------
@@ -311,84 +344,94 @@ public class DrumScene extends Scene implements SequencerListener
         World.tile_tools[id].mark0();
 
         switch(op) {
-            // mode = 0, timing
-        case 0:
+        case TOOL_TEMPO_MUL:
             int n = World.prog.getTempoMultiplier() * 2;
             if(n > 4) n = 1;
             World.prog.setTempoMultiplier(n);
             break;
 
-        case 1:
+        case TOOL_TEMPO_DETECT:
             if(World.td.add()) {
                 World.prog.setTempo( World.td.get() );
                 msg_show("" + World.td.get(), 0, -1);
             }
             break;
 
-        case 2:
+        case TOOL_TEMPO_SET:
             get_choice(World.prog, CHOICE_TEMPO, 0);
             break;
 
-            // mode = 1, sequence
-        case 4:
+        case TOOL_SEQ_PAUSE:
             World.seq.setPause(! World.seq.isPaused());
             break;
 
-        case 5:
+        case TOOL_SEQ_AB:
             World.prog.setBank(voice, !World.prog.getBank(voice));
             break;
 
-        case 6:
-            // shuffle:
-            for(int i = 0; i < PADS * 5; i++) {
-                int a = ServiceProvider.getRandomInt(PADS);
-                int b = ServiceProvider.getRandomInt(PADS);
-
-                if(World.prog.get(voice, a) && !World.prog.get(voice, b)) {
-                    select_pad(a);
-                    select_pad(b);
-                }
-            }
+        case TOOL_SEQ_SHUFFLE:
+            shuffle_pads(voice);
             break;
 
-        case 7:
-            // clear one
-            for(int i = 0; i < PADS; i++)
-                World.prog.set(voice, i, false);
+        case TOOL_SEQ_CLEAR:
+            clear_pads(voice);
             break;
 
-            // mode = 2, waveform
-        case 8:
+        case TOOL_FX_LOFI:
             World.mixer.getEffectChain().toggle(0);
             break;
 
-        case 9:
+        case TOOL_FX_LOWPASS:
             World.mixer.getEffectChain().toggle(1);
             break;
 
-        case 10:
+        case TOOL_FX_ECHO:
             World.mixer.getEffectChain().toggle(2);
             break;
 
-        case 11:
+        case TOOL_FX_COMP:
             World.mixer.getEffectChain().toggle(3);
             break;
 
-            // mode = 3, settings
-        case 12:
+        case TOOL_MISC_VOL:
             get_choice2(World.prog, CHOICE2_VOLUME, voice);
             break;
-        case 13:
+        case TOOL_MISC_COMP:
             get_choice2(World.mixer.getEffectChain().getEffect(FX_COMP),
                       CHOICE2_COMPRESS, -1);
             break;
-        case 15:
-            // save
+        case TOOL_MISC_SAVE:
             World.mgr.setScene(World.scene_save, 120);
             break;
         }
 
         update(false, false, true, false);
+    }
+
+    private void longpress_tool(int id)
+    {
+        final int op = TOOLS * mode + id;
+
+        World.tile_tools[id].mark0();
+
+        switch(op) {
+        case TOOL_TEMPO_DETECT:
+            World.prog.setTempo( 120 );
+            msg_show("120", 0, -1);
+            break;
+
+        case TOOL_SEQ_SHUFFLE:
+            for(int i = 0; i < VOICES; i++)
+                shuffle_pads(i);
+            break;
+
+        case TOOL_SEQ_CLEAR:
+            for(int i = 0; i < VOICES; i++)
+                clear_pads(i);
+            break;
+        }
+
+        update(true, true, true, false);
     }
 
     // ------------------------------------------------
@@ -408,9 +451,13 @@ public class DrumScene extends Scene implements SequencerListener
         }
     }
 
+    private void longpress_mode(int mode)
+    {
+        // empty for now
+    }
+
     // ------------------------------------------------
     // ALL
-
     private void update(boolean pads, boolean sounds,
               boolean tools, boolean mode)
     {
@@ -420,6 +467,21 @@ public class DrumScene extends Scene implements SequencerListener
         if(mode) update_mode();
     }
 
+    private void onLongPress(int idx)
+    {
+        final int i1 = idx - PADS;
+        final int i2 = i1 - VOICES;
+        final int i3 = i2 - TOOLS;
+
+        if(idx >= 0 && idx < PADS)
+            longpress_pad(idx);
+        else if(i1 >= 0 && i1 < VOICES)
+            longpress_sound(i1);
+        else if(i2 >= 0 && i2 < TOOLS)
+            longpress_tool(i2);
+        else if(i3 >= 0 && i3 < SELECTORS)
+            longpress_mode(i3);
+    }
 
     // ------------------------------------------------
     // Choices
@@ -457,6 +519,16 @@ public class DrumScene extends Scene implements SequencerListener
 
     public void onUpdate(float dt)
     {
+        // detect long press
+        if(last_time != -1) {
+            long now = System.currentTimeMillis();
+            if(now - last_time > LONGPRESS_DELAY) {
+                last_time = -1;
+                onLongPress(last_index);
+            }
+        }
+
+        // beat update
     	if(mb_beat != -1) {
     		// copy it and reset the source
     		final int beat = mb_beat;
@@ -516,13 +588,23 @@ public class DrumScene extends Scene implements SequencerListener
             last_hit[p] = -1;
             first_hit[p] = idx;
         }
-        if(idx == -1) return false;
+        if(idx == -1) {
+            last_time = -1;
+            return false;
+        }
+
+        if(down && !drag) {
+            last_time = System.currentTimeMillis();
+            last_index = idx;
+        } else if(!down) {
+            last_time = -1;
+        }
 
         if(last_hit[p] != idx) {
             last_hit[p] = idx;
 
             if(idx < PADS) {
-                select_pad(idx);
+                select_pad(World.prog.getVoice(), idx);
             }
         }
 

@@ -21,10 +21,12 @@ import static se.tube42.drum.data.Constants.*;
 
 public class DrumScene extends Scene implements SequencerListener
 {
-    private Layer layer_tiles;
+    private final static int MAX_TOUCH = 10;
+    private int []last_hit = new int[MAX_TOUCH];
+    private int []first_hit = new int[MAX_TOUCH];
 
+    private Layer layer_tiles;
     private BaseText item_msg;
-    private int last_hit, first_hit;
     private int mode;
     private boolean first;
     private volatile int mb_beat, mb_sample; // seq state posted from the other thread
@@ -503,24 +505,28 @@ public class DrumScene extends Scene implements SequencerListener
     }
 
 
-    public boolean touch(int x, int y, boolean down, boolean drag)
+    public boolean touch(int p, int x, int y, boolean down, boolean drag)
     {
+        /* multi-touch limit */
+        if(p < 0 || p >= MAX_TOUCH)
+            return false;
+
         int idx = get_tile_at(x, y);
         if(down && !drag) {
-            last_hit = -1;
-            first_hit = idx;
+            last_hit[p] = -1;
+            first_hit[p] = idx;
         }
         if(idx == -1) return false;
 
-        if(last_hit != idx) {
-            last_hit = idx;
+        if(last_hit[p] != idx) {
+            last_hit[p] = idx;
 
             if(idx < PADS) {
                 select_pad(idx);
             }
         }
 
-        if(!down && idx == first_hit) {
+        if(!down && idx == first_hit[p]) {
             final int i1 = idx - PADS;
             final int i2 = i1 - VOICES;
             final int i3 = i2 - TOOLS;

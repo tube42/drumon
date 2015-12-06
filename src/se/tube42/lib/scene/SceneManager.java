@@ -153,7 +153,7 @@ implements MessageListener
     }
 
 
-    public boolean touch(int x, int y, boolean down, boolean drag)
+    public boolean touch(int ptr, int x, int y, boolean down, boolean drag)
     {
         if(disable_input) return false;
 
@@ -162,10 +162,10 @@ implements MessageListener
         else if(touch_ignore)
             return false;
 
-        boolean ret = (scene == null) ? false : scene.touch(x, y, down, drag);
+        boolean ret = (scene == null) ? false : scene.touch(ptr, x, y, down, drag);
 
         if(!ret && bg != null)
-            ret = bg.touch(x, y, down, drag);
+            ret = bg.touch(ptr, x, y, down, drag);
         return ret;
     }
 

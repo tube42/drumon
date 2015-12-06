@@ -140,20 +140,20 @@ implements ApplicationListener, InputProcessor
 
     public boolean touchUp(int x, int y, int pointer, int button)
     {
-        return touch(x, y, false, false);
+        return touch(pointer, x, y, false, false);
     }
 
     public boolean touchDown(int x, int y, int pointer, int button)
     {
-        return touch(x, y, true, false);
+        return touch(pointer, x, y, true, false);
     }
 
     public boolean touchDragged(int x, int y, int pointer)
     {
-        return touch(x, y, true, true);
+        return touch(pointer, x, y, true, true);
     }
 
-    private boolean touch(int x, int y, boolean down, boolean drag)
+    private boolean touch(int pointer, int x, int y, boolean down, boolean drag)
     {
         // correct the Y axis direction
         touch_tmp.set(x, y, 0);
@@ -161,7 +161,7 @@ implements ApplicationListener, InputProcessor
         y = (int)( 0.5f + touch_tmp.y);
         x = (int)( 0.5f + touch_tmp.x);
 
-        return mgr.touch(x, y, down, drag);
+        return mgr.touch(pointer, x, y, down, drag);
     }
 
 }

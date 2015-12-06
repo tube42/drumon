@@ -249,7 +249,7 @@ public class ChoiceScene extends Scene
     }
 
 
-    public boolean touch(int x, int y, boolean down, boolean drag)
+    public boolean touch(int p, int x, int y, boolean down, boolean drag)
     {
         if(down && !drag) {
             hit_canvas = canvas.hit(x, y);

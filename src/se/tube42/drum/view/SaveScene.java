@@ -304,7 +304,7 @@ public class SaveScene extends Scene
     }
 
 
-    public boolean touch(int x, int y, boolean down, boolean drag)
+    public boolean touch(int p, int x, int y, boolean down, boolean drag)
     {
         // TODO
         if(down && !drag) {

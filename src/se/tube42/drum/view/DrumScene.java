@@ -116,6 +116,7 @@ public class DrumScene extends Scene implements SequencerListener
             // set beat to 0 on the first screen
             World.marker.setBeat(0);
         } else {
+            reposition(false);
             for(int i = 0; i < World.tiles.length; i++) {
                 final float t = ServiceProvider.getRandom(0.2f, 0.3f);
                 World.tiles[i].set(BaseItem.ITEM_A, 0, 1).configure(t, null);
@@ -144,30 +145,67 @@ public class DrumScene extends Scene implements SequencerListener
         System.out.println("POSITION " + animate);
         final int w = World.sw;
         final int h = World.sh;
-
-        for(int y = 0; y < 8; y++) {
-            int y0 = World.tile_y0 + World.tile_stripe * (7-y) +
-                  ((y < 4) ? World.tile_y0 / 4 : -World.tile_y0 / 4);
-
-            for(int x = 0; x < 4; x++) {
-                final int index = x + y * 4;
-                final float x0 = World.tile_x0 + World.tile_stripe * x;
-                final float x1 = (x0 < w / 2) ? x0 - w : x0 + w;
-                final float y1 = (y0 < h / 2) ? y0 - h : y0 + h;
-
-                World.tiles[index].setSize(World.tile_size, World.tile_size);
-
-                if(animate) {
-                    final float p = 0.8f + (8-y) * 0.05f;
-                    final float t = ServiceProvider.getRandom(0.35f, 0.5f);
-                    World.tiles[index].pause(BaseItem.ITEM_X, x1, p)
-                          .tail(x0).configure(t, TweenEquation.QUAD_OUT);
-
-                    World.tiles[index].pause(BaseItem.ITEM_Y, y1, p)
-                          .tail(y0).configure(t, TweenEquation.QUAD_OUT);
-                } else {
-                    World.tiles[index].setPosition(x0, y0);
+        final int flags = World.prog.getFlags();
+        
+        // position pads:        
+        if( (flags & FLAG_48) != 0) {
+            // 4 / 8
+            World.marker.setSize(World.size_pad2, World.size_pad2);
+            
+            for(int y = 0; y < 4; y++) {
+                for(int x = 0; x < 8; x++) {
+                    final PadItem pad = World.tile_pads[x + y * 8];
+                    pad.flags |= BaseItem.FLAG_VISIBLE;
+                    pad.setSize(World.size_pad2, World.size_pad2);                    
+                    pad.x2 = World.x0_pad2 + World.stripe_pad2_x * x;
+                    pad.y2 = World.y0_pad2 + World.stripe_pad2_y * (3 - y);
                 }
+            }            
+        } else {
+            // 4 / 4
+            World.marker.setSize(World.size_pad1, World.size_pad1);
+            
+            for(int y = 0; y < 4; y++) {
+                for(int x = 0; x < 8; x++) {
+                    final PadItem pad = World.tile_pads[x + y * 8];
+                    if( (x & 1) != 0)
+                        pad.flags &= ~BaseItem.FLAG_VISIBLE;                   
+                    pad.setSize(World.size_pad1, World.size_pad1);
+                    pad.x2 = World.x0_pad1 + World.stripe_pad1 * (x / 2);
+                    pad.y2 = World.y0_pad1 + World.stripe_pad1 * (3 - y);
+                }
+            }
+        }
+        
+        // position the rest
+        for(int y = 0; y < 4; y++) {
+            for(int x = 0; x < 4; x++) {
+                final BaseItem bi = World.tiles[PADS + x + y * 4];
+                bi.setSize(World.size_tile, World.size_tile);                
+                bi.x2 = World.x0_tile + World.stripe_tile * x;
+                bi.y2 = World.y0_tile + World.stripe_tile * (3 - y);
+            }
+        }
+        
+        // animate entering the screen, or just animate to position
+        for(int i = 0; i < World.tiles.length; i++) {
+            final BaseItem bi = World.tiles[i];
+            final float x1 = bi.x2;
+            final float y1 = bi.y2;
+            
+            if(animate) {
+                final float x0 = x1 + (x1 < World.sw / 2 ? -World.sw : World.sw);
+                final float y0 = x1 + (y1 < World.sh / 2 ? -World.sh : World.sh); 
+                final float p = 0.8f + (8-i / 4) * 0.05f;
+                final float t = ServiceProvider.getRandom(0.35f, 0.5f);
+                
+                bi.pause(BaseItem.ITEM_X, x0, p)
+                      .tail(x1).configure(t, TweenEquation.QUAD_OUT);
+                bi.pause(BaseItem.ITEM_Y, y0, p)
+                      .tail(y1).configure(t, TweenEquation.QUAD_OUT);
+            } else {
+                final float t = ServiceProvider.getRandom(0.35f, 0.5f);
+                bi.setPosition(t,x1, y1);
             }
         }
     }
@@ -326,6 +364,7 @@ public class DrumScene extends Scene implements SequencerListener
             v3 = World.mixer.getEffectChain().isEnabled(3);
             break;
         case 3:
+            i0 = (prog.getFlags() & FLAG_48) == 0 ? ICON_44 : ICON_48;
             break;
         }
 
@@ -340,7 +379,7 @@ public class DrumScene extends Scene implements SequencerListener
     {
         final int voice = World.prog.getVoice();
         final int op = TOOLS * mode + id;
-
+        
         World.tile_tools[id].mark0();
 
         switch(op) {
@@ -400,6 +439,11 @@ public class DrumScene extends Scene implements SequencerListener
             get_choice2(World.mixer.getEffectChain().getEffect(FX_COMP),
                       CHOICE2_COMPRESS, -1);
             break;
+        case TOOL_MISC_44_48:
+            World.prog.setFlags(World.prog.getFlags() ^ FLAG_48);
+            update(false, false, true, false);
+            reposition(false);
+            return;
         case TOOL_MISC_SAVE:
             World.mgr.setScene(World.scene_save, 120);
             break;
@@ -500,23 +544,23 @@ public class DrumScene extends Scene implements SequencerListener
 
 
 
-	// ------------------------------------------------
-	// SequencerListener interface:
-	//
-	// to avoid multi-thread madness we will just copy it variables in audio
-	// thread and handle them in our own thread
-
-
-	public void onBeatStart(int beat)
-	{
-		 mb_beat = beat;
-	}
-
-	public void onSampleStart(int beat, int sample)
-	{
-		mb_sample |= 1 << sample;
-	}
-
+    // ------------------------------------------------
+    // SequencerListener interface:
+    //
+    // to avoid multi-thread madness we will just copy it variables in audio
+    // thread and handle them in our own thread
+    
+    
+    public void onBeatStart(int beat)
+    {
+        mb_beat = beat;
+    }
+    
+    public void onSampleStart(int beat, int sample)
+    {
+        mb_sample |= 1 << sample;
+    }
+    
     public void onUpdate(float dt)
     {
         // detect long press
@@ -530,28 +574,28 @@ public class DrumScene extends Scene implements SequencerListener
 
         // beat update
     	if(mb_beat != -1) {
-    		// copy it and reset the source
-    		final int beat = mb_beat;
-    		final int samples = mb_sample;
-    		mb_beat = -1;
-    		mb_sample = 0;
-
-    		// udpate beat marker
-			World.marker.setBeat(beat);
-        	World.marker.flags |= BaseItem.FLAG_VISIBLE;
-
-			// mark played pad
-			if(samples != 0) {
-				final int mask = 1 << World.prog.getVoice();
-				World.tile_pads[beat].mark1((samples & mask) == 0 ? 1.1f : 1.2f);
-			}
-
-			// mark played sound
-			for(int i = 0; i < VOICES; i++) {
-				if( (samples & (1 << i)) != 0)
-					World.tile_voices[i].mark1();
-			}
-		}
+            // copy it and reset the source
+            final int beat = mb_beat;
+            final int samples = mb_sample;
+            mb_beat = -1;
+            mb_sample = 0;
+            
+            // udpate beat marker
+            World.marker.setBeat(beat);
+            World.marker.flags |= BaseItem.FLAG_VISIBLE;
+            
+            // mark played pad
+            if(samples != 0) {
+                final int mask = 1 << World.prog.getVoice();
+                World.tile_pads[beat].mark1((samples & mask) == 0 ? 1.1f : 1.2f);
+            }
+            
+            // mark played sound
+            for(int i = 0; i < VOICES; i++) {
+                if( (samples & (1 << i)) != 0)
+                    World.tile_voices[i].mark1();
+            }
+        }
     }
 
 
@@ -559,8 +603,7 @@ public class DrumScene extends Scene implements SequencerListener
 
     public void resize(int w, int h)
     {
-    	super.resize(w, h);
-        World.marker.setSize(World.tile_size, World.tile_size);
+    	super.resize(w, h);        
         reposition(false);
     }
 

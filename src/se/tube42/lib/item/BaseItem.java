@@ -27,11 +27,12 @@ public abstract class BaseItem extends Item
 
 
     // --------------------------------------------------------------
-
+    
     protected float w, h;
     public float cr, cg, cb;
     public int flags;
-
+    public int x2, y2;
+    
     public BaseItem()
     {
         super(6);

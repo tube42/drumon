@@ -106,9 +106,9 @@ public class SaveScene extends Scene
 
     public void resize(int w, int h)
     {
-        final int size = World.tile_size;
-        final int stripe = World.tile_stripe;
-        final int x0 = World.tile_x0;
+        final int size = World.size_tile;
+        final int stripe = World.stripe_tile;
+        final int x0 = World.x0_tile;
         int x, y;
 
         // figure out how to place everything

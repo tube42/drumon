@@ -30,7 +30,7 @@ public class Sequencer
         setPause(false);
         reset();
 
-        bcnt = 15; // next will be 0
+        bcnt = 31; // next will be 0
     }
 
 	public void setListener(SequencerListener listener)
@@ -70,7 +70,7 @@ public class Sequencer
 
     public int nextBeat()
     {
-        final int max = 60 * World.freq;
+        final int max = 30 * World.freq;
         int n = (max - tcnt) / (prog.getTempo() * prog.getTempoMultiplier());
 
         // error handler??
@@ -88,7 +88,7 @@ public class Sequencer
             return true;
         }
 
-        final int max = 60 * World.freq;
+        final int max = 30 * World.freq;
 
         tcnt += samples * prog.getTempo() * prog.getTempoMultiplier();
 
@@ -100,7 +100,11 @@ public class Sequencer
                 tcnt = 0;
             }
 
-            bcnt = (bcnt + 1) & 15;
+            bcnt = (bcnt + 1) & 31;
+            
+            // if we are doing 4/4 skip the odd ones
+            if((bcnt & 1) != 0 && (prog.getFlags() & FLAG_48) == 0)
+                return false;
 
             if(listener != null)
             	listener.onBeatStart(bcnt);

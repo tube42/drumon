@@ -103,7 +103,8 @@ public final class SaveService
             dos.writeShort(p.getTempo());
             dos.writeByte(p.getTempoMultiplier());
             dos.writeByte(p.getVoice());
-            for(int i = 0; i < 3; i++) dos.writeInt(0); // pad
+            dos.writeInt(p.getFlags());
+            for(int i = 0; i < 2; i++) dos.writeInt(0); // pad
 
 
             final int [] data = p.getRawPads();
@@ -192,7 +193,8 @@ public final class SaveService
             p.setTempo( dis.readShort() );
             p.setTempoMultiplier( dis.readByte() );
             p.setVoice( dis.readByte() );
-            for(int i = 0; i < 3; i++) dis.readInt(); // pad
+            p.setFlags( dis.readInt() );
+            for(int i = 0; i < 2; i++) dis.readInt(); // pad
 
 
             final int [] data = p.getRawPads();

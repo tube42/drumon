@@ -17,10 +17,11 @@ public class Program
 
     private int tempo, tmul;
     private int voice;
-
+    private int flags;
 
     public Program(float [] amps)
     {
+        this.flags = 0;
         this.data = new int[VOICES];
         this.sample_variants = new int[VOICES];
         this.sample_vol = new float[VOICES];
@@ -45,7 +46,17 @@ public class Program
             setSampleVariant(i, 0);
         }
     }
-
+    
+    public int getFlags()
+    {
+        return flags;
+    }
+    
+    public void setFlags(int flags)
+    {
+        this.flags = flags;
+    }
+    
     //
     public int getSampleVariant(int voice)
     {

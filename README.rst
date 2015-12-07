@@ -21,20 +21,26 @@ Building
 To build this app, you will need
 
 1. java, ant, android SDK and all that
-2. The rest (libgdx, marm, tweeny, ks, ...) is donwloaded when you do setup
+2. The rest (libgdx, marm, tweeny, ks, ...) is downloaded when you do setup
 3. Assets, a default set is downloaded during setup
 
 To setup the project and download required libraries, binaries (all FOSS) and assets
 
-* ant setup
+.. code:: shell
+
+    ant setup
 
 To build the project and run on desktop
 
-* ant run
+.. code:: shell
+
+    ant run
 
 To build for android and upload it to your device
 
-* ant debug install
+.. code:: shell
+
+    ant debug install
 
 Assets
 ------
@@ -45,8 +51,17 @@ Asset sources are found under the extra folder. To compile assets you will need 
 2. ImageMagic for converting PNG images
 3. Inkscape for rendering SVG files
 
+That is,
+
+.. code:: shell
+
+    sudo apt-get install sox imagemagick inkscape
+
+    
 To build the assets, you should do
 
-* make
+.. code:: shell
+
+    make
 
 Note that "ant setup" will overwrite your generated assets.

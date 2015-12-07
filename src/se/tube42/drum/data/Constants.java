@@ -30,9 +30,13 @@ public final class Constants
           SELECTORS = 4,
           TOOLS = 4,
           VOICES = 8,
-          PADS = 4 * 4
+          PADS = 4 * 4 * 2
           ;
-
+    
+    public static final int
+          FLAG_48 = 1
+          ;
+          
     // effect chain
     public static final int
           FX_CRUSH = 0,
@@ -85,7 +89,9 @@ public final class Constants
           ICON_COMPRESS = 27,
 
           ICON_VOLUME = 28,
-          ICON_SAVE = 29
+          ICON_SAVE = 29,
+          ICON_44 = 30,
+          ICON_48 = 31
           ;
 
     public final static int
@@ -146,8 +152,9 @@ public final class Constants
           TOOL_FX_LOWPASS = 9,
           TOOL_FX_ECHO = 10,
           TOOL_FX_COMP = 11,
-          TOOL_MISC_VOL = 12,
-          TOOL_MISC_COMP = 13,
+          TOOL_MISC_44_48 = 12,          
+          TOOL_MISC_VOL = 13,
+          TOOL_MISC_COMP = 14,
           TOOL_MISC_SAVE = 15
           ;
 
@@ -162,7 +169,7 @@ public final class Constants
         ICON_CRUSH, ICON_LPFILTER, ICON_ECHO, ICON_COMPRESS,
 
         // settings
-        ICON_VOLUME, ICON_COMPRESS, -1, ICON_SAVE
+        ICON_44, ICON_VOLUME, ICON_COMPRESS, ICON_SAVE
     };
 
     // ---------------------------------------

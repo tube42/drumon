@@ -71,18 +71,7 @@ public class DrumApp extends BaseApp
 
     public void onResize(int w, int h)
     {
-        World.ui_scale = Math.max(1, Math.min(World.sw / 200, World.sh / 300));
-        World.ui_gap = Math.min(32, 4 * World.ui_scale);
-
-        final int s1 = ~1 & (int)Math.min( World.sw / 4, World.sh / 8);
-        final int s2 = ~(8 * World.ui_scale - 1) & (int)(s1 * 0.98f);
-        World.tile_stripe = s1;
-        World.tile_size = s2;
-        World.tile_x0 = ((int)(World.sw - s1 * 4 + s1 - s2)) / 2;
-        World.tile_y0 = ((int)(World.sh - s1 * 8 + s1 - s2)) / 2;
-
-        System.out.println("RESIZE " + w + "x" + h + " -> " +
-                  World.ui_scale + ":" + World.ui_gap);
+        LayoutService.resize(w, h);
     }
 
     // ----------------------------------------------

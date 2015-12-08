@@ -115,7 +115,9 @@ public class Choice2Scene extends Scene
 
     public void resize(int w, int h)
     {
-        final int s = Math.min(w, h) - World.size_tile;
+        final int gap = World.ui_portrait ? World.size_tile / 2 : 2;
+        final int s = Math.min(w, h) - 2 * gap;
+
         mark.setSize(World.size_tile, World.size_tile);
         canvas.setSize(s, s);
         canvas.setPosition((w - s) / 2, (h - s) / 2);

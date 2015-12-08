@@ -134,7 +134,7 @@ public class DrumApp extends BaseApp
     {
         ServiceProvider.autoSave();
         World.mgr.onPause();
-//        World.mixer.stop();
+        World.mixer.stop();
         super.pause();
     }
 
@@ -142,7 +142,7 @@ public class DrumApp extends BaseApp
     @Override public void resume()
     {
         super.resume();
-        // World.mixer.start();
+        World.mixer.start();
         World.mgr.onResume();
 
     }

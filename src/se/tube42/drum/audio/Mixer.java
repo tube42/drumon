@@ -87,8 +87,8 @@ implements Runnable, Disposable
 
     public void run()
     {
-
         final Output output = this.output;
+        int errcnt = 0;
 
         try {
             Thread.sleep(1500);
@@ -97,55 +97,65 @@ implements Runnable, Disposable
         output.open();
 
         while(!stopped) {
-            for(int i = 0; i < buffer_size; i++) {
-                buffer[i] = 0;
-            }
-
-            int cnt = World.seq.nextBeat();
-
-            /* ensure it aligns to SIMD with! */
-            if(cnt < buffer_size) {
-                cnt = (cnt + SIMD_WIDTH / 2 - 1) & ~(SIMD_WIDTH - 1);
-            }
-
-            /* dont go outside buffer count */
-            if(cnt >= buffer_size) {
-                cnt = buffer_size;
-            }
-
-            if(DEBUG) {
-                prof.start(cnt); /* profiler started */
-            }
-
-
-            /* process samples */
-            World.seq.update(cnt);
-            for(int i = 0; i < World.sounds.length ; i++) {
-                World.sounds[i].write(buffer, 0, cnt);
-            }
-
-            final int rem = buffer_size - cnt;
-            if(rem > 0) {
-                World.seq.update(rem);
-                for(int i = 0; i < World.sounds.length ; i++) {
-                    World.sounds[i].write(buffer, cnt, rem);
+            try {
+                for(int i = 0; i < buffer_size; i++) {
+                    buffer[i] = 0;
                 }
+
+                int cnt = World.seq.nextBeat();
+
+                /* ensure it aligns to SIMD with! */
+                if(cnt < buffer_size) {
+                    cnt = (cnt + SIMD_WIDTH / 2 - 1) & ~(SIMD_WIDTH - 1);
+                }
+
+                /* dont go outside buffer count */
+                if(cnt >= buffer_size) {
+                    cnt = buffer_size;
+                }
+
+                if(DEBUG) {
+                    prof.start(cnt); /* profiler started */
+                }
+
+                /* process samples */
+                World.seq.update(cnt);
+                for(int i = 0; i < World.sounds.length ; i++) {
+                    World.sounds[i].write(buffer, 0, cnt);
+                }
+
+                final int rem = buffer_size - cnt;
+                if(rem > 0) {
+                    World.seq.update(rem);
+                    for(int i = 0; i < World.sounds.length ; i++) {
+                        World.sounds[i].write(buffer, cnt, rem);
+                    }
+                }
+
+                /* process effects */
+                chain.process(buffer, 0, buffer_size);
+
+                if(DEBUG) {
+                    prof.finish(); /* profiler finished */
+                }
+
+                /* write results */
+                if(!output.write(buffer, 0, buffer_size))
+                    break;
+
+                /* note that we didn't crash this time :) */
+                if(errcnt > 0)
+                    errcnt--;
+            } catch(Exception e) {
+                System.err.println("ERROR: " + e);
+                errcnt++;
+                if(errcnt > 10)
+                    stopped = true;
+                try {
+                    Thread.sleep(50 + 50 * errcnt);
+                } catch(Exception ignored) { }
             }
-
-            /* process effects */
-            chain.process(buffer, 0, buffer_size);
-
-
-            if(DEBUG) {
-                prof.finish(); /* profiler finished */
-            }
-
-            /* write results */
-            if(!output.write(buffer, 0, buffer_size))
-                break;
         }
-
-
         output.close();
     }
 

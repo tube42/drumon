@@ -21,15 +21,17 @@ public final class World extends UIC
     public static int samples = 512;
 
     // UI
+    public static boolean ui_portrait;
     public static int ui_scale, ui_gap;
+    public static int win1_x0, win1_y0, win1_w, win1_h;
+    public static int win2_x0, win2_y0, win2_w, win2_h;
+
+    // drum scene details
     public static int size_pad1, size_pad2, size_tile;
     public static int stripe_pad1, stripe_pad2_x, stripe_pad2_y, stripe_tile;
     public static int w_pad1, h_pad1, x0_pad1, y0_pad1;
     public static int w_pad2, h_pad2, x0_pad2, y0_pad2;
     public static int w_tile, h_tile, x0_tile, y0_tile;
-    public static int win2_w, win2_h, win2_x0, win2_y0;
-        
-    // public static int tile_stripe, tile_size, tile_x0, tile_y0;
 
     // assets
     public static BitmapFont font1, font2;

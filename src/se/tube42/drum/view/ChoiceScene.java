@@ -116,15 +116,12 @@ public class ChoiceScene extends Scene
     public void resize(int w, int h)
     {
     	// try to get the same size as the pads:
-        final int gap = World.size_tile / 2;
-    	final int x0 = gap;
-    	final int y0 = gap;
-        final int w1 = w - 2 * gap;
-        final int h1 = h - 2 * gap;
-        
-        System.out.println("P0 = " + x0 + "," + y0);
-        System.out.println("SIZE = " + w1 + "," + h1);
-
+        final int gap = World.ui_portrait ? World.size_tile / 2 : 2;
+        final int s = Math.min(w, h) - 2 * gap;
+        final int x0 = (w - s) / 2;
+        final int y0 = (h - s) / 2;
+        final int w1 = s;
+        final int h1 = s;
 
         mark.setSize(w1 - World.size_tile / 4, World.size_tile);
         mark.setPosition((w - mark.getW()) / 2, 0);

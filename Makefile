@@ -22,7 +22,7 @@ icons:
 	$(INKSCAPE) -z extra/icon.svg  -w 48 -h 48 -e res/drawable-mdpi/ic_launcher.png
 	$(INKSCAPE) -z extra/icon.svg  -w 72 -h 72 -e res/drawable-hdpi/ic_launcher.png
 	$(INKSCAPE) -z extra/icon.svg  -w 96 -h 96 -e res/drawable-xhdpi/ic_launcher.png
-	$(INKSCAPE) -z extra/icon.svg  -w 144 -h 144 -e res/drawable-xhdpi/ic_launcher.png
+	$(INKSCAPE) -z extra/icon.svg  -w 144 -h 144 -e res/drawable-xxhdpi/ic_launcher.png
 
 samples:
 	make -C extra/samples clean all

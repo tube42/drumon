@@ -147,14 +147,14 @@ public final class Constants
           TOOL_SEQ_PAUSE = 4,
           TOOL_SEQ_AB = 5,
           TOOL_SEQ_SHUFFLE = 6,
-          TOOL_SEQ_CLEAR = 7,
+          TOOL_SEQ_44_48 = 7,
           TOOL_FX_LOFI = 8,
           TOOL_FX_LOWPASS = 9,
           TOOL_FX_ECHO = 10,
           TOOL_FX_COMP = 11,
-          TOOL_MISC_44_48 = 12,          
-          TOOL_MISC_VOL = 13,
-          TOOL_MISC_COMP = 14,
+          TOOL_MISC_VOL = 12,
+          TOOL_MISC_COMP = 13,
+          TOOL_MISC_CLEAR = 14,
           TOOL_MISC_SAVE = 15
           ;
 
@@ -163,13 +163,13 @@ public final class Constants
         ICON_NOTE4, ICON_DOT, ICON_METRONOME, -1,
 
         // sequence
-        ICON_PAUSE, ICON_A, ICON_MIX, ICON_DEL,
+        ICON_PAUSE, ICON_A, ICON_MIX, ICON_44,
 
         // waveform
         ICON_CRUSH, ICON_LPFILTER, ICON_ECHO, ICON_COMPRESS,
 
         // settings
-        ICON_44, ICON_VOLUME, ICON_COMPRESS, ICON_SAVE
+       ICON_VOLUME, ICON_COMPRESS, ICON_DEL, ICON_SAVE
     };
 
     // ---------------------------------------

@@ -356,6 +356,7 @@ public class DrumScene extends Scene implements SequencerListener
         case 1:
             i0 = seq.isPaused() ? ICON_PLAY : ICON_PAUSE;
             i1 = prog.getBank(voice) ? ICON_B : ICON_A;
+            i3 = (prog.getFlags() & FLAG_48) == 0 ? ICON_44 : ICON_48;
             break;
         case 2:
             v0 = World.mixer.getEffectChain().isEnabled(0);
@@ -364,7 +365,6 @@ public class DrumScene extends Scene implements SequencerListener
             v3 = World.mixer.getEffectChain().isEnabled(3);
             break;
         case 3:
-            i0 = (prog.getFlags() & FLAG_48) == 0 ? ICON_44 : ICON_48;
             break;
         }
 
@@ -412,9 +412,11 @@ public class DrumScene extends Scene implements SequencerListener
             shuffle_pads(voice);
             break;
 
-        case TOOL_SEQ_CLEAR:
-            clear_pads(voice);
-            break;
+        case TOOL_SEQ_44_48:
+            World.prog.setFlags(World.prog.getFlags() ^ FLAG_48);
+            update(false, false, true, false);
+            reposition(false);
+            return;
 
         case TOOL_FX_LOFI:
             World.mixer.getEffectChain().toggle(0);
@@ -439,11 +441,9 @@ public class DrumScene extends Scene implements SequencerListener
             get_choice2(World.mixer.getEffectChain().getEffect(FX_COMP),
                       CHOICE2_COMPRESS, -1);
             break;
-        case TOOL_MISC_44_48:
-            World.prog.setFlags(World.prog.getFlags() ^ FLAG_48);
-            update(false, false, true, false);
-            reposition(false);
-            return;
+        case TOOL_MISC_CLEAR:
+            clear_pads(voice);
+            break;
         case TOOL_MISC_SAVE:
             World.mgr.setScene(World.scene_save, 120);
             break;
@@ -469,7 +469,7 @@ public class DrumScene extends Scene implements SequencerListener
                 shuffle_pads(i);
             break;
 
-        case TOOL_SEQ_CLEAR:
+        case TOOL_MISC_CLEAR:
             for(int i = 0; i < VOICES; i++)
                 clear_pads(i);
             break;

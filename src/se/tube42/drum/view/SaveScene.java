@@ -106,46 +106,29 @@ public class SaveScene extends Scene
 
     public void resize(int w, int h)
     {
-        final int size = World.size_tile;
-        final int stripe = World.stripe_tile;
-        final int x0 = World.x0_tile;
-        int x, y;
-
-        // figure out how to place everything
-        final int hused = stripe * ((NUM_SAVES / 4) + 3);
-        final int hgap = (h - hused) / 3;
-        final int ysaves = h - stripe - hgap;
-        final int ybuttons = hgap;
-
-        // position saves
-        y = ysaves;
-        x = x0;
+        // 4x4
         for(int i = 0; i < NUM_SAVES; i++) {
-            if( i != 0 && (i & 3) == 0) {
-                y -= stripe;
-                x = x0;
-            }
-            saves[i].setSize(size, size);
-            saves[i].setPosition(x, y);
-
-            x += stripe;
+            final int x = i & 3;
+            final int y = i >> 2;
+            final float t = ServiceProvider.getRandom(0.2f, 0.3f);
+            saves[i].setSize(World.size_pad1, World.size_pad1);
+            saves[i].setPosition(t,
+                      World.x0_pad1 + World.stripe_pad1 * x,
+                      World.y0_pad1 + World.stripe_pad1 * y);
         }
 
-        // position buttons
-        y = ybuttons;
-        x = x0;
+        // 2x3
+        final int y0 = World.y0_tile + World.stripe_tile / 2;
         for(int i = 0; i < buttons.length; i++) {
-            if( i != 0 && (i & 1) == 0) {
-                y += stripe;
-                x = x0;
-            }
-            buttons[i].setSize(size + stripe, size);
-            buttons[i].setPosition(x, y);
-            x += stripe * 2;
+            final int x = i & 1;
+            final int y = i >> 1;
+            final float t = ServiceProvider.getRandom(0.4f, 0.7f);
+            buttons[i].setSize(World.size_tile * 2, World.size_tile);
+            buttons[i].setPosition(t,
+                      World.x0_tile + World.stripe_tile * x * 2,
+                      y0 + World.stripe_tile * y);
         }
     }
-
-    
     
     // ------------------------------------------------
     

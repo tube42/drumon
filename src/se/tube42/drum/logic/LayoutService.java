@@ -55,8 +55,8 @@ public class LayoutService
 
     public static void resize(int w, int h)
     {
-        ui_scale = Math.max(1, Math.min(World.sw / 200, World.sh / 300));
-        ui_gap = Math.min(8, 4 * World.ui_scale);
+        ui_scale = Math.max(1, Math.min(w, h) / 200);
+        ui_gap = Math.min(8, 4 * ui_scale);
 
         if(w  < h) {
             // portrait:

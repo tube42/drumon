@@ -9,7 +9,7 @@ import se.tube42.lib.scene.*;
 import se.tube42.lib.item.*;
 
 import se.tube42.drum.data.*;
-
+import se.tube42.drum.audio.*;
 import static se.tube42.drum.data.Constants.*;
 
 public class ChoiceScene extends Scene
@@ -20,7 +20,7 @@ public class ChoiceScene extends Scene
     private SpriteItem desc0, desc1;
 
     private BaseText text;
-    private boolean hit_canvas;
+    private boolean hit_canvas, seen_down;
 
     private Object target;
     private int choice, id;
@@ -66,6 +66,7 @@ public class ChoiceScene extends Scene
 
         mark.set(BaseItem.ITEM_A, 0, 1).configure(0.3f, null);
         text.set(BaseItem.ITEM_A, 0, 1).configure(0.5f, null);
+        seen_down = false;
     }
 
 
@@ -90,12 +91,6 @@ public class ChoiceScene extends Scene
         this.y = Math.min(y_max, Math.max(y_min, curr));
         choice_update();
     }
-
-    /*
-    public int getValue()
-    {
-        return y;
-    }*/
 
     private boolean set(int x, int y)
     {
@@ -178,6 +173,8 @@ public class ChoiceScene extends Scene
         switch(choice) {
         case CHOICE_TEMPO:
             return ICON_METRONOME;
+        case CHOICE_LOFI:
+            return ICON_LOFI;
         default:
             return -1;
         }
@@ -199,6 +196,10 @@ public class ChoiceScene extends Scene
         case CHOICE_TEMPO:
             Program prog = (Program) target;
             configure(MIN_TEMPO, MAX_TEMPO, prog.getTempo());
+            break;
+        case CHOICE_LOFI:
+            final Lofi lofi = (Lofi)target;
+            configure(MIN_LOFI_BITS, MAX_LOFI_BITS, (int)lofi.getConfig(0));
             break;
         }
     }
@@ -222,6 +223,10 @@ public class ChoiceScene extends Scene
         case CHOICE_TEMPO:
             Program prog = (Program) target;
             prog.setTempo(y);
+            break;
+        case CHOICE_LOFI:
+            final Lofi lofi = (Lofi)target;
+            lofi.setConfig(0, y);
             break;
         }
     }
@@ -249,8 +254,13 @@ public class ChoiceScene extends Scene
     {
         if(down && !drag) {
             hit_canvas = canvas.hit(x, y);
+            seen_down = true;
         }
-
+        
+        // we are seeing another scenes remaining touches)
+        if(!seen_down)
+            return false;
+        
         if(hit_canvas) {
             set(x, y);
         }

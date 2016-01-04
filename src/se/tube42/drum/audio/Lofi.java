@@ -5,18 +5,38 @@ import se.tube42.drum.data.*;
 import static se.tube42.drum.data.Constants.*;
 
 /*
- * Crusher creates a rough sound
+ * Lo-fi creates a rough sound
  * by removing information from the sounds
  */
 
-public final class Crusher extends Effect
+public final class Lofi extends Effect
 {
-
-    public Crusher()
+    private int bits, mask;
+    
+    public Lofi()
     {
-
+        setConfig(0, 7);
+    }
+    
+    public int getConfigSize()
+    {
+        return 1;
     }
 
+    public void setConfig(int index, float f)
+    {
+        if(index == 0) {
+            final int bits = (int) Math.max(MIN_LOFI_BITS,
+                      Math.min(MAX_LOFI_BITS, f));
+            this.bits = bits;
+            this.mask = (1 << bits) -1;
+        }
+    }
+
+    public float getConfig(int index)
+    {
+        return (float)bits;
+    }
 
     public void process(final float [] data, int offset, int size)
     {
@@ -29,9 +49,8 @@ public final class Crusher extends Effect
                        data[offset + 2] + data[offset + 3])
                       );
 
-
             /* reduce bit size */
-            final int reduced = avg & ~0x007F;
+            final int reduced = avg & ~mask;
 
             /* back to float */
             final float out = reduced / (float)(1 << 15);

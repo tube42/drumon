@@ -122,8 +122,11 @@ public final class SaveService
             Effect comp = fx.getEffect(FX_COMP);
             dos.writeFloat( comp.getConfig(0));
             dos.writeFloat( comp.getConfig(1));
-
-            for(int i = 0; i < 4; i++) dos.writeFloat( 0); // reserved
+            
+            comp = fx.getEffect(FX_LOFI);
+            dos.writeFloat( comp.getConfig(0));
+            
+            for(int i = 0; i < 3; i++) dos.writeFloat( 0); // reserved
 
 
             // encode and add checksum
@@ -213,8 +216,11 @@ public final class SaveService
             Effect comp = fx.getEffect(FX_COMP);
             comp.setConfig(0, dis.readFloat() );
             comp.setConfig(1, dis.readFloat() );
-
-            for(int i = 0; i < 4; i++) dis.readFloat(); // reserved
+            
+            comp = fx.getEffect(FX_LOFI);
+            comp.setConfig(0, dis.readFloat() );
+            
+            for(int i = 0; i < 3; i++) dis.readFloat(); // reserved
 
             if(oldformat) {
                 if(!TAIL.equals(dis.readUTF())) {

@@ -436,10 +436,6 @@ public class DrumScene extends Scene implements SequencerListener
         case TOOL_MISC_VOL:
             get_choice2(World.prog, CHOICE2_VOLUME, voice);
             break;
-        case TOOL_MISC_COMP:
-            get_choice2(World.mixer.getEffectChain().getEffect(FX_COMP),
-                      CHOICE2_COMPRESS, -1);
-            break;
         case TOOL_MISC_CLEAR:
             clear_pads(voice);
             break;
@@ -458,6 +454,14 @@ public class DrumScene extends Scene implements SequencerListener
         tile_tools[id].mark0();
 
         switch(op) {
+        case TOOL_FX_LOFI:
+            get_choice(World.mixer.getEffectChain().getEffect(FX_LOFI),
+                      CHOICE_LOFI, 0);
+            break;
+        case TOOL_FX_COMP:
+            get_choice2(World.mixer.getEffectChain().getEffect(FX_COMP),
+                      CHOICE2_COMPRESS, -1);
+            break;
         case TOOL_TEMPO_DETECT:
             World.prog.setTempo( 120 );
             msg_show("120", 0, -1);
@@ -519,9 +523,6 @@ public class DrumScene extends Scene implements SequencerListener
         switch(hit.class_) {
         case CLASS_TOOL:
             longpress_tool(hit.id);
-            break;
-        case CLASS_SELECT:
-//            longpress_mode(hit.id);
             break;
         }
     }

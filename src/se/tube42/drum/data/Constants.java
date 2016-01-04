@@ -13,12 +13,14 @@ public final class Constants
           ;
 
     public static final int
+          MIN_LOFI_BITS = 2,
+          MAX_LOFI_BITS = 15,
           MAX_TEMPO = 260,
           MIN_TEMPO = 40,
           MAX_VARIATION = 75,
           MIN_VARIATION = 0,
           DEFAULT_VARIATION = 20,
-          LONGPRESS_DELAY = 1500,
+          LONGPRESS_DELAY = 500,
           NUM_SAVES = 16,
 
           MAX_VOLUME = 400, // %
@@ -39,7 +41,7 @@ public final class Constants
           
     // effect chain
     public static final int
-          FX_CRUSH = 0,
+          FX_LOFI = 0,
           FX_FILTER = 1,
           FX_DELAY = 2,
           FX_COMP = 3
@@ -83,7 +85,7 @@ public final class Constants
           ICON_NOTE16 = 22,
           ICON_DOT = 23,
 
-          ICON_CRUSH = 24,
+          ICON_LOFI = 24,
           ICON_LPFILTER = 25,
           ICON_ECHO = 26,
           ICON_COMPRESS = 27,
@@ -95,7 +97,8 @@ public final class Constants
           ;
 
     public final static int
-          CHOICE_TEMPO = 0
+          CHOICE_TEMPO = 0,
+          CHOICE_LOFI = 1
           ;
 
     public final static int
@@ -153,7 +156,6 @@ public final class Constants
           TOOL_FX_ECHO = 10,
           TOOL_FX_COMP = 11,
           TOOL_MISC_VOL = 12,
-          TOOL_MISC_COMP = 13,
           TOOL_MISC_CLEAR = 14,
           TOOL_MISC_SAVE = 15
           ;
@@ -166,10 +168,10 @@ public final class Constants
         ICON_PAUSE, ICON_A, ICON_MIX, ICON_44,
 
         // waveform
-        ICON_CRUSH, ICON_LPFILTER, ICON_ECHO, ICON_COMPRESS,
+        ICON_LOFI, ICON_LPFILTER, ICON_ECHO, ICON_COMPRESS,
 
         // settings
-       ICON_VOLUME, ICON_COMPRESS, ICON_DEL, ICON_SAVE
+       ICON_VOLUME, -1, ICON_DEL, ICON_SAVE
     };
 
     // ---------------------------------------

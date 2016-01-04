@@ -21,8 +21,7 @@ public class Choice2Scene extends Scene
     private SpriteItem canvas, mark;
     private SpriteItem icon;
 
-    private boolean hit_canvas;
-
+    private boolean hit_canvas, seen_down;
     private Object target;
     private int choice, id;
     private float x0, y0, xd, yd;
@@ -57,6 +56,7 @@ public class Choice2Scene extends Scene
         canvas.set(BaseItem.ITEM_S, 1.4f, 1).configure(0.1f, null);
 
         mark.set(BaseItem.ITEM_A, 0, 1).configure(0.5f, null);
+        seen_down = false;
     }
 
     public void onHide()
@@ -238,9 +238,14 @@ public class Choice2Scene extends Scene
     public boolean touch(int p, int x, int y, boolean down, boolean drag)
     {
         if(down && !drag) {
+            seen_down = true;
             hit_canvas = canvas.hit(x, y);
         }
-
+        
+        /* probably remaining touches from another scene */
+        if(!seen_down)
+            return false;
+        
         if(hit_canvas) {
             set(x, y);
         }

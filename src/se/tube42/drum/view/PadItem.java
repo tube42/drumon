@@ -17,7 +17,7 @@ import se.tube42.drum.logic.*;
 import static se.tube42.drum.data.Constants.*;
 
 
-public class PadItem extends BaseItem
+public class PadItem extends BaseButton
 {
     private int tile;
     private TextureRegion [] tex;
@@ -31,7 +31,6 @@ public class PadItem extends BaseItem
     {
 
         this.tex = tex;
-        this.flags |= BaseItem.FLAG_TOUCHABLE;
         setColor(0xffffff);
         setTile(tile);
     }

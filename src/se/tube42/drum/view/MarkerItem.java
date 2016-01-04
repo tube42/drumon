@@ -20,13 +20,14 @@ import static se.tube42.drum.data.Constants.*;
 public class MarkerItem extends SpriteItem
 {
     private int last;
-
-    public MarkerItem()
+    private PadItem [] pads;
+    
+    public MarkerItem(PadItem [] pads)
     {
         super(World.tex_tiles);
-
         super.setIndex(TILE_MARKER);
-        last = -1;
+        this.last = -1;
+        this.pads = pads;
     }
 
     public void setBeat(int b)
@@ -35,7 +36,7 @@ public class MarkerItem extends SpriteItem
 
         last = b;
 
-        final BaseItem t = World.tiles[b];
+        final PadItem t = pads[b];
 
         setPosition(0.07f, t.getX(), t.getY());
 

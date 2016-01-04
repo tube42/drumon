@@ -48,15 +48,6 @@ public final class World extends UIC
     public static Choice2Scene scene_choice2;
     public static SaveScene scene_save;
 
-    // world
-    public static BaseItem [] tiles;
-    public static PadItem [] tile_pads;
-    public static VoiceItem [] tile_voices;
-    public static PressItem [] tile_tools;
-    public static PressItem [] tile_selectors;
-
-    // public static TileItem []tiles;
-    public static MarkerItem marker;
 
     public static TempoDetector td = new TempoDetector();
     public static Program prog;

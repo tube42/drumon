@@ -18,7 +18,7 @@ import static se.tube42.drum.data.Constants.*;
 
 
 public class PressItem
-extends BaseItem
+extends BaseButton
 implements TweenListener
 {
     private static final int

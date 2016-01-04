@@ -21,14 +21,24 @@ import static se.tube42.drum.data.Constants.*;
 
 public class DrumScene extends Scene implements SequencerListener
 {
-    private final static int MAX_TOUCH = 10;
-    private int []last_hit = new int[MAX_TOUCH];
-    private int []first_hit = new int[MAX_TOUCH];
-
-    // long press
-    private long last_time;
-    private int last_index;
-
+    // button classes
+    private final int
+          CLASS_PAD = 0,
+          CLASS_VOICE = 1,
+          CLASS_TOOL = 2,
+          CLASS_SELECT = 3
+          ;
+    private final static int MAX_TOUCH = 3;
+    private BaseButton []hits0 = new BaseButton[MAX_TOUCH];
+    private BaseButton []hits1 = new BaseButton[MAX_TOUCH];
+    
+    private BaseButton [] tiles;
+    private PadItem [] tile_pads;
+    private VoiceItem [] tile_voices;
+    private PressItem [] tile_tools;
+    private PressItem [] tile_selectors;
+    private MarkerItem marker;
+    
     private Layer layer_tiles;
     private BaseText item_msg;
     private int mode;
@@ -39,51 +49,53 @@ public class DrumScene extends Scene implements SequencerListener
     {
         super("drum");
 
-		World.seq.setListener(this);
+        World.seq.setListener(this);
 
         ServiceProvider.setColorItem(COLOR_BG, World.bgc, 0f, 1f, 2f);
-
+        
+        tiles = new BaseButton[PADS + VOICES + TOOLS + SELECTORS];
+        int index = 0;
+        
         // PADS
-        World.tile_pads = new PadItem[PADS];
-        for(int i = 0; i < PADS; i++) {
-            World.tile_pads[i] = new PadItem(TILE_PAD0);
+        tile_pads = new PadItem[PADS];
+        for(int i = 0; i < PADS; i++, index++) {
+            final PadItem pi = new PadItem(TILE_PAD0);
+            pi.register(CLASS_PAD, i, false);
+            tiles[index] = tile_pads[i] = pi;
         }
 
         // VOICES
-        World.tile_voices = new VoiceItem[VOICES];
-        for(int i = 0; i < VOICES; i++) {
-            World.tile_voices[i] = new VoiceItem(VOICE_ICONS[i], COLOR_VOICES );
+        tile_voices = new VoiceItem[VOICES];
+        for(int i = 0; i < VOICES; i++, index++) {
+            final VoiceItem vi = new VoiceItem(VOICE_ICONS[i], COLOR_VOICES);
+            vi.register(CLASS_VOICE, i, false);
+            tiles[index] = tile_voices[i] = vi;
         }
 
         // tools
-        World.tile_tools = new PressItem[TOOLS];
-        for(int i = 0; i < TOOLS; i++) {
-            World.tile_tools[i] = new PressItem(TILE_BUTTON0, 0, 0);
+        tile_tools = new PressItem[TOOLS];
+        for(int i = 0; i < TOOLS; i++, index++) {
+            final PressItem pi = new PressItem(TILE_BUTTON0, 0, 0);
+            pi.register(CLASS_TOOL, i, true);
+            tiles[index] = tile_tools[i] = pi;
         }
 
         // selectors
-        World.tile_selectors = new PressItem[SELECTORS];
-        for(int i = 0; i < SELECTORS; i++) {
-            World.tile_selectors[i] = new PressItem(TILE_BUTTON0,
-                      SELECTOR_ICONS[i], COLOR_SELECTORS[i]
-                      );
+        tile_selectors = new PressItem[SELECTORS];
+        for(int i = 0; i < SELECTORS; i++, index++) {
+            final PressItem pi = new PressItem(TILE_BUTTON0,
+                      SELECTOR_ICONS[i], COLOR_SELECTORS[i]);
+            pi.register(CLASS_SELECT, i, false);
+            tiles[index] = tile_selectors[i] = pi;
         }
 
-        // put them all into Worl.tiles
-        World.tiles = new BaseItem[PADS + VOICES + TOOLS + SELECTORS];
-        int index = 0;
-        for(BaseItem bi : World.tile_pads) World.tiles[index++] = bi;
-        for(BaseItem bi : World.tile_voices) World.tiles[index++] = bi;
-        for(BaseItem bi : World.tile_tools) World.tiles[index++] = bi;
-        for(BaseItem bi : World.tile_selectors) World.tiles[index++] = bi;
-
         layer_tiles = getLayer(1);
-        layer_tiles.add(World.tiles);
+        layer_tiles.add(tiles);
 
-        World.marker = new MarkerItem();
-        World.marker.setColor(COLOR_MARKER);
-        World.marker.flags &= ~BaseItem.FLAG_VISIBLE;
-        getLayer(2).add(World.marker);
+        marker = new MarkerItem(tile_pads);
+        marker.setColor(COLOR_MARKER);
+        marker.flags &= ~BaseItem.FLAG_VISIBLE;
+        getLayer(2).add(marker);
 
         item_msg = new BaseText(World.font1);
         item_msg.setAlignment(-0.5f, -0.5f);
@@ -107,36 +119,33 @@ public class DrumScene extends Scene implements SequencerListener
     {
         this.mb_beat = -1;
         this.mb_sample = 0;
-        this.last_time = -1;
 
         if(first) {
             first = false;
             reposition(true);
 
             // set beat to 0 on the first screen
-            World.marker.setBeat(0);
+            marker.setBeat(0);
         } else {
             reposition(false);
-            for(int i = 0; i < World.tiles.length; i++) {
+            for(int i = 0; i < tiles.length; i++) {
                 final float t = ServiceProvider.getRandom(0.2f, 0.3f);
-                World.tiles[i].set(BaseItem.ITEM_A, 0, 1).configure(t, null);
+                tiles[i].set(BaseItem.ITEM_A, 0, 1).configure(t, null);
             }
 
             // update beat right away, dont wait until the next one
-            World.marker.setBeat( World.seq.getBeat() );
+            marker.setBeat( World.seq.getBeat() );
         }
 
         // this is needed since the animation code above has removed or alpha change:
         select_sound(World.prog.getVoice(), true);
-
-
     }
 
     public void onHide()
     {
-        for(int i = 0; i < World.tiles.length; i++) {
+        for(int i = 0; i < tiles.length; i++) {
             final float t = ServiceProvider.getRandom(0.2f, 0.3f);
-            World.tiles[i].set(BaseItem.ITEM_A, 1, 0).configure(t, null);
+            tiles[i].set(BaseItem.ITEM_A, 1, 0).configure(t, null);
         }
     }
 
@@ -147,29 +156,29 @@ public class DrumScene extends Scene implements SequencerListener
         final int h = World.sh;
         final int flags = World.prog.getFlags();
         
-        // position pads:        
+        // position pads:
         if( (flags & FLAG_48) != 0) {
             // 4 / 8
-            World.marker.setSize(World.size_pad2, World.size_pad2);
+            marker.setSize(World.size_pad2, World.size_pad2);
             
             for(int y = 0; y < 4; y++) {
                 for(int x = 0; x < 8; x++) {
-                    final PadItem pad = World.tile_pads[x + y * 8];
+                    final PadItem pad = tile_pads[x + y * 8];
                     pad.flags |= BaseItem.FLAG_VISIBLE;
-                    pad.setSize(World.size_pad2, World.size_pad2);                    
+                    pad.setSize(World.size_pad2, World.size_pad2);
                     pad.x2 = World.x0_pad2 + World.stripe_pad2_x * x;
                     pad.y2 = World.y0_pad2 + World.stripe_pad2_y * (3 - y);
                 }
-            }            
+            }
         } else {
             // 4 / 4
-            World.marker.setSize(World.size_pad1, World.size_pad1);
+            marker.setSize(World.size_pad1, World.size_pad1);
             
             for(int y = 0; y < 4; y++) {
                 for(int x = 0; x < 8; x++) {
-                    final PadItem pad = World.tile_pads[x + y * 8];
+                    final PadItem pad = tile_pads[x + y * 8];
                     if( (x & 1) != 0)
-                        pad.flags &= ~BaseItem.FLAG_VISIBLE;                   
+                        pad.flags &= ~BaseItem.FLAG_VISIBLE;
                     pad.setSize(World.size_pad1, World.size_pad1);
                     pad.x2 = World.x0_pad1 + World.stripe_pad1 * (x / 2);
                     pad.y2 = World.y0_pad1 + World.stripe_pad1 * (3 - y);
@@ -180,22 +189,22 @@ public class DrumScene extends Scene implements SequencerListener
         // position the rest
         for(int y = 0; y < 4; y++) {
             for(int x = 0; x < 4; x++) {
-                final BaseItem bi = World.tiles[PADS + x + y * 4];
-                bi.setSize(World.size_tile, World.size_tile);                
+                final BaseItem bi = tiles[PADS + x + y * 4];
+                bi.setSize(World.size_tile, World.size_tile);
                 bi.x2 = World.x0_tile + World.stripe_tile * x;
                 bi.y2 = World.y0_tile + World.stripe_tile * (3 - y);
             }
         }
         
         // animate entering the screen, or just animate to position
-        for(int i = 0; i < World.tiles.length; i++) {
-            final BaseItem bi = World.tiles[i];
+        for(int i = 0; i < tiles.length; i++) {
+            final BaseItem bi = tiles[i];
             final float x1 = bi.x2;
             final float y1 = bi.y2;
             
             if(animate) {
                 final float x0 = x1 + (x1 < World.sw / 2 ? -World.sw : World.sw);
-                final float y0 = x1 + (y1 < World.sh / 2 ? -World.sh : World.sh); 
+                final float y0 = x1 + (y1 < World.sh / 2 ? -World.sh : World.sh);
                 final float p = 0.8f + (8-i / 4) * 0.05f;
                 final float t = ServiceProvider.getRandom(0.35f, 0.5f);
                 
@@ -240,7 +249,7 @@ public class DrumScene extends Scene implements SequencerListener
     private void update_pad(int pad)
     {
         final int voice =  World.prog.getVoice();
-        World.tile_pads[pad].setTile( World.prog.get(voice, pad)
+        tile_pads[pad].setTile( World.prog.get(voice, pad)
                   ? TILE_PAD1 : TILE_PAD0 );
     }
 
@@ -271,14 +280,9 @@ public class DrumScene extends Scene implements SequencerListener
     private void select_pad(int voice, int pad)
     {
         World.prog.set(voice, pad, !World.prog.get(voice, pad));
-        World.tile_pads[pad].mark0();
+        tile_pads[pad].mark0();
         if(voice == World.prog.getVoice())
             update_pad(pad);
-    }
-
-    private void longpress_pad(int pad)
-    {
-        // empty for now
     }
 
     // ------------------------------------------------
@@ -287,7 +291,7 @@ public class DrumScene extends Scene implements SequencerListener
     private void update_sounds()
     {
         for(int i = 0; i < VOICES; i++) {
-            World.tile_voices[i].setVariant(
+            tile_voices[i].setVariant(
                       World.prog.getSampleVariant(i),
                       World.prog.getBank(i) );
         }
@@ -305,22 +309,17 @@ public class DrumScene extends Scene implements SequencerListener
         } else {
             World.prog.setVoice(voice);
             for(int i = 0; i < VOICES ; i++)
-                World.tile_voices[i].setAlpha(i == voice ? 1 : ALPHA_INACTIVE);
+                tile_voices[i].setAlpha(i == voice ? 1 : ALPHA_INACTIVE);
 
             final int c = COLOR_PADS[voice];
             ServiceProvider.setColorItem(c, World.bgc, 0f, 0.4f, 0.7f);
 
             for(int i = 0; i < PADS; i++)
-                World.tile_pads[i].setColor(c);
+                tile_pads[i].setColor(c);
         }
 
-        World.tile_voices[voice].mark0();
+        tile_voices[voice].mark0();
         update(false, true, false, false);
-    }
-
-    private void longpress_sound(int voice)
-    {
-        // empty for now
     }
 
     // ------------------------------------------------
@@ -369,10 +368,10 @@ public class DrumScene extends Scene implements SequencerListener
         }
 
         final int color = COLOR_SELECTORS[mode];
-        World.tile_tools[0].change(color, i0, v0, modechange);
-        World.tile_tools[1].change(color, i1, v1, modechange);
-        World.tile_tools[2].change(color, i2, v2, modechange);
-        World.tile_tools[3].change(color, i3, v3, modechange);
+        tile_tools[0].change(color, i0, v0, modechange);
+        tile_tools[1].change(color, i1, v1, modechange);
+        tile_tools[2].change(color, i2, v2, modechange);
+        tile_tools[3].change(color, i3, v3, modechange);
     }
 
     private void select_tool(int id)
@@ -380,7 +379,7 @@ public class DrumScene extends Scene implements SequencerListener
         final int voice = World.prog.getVoice();
         final int op = TOOLS * mode + id;
         
-        World.tile_tools[id].mark0();
+        tile_tools[id].mark0();
 
         switch(op) {
         case TOOL_TEMPO_MUL:
@@ -456,7 +455,7 @@ public class DrumScene extends Scene implements SequencerListener
     {
         final int op = TOOLS * mode + id;
 
-        World.tile_tools[id].mark0();
+        tile_tools[id].mark0();
 
         switch(op) {
         case TOOL_TEMPO_DETECT:
@@ -484,7 +483,7 @@ public class DrumScene extends Scene implements SequencerListener
     private void update_mode()
     {
         for(int i = 0; i < SELECTORS; i++)
-            World.tile_selectors[ i].setActive(i == this.mode);
+            tile_selectors[ i].setActive(i == this.mode);
     }
 
     private void select_mode(int mode, boolean force)
@@ -493,11 +492,6 @@ public class DrumScene extends Scene implements SequencerListener
             this.mode = mode;
             update(false, false, false, true);
         }
-    }
-
-    private void longpress_mode(int mode)
-    {
-        // empty for now
     }
 
     // ------------------------------------------------
@@ -510,23 +504,43 @@ public class DrumScene extends Scene implements SequencerListener
         if(tools || sounds || mode) update_tools(mode);
         if(mode) update_mode();
     }
-
-    private void onLongPress(int idx)
+    
+    private void onEnter(BaseButton hit, boolean pressed)
     {
-        final int i1 = idx - PADS;
-        final int i2 = i1 - VOICES;
-        final int i3 = i2 - TOOLS;
-
-        if(idx >= 0 && idx < PADS)
-            longpress_pad(idx);
-        else if(i1 >= 0 && i1 < VOICES)
-            longpress_sound(i1);
-        else if(i2 >= 0 && i2 < TOOLS)
-            longpress_tool(i2);
-        else if(i3 >= 0 && i3 < SELECTORS)
-            longpress_mode(i3);
+        switch(hit.class_) {
+        case CLASS_PAD:
+            select_pad(World.prog.getVoice(), hit.id);
+            break;
+        }
     }
-
+    
+    private void onLongPress(BaseButton hit)
+    {
+        switch(hit.class_) {
+        case CLASS_TOOL:
+            longpress_tool(hit.id);
+            break;
+        case CLASS_SELECT:
+//            longpress_mode(hit.id);
+            break;
+        }
+    }
+    
+    private void onShortPress(BaseButton hit)
+    {
+        switch(hit.class_) {
+        case CLASS_VOICE:
+            select_sound(hit.id, false);
+            break;
+        case CLASS_TOOL:
+            select_tool(hit.id);
+            break;
+        case CLASS_SELECT:
+            select_mode(hit.id, false);
+            break;
+        }
+    }
+    
     // ------------------------------------------------
     // Choices
 
@@ -564,11 +578,13 @@ public class DrumScene extends Scene implements SequencerListener
     public void onUpdate(float dt)
     {
         // detect long press
-        if(last_time != -1) {
-            long now = System.currentTimeMillis();
-            if(now - last_time > LONGPRESS_DELAY) {
-                last_time = -1;
-                onLongPress(last_index);
+        long when = System.currentTimeMillis() - LONGPRESS_DELAY;
+        for(int i = 0; i < MAX_TOUCH; i++) {
+            if(hits0[i] != null && hits0[i].hasLongpress) {
+                if(hits0[i].timeDown < when)  {
+                    onLongPress(hits0[i]);
+                    hits0[i] = hits1[i] = null;
+                }
             }
         }
 
@@ -581,19 +597,19 @@ public class DrumScene extends Scene implements SequencerListener
             mb_sample = 0;
             
             // udpate beat marker
-            World.marker.setBeat(beat);
-            World.marker.flags |= BaseItem.FLAG_VISIBLE;
+            marker.setBeat(beat);
+            marker.flags |= BaseItem.FLAG_VISIBLE;
             
             // mark played pad
             if(samples != 0) {
                 final int mask = 1 << World.prog.getVoice();
-                World.tile_pads[beat].mark1((samples & mask) == 0 ? 1.1f : 1.2f);
+                tile_pads[beat].mark1((samples & mask) == 0 ? 1.1f : 1.2f);
             }
             
             // mark played sound
             for(int i = 0; i < VOICES; i++) {
                 if( (samples & (1 << i)) != 0)
-                    World.tile_voices[i].mark1();
+                    tile_voices[i].mark1();
             }
         }
     }
@@ -603,7 +619,7 @@ public class DrumScene extends Scene implements SequencerListener
 
     public void resize(int w, int h)
     {
-    	super.resize(w, h);        
+        super.resize(w, h);
         reposition(false);
     }
 
@@ -625,57 +641,32 @@ public class DrumScene extends Scene implements SequencerListener
         /* multi-touch limit */
         if(p < 0 || p >= MAX_TOUCH)
             return false;
-
-        int idx = get_tile_at(x, y);
+        
+        final BaseButton hit = (BaseButton) layer_tiles.hit(x, y);
         if(down && !drag) {
-            last_hit[p] = -1;
-            first_hit[p] = idx;
+            hits0[p] = hit;
         }
-        if(idx == -1) {
-            last_time = -1;
+        
+        if(hit == null)
             return false;
-        }
-
+        
+        /* record press time */
         if(down && !drag) {
-            last_time = System.currentTimeMillis();
-            last_index = idx;
-        } else if(!down) {
-            last_time = -1;
+            hit.timeDown = System.currentTimeMillis();
+        }
+        
+        if(hits1[p] != hit) {
+            onEnter(hit, down && !drag);
+            hits1[p] = hit;
         }
 
-        if(last_hit[p] != idx) {
-            last_hit[p] = idx;
-
-            if(idx < PADS) {
-                select_pad(World.prog.getVoice(), idx);
-            }
+        if(!down) {
+            if(hits0[p] == hit)
+                onShortPress(hit);
+            hits0[p] = hits1[p] = null;
         }
-
-        if(!down && idx == first_hit[p]) {
-            final int i1 = idx - PADS;
-            final int i2 = i1 - VOICES;
-            final int i3 = i2 - TOOLS;
-
-            if(i1 >= 0 && i1 < VOICES)
-                select_sound(i1, false);
-            else if(i2 >= 0 && i2 < TOOLS)
-                select_tool(i2);
-            else if(i3 >= 0 && i3 < SELECTORS)
-                select_mode(i3, false);
-        }
-
+        
         return true;
     }
-
-    // --------------------------------------------------
-    private int get_tile_at(int x, int y)
-    {
-        for(int i = 0; i < World.tiles.length; i++) {
-            if(World.tiles[i].hit(x, y))
-                return i;
-        }
-        return -1;
-    }
-
 
 }

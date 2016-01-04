@@ -119,14 +119,15 @@ public class SaveScene extends Scene
 
         // 2x3
         final int y0 = World.y0_tile + World.stripe_tile / 2;
+        final int gap = Math.max( 2, World.size_tile / 8);
         for(int i = 0; i < buttons.length; i++) {
             final int x = i & 1;
             final int y = i >> 1;
             final float t = ServiceProvider.getRandom(0.4f, 0.7f);
-            buttons[i].setSize(World.size_tile * 2, World.size_tile);
+            buttons[i].setSize(World.size_tile * 2 - gap, World.size_tile - gap);
             buttons[i].setPosition(t,
-                      World.x0_tile + World.stripe_tile * x * 2,
-                      y0 + World.stripe_tile * y);
+                      World.x0_tile - gap / 2 + World.stripe_tile * x * 2,
+                      - gap / 2 + y0 + World.stripe_tile * y);
         }
     }
     

@@ -267,9 +267,10 @@ public class DrumScene extends Scene implements SequencerListener
 
     private void shuffle_pads(int voice)
     {
+        int mask = ~((World.prog.getFlags() & FLAG_48) == 0 ? 1 : 0);
         for(int i = 0; i < PADS * 5; i++) {
-            int a = ServiceProvider.getRandomInt(PADS);
-            int b = ServiceProvider.getRandomInt(PADS);
+            int a = ServiceProvider.getRandomInt(PADS) & mask;
+            int b = ServiceProvider.getRandomInt(PADS) & mask;
             if(World.prog.get(voice, a) && !World.prog.get(voice, b)) {
                 select_pad(voice, a);
                 select_pad(voice, b);

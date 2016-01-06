@@ -107,6 +107,18 @@ public class ServiceProvider
 
     // ----------------------------------------------------
 
+    public static int mulColor(int color, float mul)
+    {
+        int ret = color >> 24;
+        for(int i = 0; i < 3; i++) {
+            int c = (color >> 16) & 0xFF;
+            c = (int)Math.min(0xFF, 0.5f + c * mul);
+            ret = (ret << 8) | c;
+            color <<= 8;
+        }
+        return ret;
+    }
+
     public static void setColorItem(int color, Item rgb,
               float add, float mul, float delay)
     {

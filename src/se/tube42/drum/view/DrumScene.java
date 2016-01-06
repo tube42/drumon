@@ -314,8 +314,10 @@ public class DrumScene extends Scene implements SequencerListener
             final int c = COLOR_PADS[voice];
             ServiceProvider.setColorItem(c, World.bgc, 0f, 0.4f, 0.7f);
 
+            // set pad color and make the 4/8 adds a bit darker
+            final int c2 = ServiceProvider.mulColor(c, 0.75f);
             for(int i = 0; i < PADS; i++)
-                tile_pads[i].setColor(c);
+                tile_pads[i].setColor( (i & 1) == 0 ? c : c2);
         }
 
         tile_voices[voice].mark0();

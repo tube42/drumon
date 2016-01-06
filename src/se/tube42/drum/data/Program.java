@@ -1,13 +1,14 @@
 
 package se.tube42.drum.data;
 
+import se.tube42.lib.util.*;
 import static se.tube42.drum.data.Constants.*;
 
 /*
  * the sequencer program
  */
 
-public class Program
+public class Program extends Flags
 {
     private int []data;
     private int bank_active;
@@ -17,11 +18,9 @@ public class Program
 
     private int tempo, tmul;
     private int voice;
-    private int flags;
 
     public Program(float [] amps)
     {
-        this.flags = 0;
         this.data = new int[VOICES];
         this.sample_variants = new int[VOICES];
         this.sample_vol = new float[VOICES];
@@ -47,15 +46,6 @@ public class Program
         }
     }
     
-    public int getFlags()
-    {
-        return flags;
-    }
-    
-    public void setFlags(int flags)
-    {
-        this.flags = flags;
-    }
     
     //
     public int getSampleVariant(int voice)

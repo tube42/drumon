@@ -154,10 +154,9 @@ public class DrumScene extends Scene implements SequencerListener
         System.out.println("POSITION " + animate);
         final int w = World.sw;
         final int h = World.sh;
-        final int flags = World.prog.getFlags();
         
         // position pads:
-        if( (flags & FLAG_48) != 0) {
+        if(World.prog.getFlag(FLAG_48)) {
             // 4 / 8
             marker.setSize(World.size_pad2, World.size_pad2);
             
@@ -267,7 +266,7 @@ public class DrumScene extends Scene implements SequencerListener
 
     private void shuffle_pads(int voice)
     {
-        int mask = ~((World.prog.getFlags() & FLAG_48) == 0 ? 1 : 0);
+        int mask = ~(World.prog.getFlag(FLAG_48) ? 0 : 1);
         for(int i = 0; i < PADS * 5; i++) {
             int a = ServiceProvider.getRandomInt(PADS) & mask;
             int b = ServiceProvider.getRandomInt(PADS) & mask;
@@ -356,7 +355,7 @@ public class DrumScene extends Scene implements SequencerListener
         case 1:
             i0 = seq.isPaused() ? ICON_PLAY : ICON_PAUSE;
             i1 = prog.getBank(voice) ? ICON_B : ICON_A;
-            i3 = (prog.getFlags() & FLAG_48) == 0 ? ICON_44 : ICON_48;
+            i3 = prog.getFlag(FLAG_48) ? ICON_48 : ICON_44;
             break;
         case 2:
             v0 = World.mixer.getEffectChain().isEnabled(0);
@@ -413,7 +412,7 @@ public class DrumScene extends Scene implements SequencerListener
             break;
 
         case TOOL_SEQ_44_48:
-            World.prog.setFlags(World.prog.getFlags() ^ FLAG_48);
+            World.prog.toggleFlag(FLAG_48);
             update(false, false, true, false);
             reposition(false);
             return;

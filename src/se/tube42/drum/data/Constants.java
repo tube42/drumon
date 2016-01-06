@@ -36,7 +36,7 @@ public final class Constants
           ;
     
     public static final int
-          FLAG_48 = 1
+          FLAG_48 = 0
           ;
           
     // effect chain

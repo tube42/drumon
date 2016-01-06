@@ -103,7 +103,7 @@ public class Sequencer
             bcnt = (bcnt + 1) & 31;
             
             // if we are doing 4/4 skip the odd ones
-            if((bcnt & 1) != 0 && (prog.getFlags() & FLAG_48) == 0)
+            if((bcnt & 1) != 0 && prog.getFlag(FLAG_48))
                 return false;
 
             if(listener != null)

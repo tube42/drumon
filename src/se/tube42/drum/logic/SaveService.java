@@ -19,13 +19,8 @@ public final class SaveService
           SAVE_NAME = "DrumonSave-"
           ;
 
-    private final static String
-          HEADER_OLD = "drum-save-v0.2",
-          SAVE_NAME_OLD = "PREF-" + HEADER_OLD
-          ;
-
     private final static int
-          VERSION = 3,
+          VERSION = 4,
           CHECKSUM_SIZE = 4,
           SAVE_SIZE = 1
           ;
@@ -36,10 +31,7 @@ public final class SaveService
 
     public static String getSave(int num)
     {
-        String s = StorageService.load(SAVE_NAME + "." + num, (String)null);;
-        if(s == null)
-            s = StorageService.load(SAVE_NAME_OLD + "." + num, (String)null);;
-        return s;
+        return StorageService.load(SAVE_NAME + "." + num, (String)null);
     }
 
     public static void setSave(int num, String data)
@@ -62,29 +54,25 @@ public final class SaveService
 
         return EncodingService.shortToHex(sum & 0xFFFF);
     }
-    
+
     // valid save data? works only for new format
     public static boolean isValidSave(String str)
     {
         if(str == null) return false;
         str = str.trim();
-        
+
         if(str.startsWith(HEADER)) {
             String s1 = str.substring(0, str.length() - CHECKSUM_SIZE);
             String s2 = str.substring(str.length() - CHECKSUM_SIZE);
             return s2.equals( calcChecksum(s1));
         }
-        return false;        
+        return false;
     }
-          
+
     // -----------------------------------------------------------
     // serial / deserial:
-    //
-    // valid formats are
-    //   new: HEADER + <data> + CHECKSUM
-    //   old: <HEADER_OLD + data  + TAIL>
+    //   format: HEADER + <data> + CHECKSUM
     // -----------------------------------------------------------
-
 
     // serialize current program
     public static String currentToString()
@@ -98,36 +86,44 @@ public final class SaveService
             // format
             dos.writeByte(VERSION);
 
+            // format flags
+            int fileflags = 0;
+
+            dos.writeInt(fileflags);
+
             // serialize p
             dos.writeInt(p.getRawBanks());
             dos.writeShort(p.getTempo());
             dos.writeByte(p.getTempoMultiplier());
             dos.writeByte(p.getVoice());
             dos.writeInt(p.getRawFlags());
-            for(int i = 0; i < 2; i++) dos.writeInt(0); // pad
 
+            for(int i = 0; i < VOICES; i++) {
+                final int banks = p.getUsedBanks(i);
 
-            final int [] data = p.getRawPads();
-            for(int i = 0; i < data.length; i++) {
-                dos.writeInt( data[i]);
-                dos.writeByte( p.getSampleVariant(i));
+                int voiceflags = 0;
+                voiceflags |= (0x0F & p.getSampleVariant(i)) << 0;
+                voiceflags |= (0xFF & p.getVolumeVariation(i)) << 4;
+                voiceflags |= (0x0F & banks) << 12;
+
+                dos.writeInt(voiceflags);
                 dos.writeFloat( p.getVolume(i));
-                dos.writeShort( p.getVolumeVariation(i));
+                for(int j = 0; j < banks; j++)
+                    dos.writeInt( p.getRawData(j, i));
             }
 
             // serialize fx
-            dos.writeShort(fx.getEnabledRaw());
-            dos.writeShort(0); // reserved
-
-            Effect comp = fx.getEffect(FX_COMP);
-            dos.writeFloat( comp.getConfig(0));
-            dos.writeFloat( comp.getConfig(1));
-            
-            comp = fx.getEffect(FX_LOFI);
-            dos.writeFloat( comp.getConfig(0));
-            
-            for(int i = 0; i < 3; i++) dos.writeFloat( 0); // reserved
-
+            int fxcount = 0x2221;
+            int fxflags = 0;
+            fxflags |= 0x0F & fx.getEnabledRaw();
+            fxflags |= fxcount << 4;
+            dos.writeInt(fxflags);
+            for(int i = 0; i < EffectChain.SIZE; i++) {
+                Effect comp = fx.getEffect(i);
+                for(int j = 0; j < (fxcount & 0xF); j++)
+                    dos.writeFloat( comp.getConfig(j));
+                fxcount >>= 4;
+            }
 
             // encode and add checksum
             dos.flush();
@@ -149,21 +145,17 @@ public final class SaveService
         // in case this was a copy-paste, we may have extra spaces
         str = str.trim();
 
+        if(!str.startsWith(HEADER))
+            return false;
 
-        // check header, see if its the new format
-        boolean oldformat = true;
+        // check and remove checksum
+        String s1 = str.substring(0, str.length() - CHECKSUM_SIZE);
+        String s2 = str.substring(str.length() - CHECKSUM_SIZE);
+        if(!s2.equals( calcChecksum(s1)))
+            return false;
+        str = s1.substring(HEADER.length());
 
-        if(str.startsWith(HEADER)) {
-            oldformat = false;
-            String s1 = str.substring(0, str.length() - CHECKSUM_SIZE);
-            String s2 = str.substring(str.length() - CHECKSUM_SIZE);
-            if(!s2.equals( calcChecksum(s1)))
-               return false;
-            else
-               str = s1.substring(HEADER.length());
-        }
         try {
-
             final Program p = World.prog;
             final EffectChain fx = World.mixer.getEffectChain();
 
@@ -176,20 +168,8 @@ public final class SaveService
             ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
             DataInputStream dis = new DataInputStream(bais);
 
-            if(oldformat) {
-                String header = dis.readUTF();
-                if(!HEADER_OLD.equals(header)) {
-                    System.err.println("Internal error: bad save header - " + header);
-                    return false;
-                } else {
-                    System.out.println("NOTE: save file is in old format");
-                }
-            }
-
-            // get version
-            int version = 0;
-            if(!oldformat)
-                version = dis.readByte();
+            final byte version = dis.readByte();
+            final int fileflags = dis.readInt();
 
             // deserialze to p
             p.setRawBanks( dis.readInt());
@@ -197,36 +177,37 @@ public final class SaveService
             p.setTempoMultiplier( dis.readByte() );
             p.setVoice( dis.readByte() );
             p.setRawFlags( dis.readInt() );
-            for(int i = 0; i < 2; i++) dis.readInt(); // pad
 
-
-            final int [] data = p.getRawPads();
-            for(int i = 0; i < data.length; i++) {
-                data[i] = dis.readInt();
-                p.setSampleVariant(i, dis.readByte());
+            for(int i = 0; i < VOICES; i++) {
+                final int voiceflags = dis.readInt();
                 p.setVolume(i, dis.readFloat());
-                p.setVolumeVariation(i, dis.readShort());
+
+                final int samplevar = voiceflags & 0xF;
+                final int volvar = (voiceflags >> 4) & 0xFF;
+                final int banks = (voiceflags >> 12) & 0x0F;
+
+                p.setSampleVariant(i, samplevar);
+                p.setVolumeVariation(i, volvar);
+                for(int j = 0; j < VOICE_BANKS; j++) {
+                    int data = 0;
+                    if(j < banks)
+                        data = dis.readInt();
+                    p.setRawData(j, i, data);
+                }
             }
 
-
             // deserialize fx
-            fx.setEnabledRaw( dis.readShort());
-            dis.readShort(); // reserved
+            final int fxflags = dis.readInt();
+            final int fxenabled = 0x0F & fxflags;
+            int fxcount = (fxflags >> 4) & 0xFFFF;
+            fx.setEnabledRaw( fxenabled);
 
-            Effect comp = fx.getEffect(FX_COMP);
-            comp.setConfig(0, dis.readFloat() );
-            comp.setConfig(1, dis.readFloat() );
-            
-            comp = fx.getEffect(FX_LOFI);
-            comp.setConfig(0, dis.readFloat() );
-            
-            for(int i = 0; i < 3; i++) dis.readFloat(); // reserved
-
-            if(oldformat) {
-                if(!TAIL.equals(dis.readUTF())) {
-                    System.err.println("Internal error: bad save tail");
-                    return false;
-                }
+            for(int i = 0; i < EffectChain.SIZE; i++) {
+                Effect comp = fx.getEffect(i);
+                comp.reset();
+                for(int j = 0; j < (fxcount & 0xF); j++)
+                    comp.setConfig(j, dis.readFloat() );
+                fxcount >>= 4;
             }
 
             return true;
@@ -251,7 +232,6 @@ public final class SaveService
             return false;
         }
     }
-
 
     // load from a save
     public static boolean load(int num)

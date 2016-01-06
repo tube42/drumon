@@ -10,19 +10,67 @@ import static se.tube42.drum.data.Constants.*;
 
 public final class Delay extends Effect
 {
-    private float amp;
+    public static final int
+          CONFIG_AMP = 0,
+          CONFIG_TIME = 1
+          ;
+
+    private float amp, time;
     private float []buffer;
-    private int curr, len;
+    private int freq, curr, len;
 
-
-    public Delay(int freq, float time, float amp)
+    public Delay(int freq)
     {
-        this.amp = amp;
-        this.curr = 0;
-        this.len = ~3 & (int)(3 + Math.max(3, freq * time));
-        this.buffer = new float[len];
+        this.freq = freq;
+        this.buffer = new float[(int)(freq * MAX_DELAY_TIME + 2 * SIMD_WIDTH)];
+        reset();
     }
 
+    // --------------------------------------------------------
+
+    public void reset()
+    {
+        curr = 0;
+        setConfig(CONFIG_AMP, 0.2f);
+        setConfig(CONFIG_TIME, 0.32f);
+    }
+
+    public int getConfigSize()
+    {
+        return 2;
+    }
+
+    public void setConfig(int index, float f)
+    {
+        switch(index) {
+        case CONFIG_AMP:
+            f = Math.max(Math.min(f, MAX_DELAY_AMP), MIN_DELAY_AMP);
+            amp = f;
+            break;
+        case CONFIG_TIME:
+            f = Math.max(Math.min(f, MAX_DELAY_TIME), MIN_DELAY_TIME);
+            time = f;
+            len = ~3 & (int)(3 + freq * time);
+            // make sure we are not past our new buffer
+            if(curr > len + 5);
+                curr = len - 5;
+            break;
+        }
+    }
+
+    public float getConfig(int index)
+    {
+        switch(index) {
+        case CONFIG_AMP:
+            return amp;
+        case CONFIG_TIME:
+            return time;
+        default:
+            return 0;
+        }
+    }
+
+    // --------------------------------------------------------
 
     public void process(final float [] data, int offset,
               final int size)

@@ -18,15 +18,21 @@ public final class FIRFilter extends Effect
         this.size = size;
         this.v = new float[size];
         this.ring = new Ring(size);
+
+        for(int i = 0; i < v.length; i++)
+            v[i] = 0;
+
         reset();
     }
+
+    // -----------------------------------------------------------------
 
     public void reset()
     {
         ring.reset();
-        for(int i = 0; i < v.length; i++)
-            v[i] = 0;
     }
+
+    // -----------------------------------------------------------------
 
     public int getSize()
     {

@@ -13,13 +13,13 @@ public abstract class Effect
 
     public Effect()
     {
-
     }
 
 
     // processor logic goes here
     public abstract void process(final float [] data, int offset, int size);
 
+    public abstract void reset();
 
     // configuration empty implementation
     public int getConfigSize()

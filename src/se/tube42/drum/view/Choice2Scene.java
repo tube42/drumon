@@ -72,6 +72,22 @@ public class Choice2Scene extends Scene
 
     // ------------------------------------------------
 
+
+    // just a helper when the params are floats
+    private void configureFloat(
+              float x_min, float x_max, float x,
+              float y_min, float y_max, float y)
+    {
+        configure(
+                  (int)(0.5f + x_min * 1024),
+                  (int)(0.5f + x_max * 1024),
+                  (int)(0.5f + x * 1024),
+                  (int)(0.5f + y_min * 1024),
+                  (int)(0.5f + y_max * 1024),
+                  (int)(0.5f + y * 1024)
+                  );
+    }
+
     private void configure(
               int x_min, int x_max, int x,
               int y_min, int y_max, int y)
@@ -160,6 +176,8 @@ public class Choice2Scene extends Scene
             return ICON_COMPRESS;
         case CHOICE2_VOLUME:
             return ICON_VOLUME;
+        case CHOICE2_DELAY:
+            return ICON_DELAY;
         default:
             return -1;
         }
@@ -167,26 +185,40 @@ public class Choice2Scene extends Scene
 
     private void choice_init()
     {
+        Effect fx;
+        Program prog;
+
         // get initial configuration and values
         switch(choice) {
         case CHOICE2_VOLUME:
-            Program prog = (Program) target;
+            prog = (Program) target;
             // note 1: mirror x axis => the no variation point is in middle of screen => happy user
             configure(-MAX_VARIATION, MAX_VARIATION, prog.getVolumeVariation(id),
                       MIN_VOLUME, MAX_VOLUME, (int)(100f * prog.getVolume(id))
                       );
             break;
 
+        case CHOICE2_DELAY:
+            fx = (Effect) target;
+            configureFloat(
+                      MIN_DELAY_TIME, MAX_DELAY_TIME, fx.getConfig( Delay.CONFIG_TIME),
+                      MIN_DELAY_AMP, MAX_DELAY_AMP, fx.getConfig( Delay.CONFIG_AMP));
+            break;
+
         case CHOICE2_COMPRESS:
-            Effect comp = (Effect) target;
-            configure(0, 100, (int)(100 * comp.getConfig(Compressor.CONFIG_SRC) + 0.5f),
-                      0, 100, (int)(100 * comp.getConfig(Compressor.CONFIG_DST) + 0.5f));
+            fx = (Effect) target;
+            configureFloat(
+                      0, 1,  fx.getConfig(Compressor.CONFIG_SRC),
+                      0, 1, fx.getConfig(Compressor.CONFIG_DST));
             break;
         }
     }
 
     private void choice_update()
     {
+        Effect fx;
+        Program prog;
+
         // uppdate view
         final float xn = (x - x_min) / (float) (x_max - x_min);
         final float yn = (y - y_min) / (float) (y_max - y_min);
@@ -203,16 +235,22 @@ public class Choice2Scene extends Scene
         // update world
         switch(choice) {
         case CHOICE2_VOLUME:
-            Program prog = (Program) target;
+            prog = (Program) target;
             prog.setVolumeVariation(id, Math.abs(x)); // see note 1
             prog.setVolume(id, y / 100f);
             break;
-        case CHOICE2_COMPRESS:
-            Effect comp = (Effect) target;
-            comp.setConfig(Compressor.CONFIG_SRC, x / 100f);
-            comp.setConfig(Compressor.CONFIG_DST, y / 100f);
+
+        case CHOICE2_DELAY:
+            fx = (Effect) target;
+            fx.setConfig(Delay.CONFIG_TIME, x / 1024.0f);
+            fx.setConfig(Delay.CONFIG_AMP, y / 1024.0f);
             break;
 
+        case CHOICE2_COMPRESS:
+            fx = (Effect) target;
+            fx.setConfig(Compressor.CONFIG_SRC, x / 1024.0f);
+            fx.setConfig(Compressor.CONFIG_DST, y / 1024.0f);
+            break;
         }
     }
 
@@ -241,11 +279,11 @@ public class Choice2Scene extends Scene
             seen_down = true;
             hit_canvas = canvas.hit(x, y);
         }
-        
+
         /* probably remaining touches from another scene */
         if(!seen_down)
             return false;
-        
+
         if(hit_canvas) {
             set(x, y);
         }

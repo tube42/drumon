@@ -11,13 +11,24 @@ import static se.tube42.drum.data.Constants.*;
 
 public final class Lofi extends Effect
 {
+    public static final int
+          CONFIG_BITS = 0
+          ;
+
     private int bits, mask;
-    
+
     public Lofi()
     {
-        setConfig(0, 7);
+        reset();
     }
-    
+
+    // -------------------------------------------------
+
+    public void reset()
+    {
+        setConfig(CONFIG_BITS, 7);
+    }
+
     public int getConfigSize()
     {
         return 1;
@@ -25,18 +36,27 @@ public final class Lofi extends Effect
 
     public void setConfig(int index, float f)
     {
-        if(index == 0) {
+        switch(index) {
+        case CONFIG_BITS:
             final int bits = (int) Math.max(MIN_LOFI_BITS,
                       Math.min(MAX_LOFI_BITS, f));
             this.bits = bits;
             this.mask = (1 << bits) -1;
+            break;
         }
     }
 
     public float getConfig(int index)
     {
-        return (float)bits;
+        switch(index) {
+        case CONFIG_BITS:
+            return (float)bits;
+        default:
+            return 0;
+        }
     }
+
+    // -------------------------------------------------
 
     public void process(final float [] data, int offset, int size)
     {

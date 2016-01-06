@@ -17,11 +17,55 @@ public final class Compressor extends Effect
     private float src, dst;
     private float mul1, mul2, add2;
 
-    public Compressor(float src, float dst)
+    public Compressor()
     {
-        setConfig(CONFIG_DST, dst);
-        setConfig(CONFIG_SRC, src);
+        reset();
     }
+
+    // --------------------------------------------------------
+
+    public void reset()
+    {
+        setConfig(CONFIG_SRC, 0.2f);
+        setConfig(CONFIG_DST, 0.8f);
+    }
+
+
+    public int getConfigSize()
+    {
+        return 2; // nothing
+    }
+
+    public void setConfig(int index, float f)
+    {
+        switch(index) {
+        case CONFIG_SRC:
+            src = f;
+            update();
+            break;
+
+        case CONFIG_DST:
+            dst = f;
+            update();
+            break;
+        }
+    }
+
+    public float getConfig(int index)
+    {
+        switch(index) {
+        case CONFIG_SRC:
+            return src;
+
+        case CONFIG_DST:
+            return dst;
+
+        default:
+            return 0;
+        }
+    }
+
+    // --------------------------------------------------------
 
     public void update()
     {
@@ -61,42 +105,4 @@ public final class Compressor extends Effect
             data[offset++] = b1;
         }
     }
-
-
-    // configuration
-    public int getConfigSize()
-    {
-        return 2; // nothing
-    }
-
-    public void setConfig(int index, float f)
-    {
-        switch(index) {
-        case CONFIG_SRC:
-            src = f;
-            update();
-            break;
-
-        case CONFIG_DST:
-            dst = f;
-            update();
-            break;
-        }
-    }
-
-    public float getConfig(int index)
-    {
-        switch(index) {
-        case CONFIG_SRC:
-            return src;
-
-        case CONFIG_DST:
-            return dst;
-
-        default:
-            return 0;
-        }
-    }
-
-
 }

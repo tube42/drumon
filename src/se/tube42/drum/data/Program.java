@@ -10,7 +10,7 @@ import static se.tube42.drum.data.Constants.*;
 
 public class Program extends Flags
 {
-    private int []data;
+    private int [][]data;
     private int bank_active;
     private int [] sample_variants;
     private float [] sample_vol;
@@ -21,7 +21,7 @@ public class Program extends Flags
 
     public Program(float [] amps)
     {
-        this.data = new int[VOICES];
+        this.data = new int[VOICE_BANKS][VOICES];
         this.sample_variants = new int[VOICES];
         this.sample_vol = new float[VOICES];
         this.sample_vol_variation = new int[VOICES];
@@ -41,12 +41,13 @@ public class Program extends Flags
     public void reset()
     {
         for(int i = 0; i < VOICES; i++) {
-            setBank(i, false);
+            setBank(i, 0);
             setSampleVariant(i, 0);
+            clear(i, true);
         }
     }
-    
-    
+
+
     //
     public int getSampleVariant(int voice)
     {
@@ -92,14 +93,15 @@ public class Program extends Flags
     }
 
     //
-    public boolean getBank(int voice)
+    public int getBank(int voice)
     {
-        return get_bit(bank_active, voice);
+        return get_bit(bank_active, voice) ? 1 : 0;
     }
 
-    public void setBank(int voice, boolean b)
+    public void setBank(int voice, int bank)
     {
-        bank_active = set_bit(bank_active, voice, b);
+        if(bank >= 0 && bank < VOICE_BANKS)
+            bank_active = set_bit(bank_active, voice, bank != 0);
     }
 
     //
@@ -133,25 +135,48 @@ public class Program extends Flags
         if(v >= 0 && v < VOICES) this.voice = v;
     }
 
-    //
+    // returns the number of banks used for this voice
+    public int getUsedBanks(int voice)
+    {
+        int ret = 0;
+        for(int i = 0; i < VOICE_BANKS; i++)
+            if(data[i][voice] != 0)
+                ret = i + 1;
+        return ret;
+    }
 
+    public void clear(int voice, boolean allbanks)
+    {
+        if(allbanks) {
+            for(int i = 0; i < VOICE_BANKS; i++)
+                data[i][voice] = 0;
+        } else {
+            final int bank = getBank(voice);
+            data[bank][voice] = 0;
+        }
+    }
+
+    //
     public boolean get(int voice, int step)
     {
-        final int off = getBank(voice) ? 0 : PADS;
-        return get_bit(data[voice], step + off);
+        final int bank = getBank(voice);
+        return get_bit(data[bank][voice], step);
     }
 
     public void set(int voice, int step, boolean set)
     {
-        final int off = getBank(voice) ? 0 : PADS;
-        data[voice] = set_bit(data[voice], step + off, set);
+        final int bank = getBank(voice);
+        data[bank][voice] = set_bit(data[bank][voice], step, set);
     }
 
-
     // these are used for serialization
-    public int [] getRawPads()
+    public int getRawData(int bank, int voice)
     {
-        return data;
+        return data[bank][voice];
+    }
+    public void setRawData(int bank, int voice, int data)
+    {
+        this.data[bank][voice] = data;
     }
 
     public int getRawBanks()

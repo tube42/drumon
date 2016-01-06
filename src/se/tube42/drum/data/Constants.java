@@ -12,6 +12,13 @@ public final class Constants
           CHARSET2 = "abcdefghijklmnopqrstuvwxyz!?"
           ;
 
+    public static final float
+          MIN_DELAY_AMP = 0.1f,
+          MAX_DELAY_AMP = 0.8f,
+          MIN_DELAY_TIME = 0.05f,
+          MAX_DELAY_TIME = 1.0f
+          ;
+
     public static final int
           MIN_LOFI_BITS = 2,
           MAX_LOFI_BITS = 15,
@@ -32,13 +39,14 @@ public final class Constants
           SELECTORS = 4,
           TOOLS = 4,
           VOICES = 8,
+          VOICE_BANKS = 2,
           PADS = 4 * 4 * 2
           ;
-    
+
     public static final int
           FLAG_48 = 0
           ;
-          
+
     // effect chain
     public static final int
           FX_LOFI = 0,
@@ -87,7 +95,7 @@ public final class Constants
 
           ICON_LOFI = 24,
           ICON_LPFILTER = 25,
-          ICON_ECHO = 26,
+          ICON_DELAY = 26,
           ICON_COMPRESS = 27,
 
           ICON_VOLUME = 28,
@@ -103,7 +111,8 @@ public final class Constants
 
     public final static int
           CHOICE2_VOLUME = 0,
-          CHOICE2_COMPRESS = 1
+          CHOICE2_COMPRESS = 1,
+          CHOICE2_DELAY = 2
           ;
 
     // ---------------------------------------
@@ -153,7 +162,7 @@ public final class Constants
           TOOL_SEQ_44_48 = 7,
           TOOL_FX_LOFI = 8,
           TOOL_FX_LOWPASS = 9,
-          TOOL_FX_ECHO = 10,
+          TOOL_FX_DELAY = 10,
           TOOL_FX_COMP = 11,
           TOOL_MISC_VOL = 12,
           TOOL_MISC_CLEAR = 14,
@@ -168,7 +177,7 @@ public final class Constants
         ICON_PAUSE, ICON_A, ICON_MIX, ICON_44,
 
         // waveform
-        ICON_LOFI, ICON_LPFILTER, ICON_ECHO, ICON_COMPRESS,
+        ICON_LOFI, ICON_LPFILTER, ICON_DELAY, ICON_COMPRESS,
 
         // settings
        ICON_VOLUME, -1, ICON_DEL, ICON_SAVE

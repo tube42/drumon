@@ -33,8 +33,8 @@ public class EffectChain
         effects = new Effect[SIZE];
         effects[FX_LOFI] = new Lofi();
         effects[FX_FILTER] = fir;
-        effects[FX_DELAY] = new Delay(World.freq, 0.32f, 0.2f);
-        effects[FX_COMP] = new Compressor(0.2f, 0.8f);
+        effects[FX_DELAY] = new Delay(World.freq);
+        effects[FX_COMP] = new Compressor();
     }
 
     // ------------------------------------------

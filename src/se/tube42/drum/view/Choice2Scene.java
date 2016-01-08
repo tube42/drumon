@@ -178,6 +178,8 @@ public class Choice2Scene extends Scene
             return ICON_VOLUME;
         case CHOICE2_DELAY:
             return ICON_DELAY;
+        case CHOICE2_FILTER:
+            return ICON_FILTER;
         default:
             return -1;
         }
@@ -203,6 +205,13 @@ public class Choice2Scene extends Scene
             configureFloat(
                       MIN_DELAY_TIME, MAX_DELAY_TIME, fx.getConfig( Delay.CONFIG_TIME),
                       MIN_DELAY_AMP, MAX_DELAY_AMP, fx.getConfig( Delay.CONFIG_AMP));
+            break;
+
+        case CHOICE2_FILTER:
+            fx = (Effect) target;
+            configureFloat(
+                      MIN_FILTER_FREQ, MAX_FILTER_FREQ, fx.getConfig( Filter.CONFIG_FREQ),
+                      MIN_FILTER_RAD, MAX_FILTER_RAD, fx.getConfig( Filter.CONFIG_RAD));
             break;
 
         case CHOICE2_COMPRESS:
@@ -244,6 +253,12 @@ public class Choice2Scene extends Scene
             fx = (Effect) target;
             fx.setConfig(Delay.CONFIG_TIME, x / 1024.0f);
             fx.setConfig(Delay.CONFIG_AMP, y / 1024.0f);
+            break;
+
+        case CHOICE2_FILTER:
+            fx = (Effect) target;
+            fx.setConfig(Filter.CONFIG_FREQ, x / 1024.0f);
+            fx.setConfig(Filter.CONFIG_RAD, y / 1024.0f);
             break;
 
         case CHOICE2_COMPRESS:

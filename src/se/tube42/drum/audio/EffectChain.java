@@ -23,16 +23,10 @@ public class EffectChain
     {
         enabled = 0;
 
-        // configure our FIR filter
-        FIRFilter fir = new FIRFilter(7);
-        for(int i = 0; i < 7; i++)
-            fir.set(i, 1f / 7);
-
-
         // build the chain
         effects = new Effect[SIZE];
         effects[FX_LOFI] = new Lofi();
-        effects[FX_FILTER] = fir;
+        effects[FX_FILTER] = new Filter();
         effects[FX_DELAY] = new Delay(World.freq);
         effects[FX_COMP] = new Compressor();
     }

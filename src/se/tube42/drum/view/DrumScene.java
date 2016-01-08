@@ -421,7 +421,7 @@ public class DrumScene extends Scene implements SequencerListener
             World.mixer.getEffectChain().toggle(0);
             break;
 
-        case TOOL_FX_LOWPASS:
+        case TOOL_FX_FILTER:
             World.mixer.getEffectChain().toggle(1);
             break;
 
@@ -462,6 +462,11 @@ public class DrumScene extends Scene implements SequencerListener
         case TOOL_FX_DELAY:
             get_choice2(World.mixer.getEffectChain().getEffect(FX_DELAY),
                       CHOICE2_DELAY, -1);
+            break;
+
+        case TOOL_FX_FILTER:
+            get_choice2(World.mixer.getEffectChain().getEffect(FX_FILTER),
+                      CHOICE2_FILTER, -1);
             break;
 
         case TOOL_FX_COMP:

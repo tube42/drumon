@@ -16,7 +16,12 @@ public final class Constants
           MIN_DELAY_AMP = 0.1f,
           MAX_DELAY_AMP = 0.8f,
           MIN_DELAY_TIME = 0.05f,
-          MAX_DELAY_TIME = 1.0f
+          MAX_DELAY_TIME = 1.0f,
+
+          MIN_FILTER_FREQ = 0,
+          MAX_FILTER_FREQ = 0.3f,
+          MIN_FILTER_RAD = 0,
+          MAX_FILTER_RAD = 0.95f
           ;
 
     public static final int
@@ -94,7 +99,7 @@ public final class Constants
           ICON_DOT = 23,
 
           ICON_LOFI = 24,
-          ICON_LPFILTER = 25,
+          ICON_FILTER = 25,
           ICON_DELAY = 26,
           ICON_COMPRESS = 27,
 
@@ -112,7 +117,8 @@ public final class Constants
     public final static int
           CHOICE2_VOLUME = 0,
           CHOICE2_COMPRESS = 1,
-          CHOICE2_DELAY = 2
+          CHOICE2_DELAY = 2,
+          CHOICE2_FILTER = 3
           ;
 
     // ---------------------------------------
@@ -161,7 +167,7 @@ public final class Constants
           TOOL_SEQ_SHUFFLE = 6,
           TOOL_SEQ_44_48 = 7,
           TOOL_FX_LOFI = 8,
-          TOOL_FX_LOWPASS = 9,
+          TOOL_FX_FILTER = 9,
           TOOL_FX_DELAY = 10,
           TOOL_FX_COMP = 11,
           TOOL_MISC_VOL = 12,
@@ -177,7 +183,7 @@ public final class Constants
         ICON_PAUSE, ICON_A, ICON_MIX, ICON_44,
 
         // waveform
-        ICON_LOFI, ICON_LPFILTER, ICON_DELAY, ICON_COMPRESS,
+        ICON_LOFI, ICON_FILTER, ICON_DELAY, ICON_COMPRESS,
 
         // settings
        ICON_VOLUME, -1, ICON_DEL, ICON_SAVE

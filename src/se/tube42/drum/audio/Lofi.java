@@ -15,10 +15,12 @@ public final class Lofi extends Effect
           CONFIG_BITS = 0
           ;
 
-    private int bits, mask;
+    private int mask;
 
     public Lofi()
     {
+        super(1);
+        configure(CONFIG_BITS, 2, 15);
         reset();
     }
 
@@ -26,41 +28,20 @@ public final class Lofi extends Effect
 
     public void reset()
     {
-        setConfig(CONFIG_BITS, 7);
+        set(CONFIG_BITS, 7);
     }
 
-    public int getConfigSize()
-    {
-        return 1;
-    }
 
-    public void setConfig(int index, float f)
+    protected void onUpdate(int index, float f)
     {
-        switch(index) {
-        case CONFIG_BITS:
-            final int bits = (int) Math.max(MIN_LOFI_BITS,
-                      Math.min(MAX_LOFI_BITS, f));
-            this.bits = bits;
-            this.mask = (1 << bits) -1;
-            break;
-        }
-    }
-
-    public float getConfig(int index)
-    {
-        switch(index) {
-        case CONFIG_BITS:
-            return (float)bits;
-        default:
-            return 0;
-        }
+        final int bits = (int)(0.5f + get(CONFIG_BITS));
+        this.mask = (1 << bits) -1;
     }
 
     // -------------------------------------------------
 
     public void process(final float [] data, int offset, int size)
     {
-
         for(int i = size / 4; i != 0; i--) {
 
             /* average of 4 samples as a short */
@@ -74,8 +55,6 @@ public final class Lofi extends Effect
 
             /* back to float */
             final float out = reduced / (float)(1 << 15);
-
-
             data[offset ++] =
             data[offset ++] =
             data[offset ++] =

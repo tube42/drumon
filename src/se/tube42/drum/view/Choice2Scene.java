@@ -15,15 +15,14 @@ import static se.tube42.drum.data.Constants.*;
 
 public class Choice2Scene extends Scene
 {
-    private int x_min, x_max, x;
-    private int y_min, y_max, y;
+    private Parameters params;
+    private float x_min, x_max, x;
+    private float y_min, y_max, y;
 
     private SpriteItem canvas, mark;
     private SpriteItem icon;
 
     private boolean hit_canvas, seen_down;
-    private Object target;
-    private int choice, id;
     private float x0, y0, xd, yd;
 
     public Choice2Scene()
@@ -72,25 +71,9 @@ public class Choice2Scene extends Scene
 
     // ------------------------------------------------
 
-
-    // just a helper when the params are floats
-    private void configureFloat(
+    private void configure(
               float x_min, float x_max, float x,
               float y_min, float y_max, float y)
-    {
-        configure(
-                  (int)(0.5f + x_min * 1024),
-                  (int)(0.5f + x_max * 1024),
-                  (int)(0.5f + x * 1024),
-                  (int)(0.5f + y_min * 1024),
-                  (int)(0.5f + y_max * 1024),
-                  (int)(0.5f + y * 1024)
-                  );
-    }
-
-    private void configure(
-              int x_min, int x_max, int x,
-              int y_min, int y_max, int y)
     {
         // avoid div by zero
         if(x_min == x_max) x_max++;
@@ -116,8 +99,8 @@ public class Choice2Scene extends Scene
         final float yn = (y - y0) / yd;
         final float xm = x_min + xn * (x_max - x_min);
         final float ym = y_min + yn * (y_max - y_min);
-        final int xc = Math.max(x_min, Math.min(x_max, (int)(xm + 0.5f)));
-        final int yc = Math.max(y_min, Math.min(y_max, (int)(ym + 0.5f)));
+        final float xc = Math.max(x_min, Math.min(x_max, xm));
+        final float yc = Math.max(y_min, Math.min(y_max, ym));
 
         if(xc != this.x || yc != this.y) {
             this.x = xc;
@@ -148,86 +131,27 @@ public class Choice2Scene extends Scene
     }
 
     // ----------------------------------------------------------
-    public void setChoice(Object target, int choice, int id)
+    public void set(Parameters params, int iconnr)
     {
-        this.target = target;;
-        this.choice = choice;
-        this.id = id;
+        this.params = params;
 
-        // update UI
-        int t0 = choice_get_icon();
-        if(t0 != -1) {
-            icon.setIndex(t0);
-            icon.flags |= BaseItem.FLAG_VISIBLE;
-        } else {
+        if(iconnr == -1) {
             icon.flags &= ~BaseItem.FLAG_VISIBLE;
+        } else {
+            icon.setIndex(iconnr);
+            icon.flags |= BaseItem.FLAG_VISIBLE;
         }
 
-        // set initial values
-        choice_init();
+        configure(
+                  params.getMin(0), params.getMax(0), params.get(0),
+                  params.getMin(1), params.getMax(1), params.get(1)
+                  );
     }
 
     // ----------------------------------------------------------
 
-    private int choice_get_icon()
-    {
-        switch(choice) {
-        case CHOICE2_COMPRESS:
-            return ICON_COMPRESS;
-        case CHOICE2_VOLUME:
-            return ICON_VOLUME;
-        case CHOICE2_DELAY:
-            return ICON_DELAY;
-        case CHOICE2_FILTER:
-            return ICON_FILTER;
-        default:
-            return -1;
-        }
-    }
-
-    private void choice_init()
-    {
-        Effect fx;
-        Program prog;
-
-        // get initial configuration and values
-        switch(choice) {
-        case CHOICE2_VOLUME:
-            prog = (Program) target;
-            // note 1: mirror x axis => the no variation point is in middle of screen => happy user
-            configure(-MAX_VARIATION, MAX_VARIATION, prog.getVolumeVariation(id),
-                      MIN_VOLUME, MAX_VOLUME, (int)(100f * prog.getVolume(id))
-                      );
-            break;
-
-        case CHOICE2_DELAY:
-            fx = (Effect) target;
-            configureFloat(
-                      MIN_DELAY_TIME, MAX_DELAY_TIME, fx.getConfig( Delay.CONFIG_TIME),
-                      MIN_DELAY_AMP, MAX_DELAY_AMP, fx.getConfig( Delay.CONFIG_AMP));
-            break;
-
-        case CHOICE2_FILTER:
-            fx = (Effect) target;
-            configureFloat(
-                      MIN_FILTER_FREQ, MAX_FILTER_FREQ, fx.getConfig( Filter.CONFIG_FREQ),
-                      MIN_FILTER_RAD, MAX_FILTER_RAD, fx.getConfig( Filter.CONFIG_RAD));
-            break;
-
-        case CHOICE2_COMPRESS:
-            fx = (Effect) target;
-            configureFloat(
-                      0, 1,  fx.getConfig(Compressor.CONFIG_SRC),
-                      0, 1, fx.getConfig(Compressor.CONFIG_DST));
-            break;
-        }
-    }
-
     private void choice_update()
     {
-        Effect fx;
-        Program prog;
-
         // uppdate view
         final float xn = (x - x_min) / (float) (x_max - x_min);
         final float yn = (y - y_min) / (float) (y_max - y_min);
@@ -242,31 +166,8 @@ public class Choice2Scene extends Scene
                   );
 
         // update world
-        switch(choice) {
-        case CHOICE2_VOLUME:
-            prog = (Program) target;
-            prog.setVolumeVariation(id, Math.abs(x)); // see note 1
-            prog.setVolume(id, y / 100f);
-            break;
-
-        case CHOICE2_DELAY:
-            fx = (Effect) target;
-            fx.setConfig(Delay.CONFIG_TIME, x / 1024.0f);
-            fx.setConfig(Delay.CONFIG_AMP, y / 1024.0f);
-            break;
-
-        case CHOICE2_FILTER:
-            fx = (Effect) target;
-            fx.setConfig(Filter.CONFIG_FREQ, x / 1024.0f);
-            fx.setConfig(Filter.CONFIG_RAD, y / 1024.0f);
-            break;
-
-        case CHOICE2_COMPRESS:
-            fx = (Effect) target;
-            fx.setConfig(Compressor.CONFIG_SRC, x / 1024.0f);
-            fx.setConfig(Compressor.CONFIG_DST, y / 1024.0f);
-            break;
-        }
+        params.set(0, x);
+        params.set(1, y);
     }
 
     // ----------------------------------------------------------

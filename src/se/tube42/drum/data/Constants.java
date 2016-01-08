@@ -13,30 +13,22 @@ public final class Constants
           ;
 
     public static final float
-          MIN_DELAY_AMP = 0.1f,
-          MAX_DELAY_AMP = 0.8f,
-          MIN_DELAY_TIME = 0.05f,
-          MAX_DELAY_TIME = 1.0f,
-
-          MIN_FILTER_FREQ = 0,
-          MAX_FILTER_FREQ = 0.3f,
-          MIN_FILTER_RAD = 0,
-          MAX_FILTER_RAD = 0.95f
+          MAX_VOLUME = 4.0f,
+          MIN_VOLUME = 0.0f
           ;
 
     public static final int
-          MIN_LOFI_BITS = 2,
-          MAX_LOFI_BITS = 15,
           MAX_TEMPO = 260,
           MIN_TEMPO = 40,
-          MAX_VARIATION = 75,
-          MIN_VARIATION = 0,
-          DEFAULT_VARIATION = 20,
+          MIN_TEMPO_MUL = 0,
+          MAX_TEMPO_MUL = 2,
+
+          MIN_VOLUME_VAR = 0,
+          MAX_VOLUME_VAR = 75,
+
           LONGPRESS_DELAY = 500,
           NUM_SAVES = 16,
 
-          MAX_VOLUME = 400, // %
-          MIN_VOLUME = 0, // %
           SIMD_WIDTH = 4
           ;
 
@@ -109,18 +101,6 @@ public final class Constants
           ICON_48 = 31
           ;
 
-    public final static int
-          CHOICE_TEMPO = 0,
-          CHOICE_LOFI = 1
-          ;
-
-    public final static int
-          CHOICE2_VOLUME = 0,
-          CHOICE2_COMPRESS = 1,
-          CHOICE2_DELAY = 2,
-          CHOICE2_FILTER = 3
-          ;
-
     // ---------------------------------------
     // samples
     // ---------------------------------------
@@ -162,8 +142,8 @@ public final class Constants
           TOOL_TEMPO_MUL = 0,
           TOOL_TEMPO_DETECT = 1,
           TOOL_TEMPO_SET = 2,
-          TOOL_SEQ_PAUSE = 4,
-          TOOL_SEQ_AB = 5,
+          TOOL_SEQ_AB = 4,          
+          TOOL_SEQ_CLEAR = 5,
           TOOL_SEQ_SHUFFLE = 6,
           TOOL_SEQ_44_48 = 7,
           TOOL_FX_LOFI = 8,
@@ -171,7 +151,7 @@ public final class Constants
           TOOL_FX_DELAY = 10,
           TOOL_FX_COMP = 11,
           TOOL_MISC_VOL = 12,
-          TOOL_MISC_CLEAR = 14,
+          TOOL_MISC_PAUSE = 14,
           TOOL_MISC_SAVE = 15
           ;
 
@@ -180,13 +160,13 @@ public final class Constants
         ICON_NOTE4, ICON_DOT, ICON_METRONOME, -1,
 
         // sequence
-        ICON_PAUSE, ICON_A, ICON_MIX, ICON_44,
+        ICON_A, ICON_DEL, ICON_MIX, ICON_44,
 
         // waveform
         ICON_LOFI, ICON_FILTER, ICON_DELAY, ICON_COMPRESS,
 
         // settings
-       ICON_VOLUME, -1, ICON_DEL, ICON_SAVE
+       ICON_VOLUME, -1, ICON_PAUSE, ICON_SAVE
     };
 
     // ---------------------------------------

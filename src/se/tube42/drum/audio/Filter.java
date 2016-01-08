@@ -17,10 +17,12 @@ public final class Filter extends Effect
 
     private float x0, y0, y1, y2;
     private float b0, a0, a1, a2;
-    private float freq, rad;
 
     public Filter()
     {
+        super(2);
+        configure(CONFIG_FREQ, 0, 0.3f);
+        configure(CONFIG_RAD, 0, 0.95f);
         reset();
     }
 
@@ -29,8 +31,8 @@ public final class Filter extends Effect
     public void reset()
     {
         x0 = y0 = y1 = y2 = 0;
-        setConfig(CONFIG_FREQ, 0.2f);
-        setConfig(CONFIG_RAD, 0.5f);
+        set(CONFIG_FREQ, 0.2f);
+        set(CONFIG_RAD, 0.5f);
     }
 
     public int getConfigSize()
@@ -38,34 +40,12 @@ public final class Filter extends Effect
         return 2;
     }
 
-    public void setConfig(int index, float f)
-    {
-        switch(index) {
-        case CONFIG_FREQ:
-            freq = Math.max(Math.min(f, MAX_FILTER_FREQ), MIN_FILTER_FREQ);
-            update();
-            break;
-        case CONFIG_RAD:
-            rad = Math.max(Math.min(f, MAX_FILTER_RAD), MIN_FILTER_RAD);
-            update();
-            break;
-        }
-    }
 
-    public float getConfig(int index)
+    protected void onUpdate(int index, float f)
     {
-        switch(index) {
-        case CONFIG_FREQ:
-            return freq;
-        case CONFIG_RAD:
-            return rad;
-        default:
-            return 0;
-        }
-    }
+        final float freq = get(CONFIG_FREQ);
+        final float rad = get(CONFIG_RAD);
 
-    private void update()
-    {
         final double w = 2 * Math.PI * freq;
         final double cw = Math.cos(w);
         final double sw = Math.sin(w);

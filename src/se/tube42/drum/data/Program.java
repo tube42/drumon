@@ -10,30 +10,32 @@ import static se.tube42.drum.data.Constants.*;
 
 public class Program extends Flags
 {
+    private Parameters tempo;
+    private Parameters[] volumes;
+
     private int [][]data;
     private int bank_active;
     private int [] sample_variants;
-    private float [] sample_vol;
-    private int [] sample_vol_variation;
-
-    private int tempo, tmul;
     private int voice;
 
     public Program(float [] amps)
     {
         this.data = new int[VOICE_BANKS][VOICES];
         this.sample_variants = new int[VOICES];
-        this.sample_vol = new float[VOICES];
-        this.sample_vol_variation = new int[VOICES];
 
-        // set default amps
+        // temp parameters
+        tempo = new Parameters(2);
+        tempo.configure(0, MIN_TEMPO, MAX_TEMPO, 120);
+        tempo.configure(1, MIN_TEMPO_MUL, MAX_TEMPO_MUL, 1);
+
+        // volume parameters:
+        volumes = new Parameters[VOICES];
         for(int i = 0; i < VOICES; i++) {
-            sample_vol[i] = amps[i];
-            sample_vol_variation[i] = DEFAULT_VARIATION;
+            volumes[i] = new Parameters(2);
+            volumes[i].configure(0, MIN_VOLUME_VAR, MAX_VOLUME_VAR, 20);
+            volumes[i].configure(1, MIN_VOLUME, MAX_VOLUME, amps[i]);
         }
 
-        setTempoMultiplier(2);
-        setTempo(120);
         setVoice(0);
         reset();
     }
@@ -63,33 +65,30 @@ public class Program extends Flags
     }
 
     //
-
+    // Volume
+    //
+    public Parameters getVolumeParameters(int voice)
+    {
+        return volumes[voice];
+    }
     public int getVolumeVariation(int voice)
     {
-        return sample_vol_variation[voice];
+        return volumes[voice].getInt(0);
     }
 
-    public boolean setVolumeVariation(int voice, int var)
+    public void setVolumeVariation(int voice, int var)
     {
-        if(var < MIN_VARIATION || var > MAX_VARIATION)
-            return false;
-
-        sample_vol_variation[voice] = var;
-        return true;
+        volumes[voice].set(0, var);
     }
 
     public float getVolume(int voice)
     {
-        return sample_vol[voice];
+        return volumes[voice].get(1);
     }
 
-    public boolean setVolume(int voice, float v)
+    public void setVolume(int voice, float v)
     {
-        if(v < MIN_VOLUME / 100f || v > MAX_VOLUME / 100f)
-            return false;
-
-        sample_vol[voice] = v;
-        return true;
+        volumes[voice].set(1, v);
     }
 
     //
@@ -105,23 +104,31 @@ public class Program extends Flags
     }
 
     //
-    public int getTempo() { return tempo; }
+    // temp
+    //
+
+    public Parameters getTempoParameters()
+    {
+        return tempo;
+    }
+    public int getTempo()
+    {
+        return tempo.getInt(0);
+    }
 
     public void setTempo(int t)
     {
-        if(t > MIN_TEMPO && t < MAX_TEMPO)
-            tempo = t;
+        tempo.set(0, t);
     }
 
     public int getTempoMultiplier()
     {
-        return tmul;
+        return tempo.getInt(1);
     }
 
     public void setTempoMultiplier(int t)
     {
-        if(t > 0 && t  < 64)
-            this.tmul = t;
+        tempo.set(1, t);
     }
 
     //

@@ -192,13 +192,15 @@
       <zipfileset dir="res" prefix="res" />
     </zip>
 
-    <!-- build release and save APK-->
+    <!-- build release and save APK + JAR -->
+    <antcall target="dist" />
+    <copy file="bin/${proj}_app.jar" todir="${site}/bin"/>
     <antcall target="release" />
     <copy file="bin/${apkplz}" todir="${site}/bin"/>
 
     <!-- add them to git, commit them and finally push the repo-->
     <exec executable="git" dir="${site}">
-      <arg line="add bin/${apkplz} assets/assets.zip"/>
+      <arg line="add bin/${apkplz} add/${proj}_app.jar assets/assets.zip"/>
     </exec>
     <exec executable="git" dir="${site}">
       <arg line="commit . -m 'published ${apkplz} and assets from custom_rules.xml'"/>

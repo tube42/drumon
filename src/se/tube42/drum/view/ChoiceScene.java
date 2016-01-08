@@ -14,16 +14,14 @@ import static se.tube42.drum.data.Constants.*;
 
 public class ChoiceScene extends Scene
 {
-    private int y_min, y_max, y;
+    private Parameters params;
+    private float y_min, y_max, y;
 
     private SpriteItem canvas, mark;
     private SpriteItem desc0, desc1;
 
     private BaseText text;
     private boolean hit_canvas, seen_down;
-
-    private Object target;
-    private int choice, id;
     private float y0, yd;
 
     public ChoiceScene()
@@ -83,7 +81,7 @@ public class ChoiceScene extends Scene
 
     // ------------------------------------------------
 
-    private void configure(int min, int max, int curr)
+    private void configure(float min, float max, float curr)
     {
         if(min == max) max++; // avoid div by zero
         this.y_min = min;
@@ -94,10 +92,9 @@ public class ChoiceScene extends Scene
 
     private boolean set(int x, int y)
     {
-
         final float yn = (y - y0) / yd;
         final float ym = y_min + yn * (y_max - y_min);
-        final int yc = Math.max(y_min, Math.min(y_max, (int)(ym + 0.5f)));
+        final float yc = Math.max(y_min, Math.min(y_max, ym));
 
         if(this.y != yc) {
             this.y = yc;
@@ -136,72 +133,25 @@ public class ChoiceScene extends Scene
     }
 
     // ----------------------------------------------------------
-    public void setChoice(Object target, int choice, int id)
+    public void set(Parameters params, int icon0, int icon1)
     {
-        this.target = target;
-        this.choice = choice;
-        this.id = id;
+        this.params = params;
 
-        // update UI
-        int t0 = choice_get_icon0();
-        int t1 = choice_get_icon1();
-
-        if(t0 != -1) {
-            desc0.setIndex(t0);
+        if(icon0 != -1) {
+            desc0.setIndex(icon0);
             desc0.flags |= BaseItem.FLAG_VISIBLE;
         } else {
             desc0.flags &= ~BaseItem.FLAG_VISIBLE;
         }
 
-        if(t1 != -1) {
-            desc1.setIndex(t1);
+        if(icon1 != -1) {
+            desc1.setIndex(icon1);
             desc1.flags |= BaseItem.FLAG_VISIBLE;
         } else {
             desc1.flags &= ~BaseItem.FLAG_VISIBLE;
         }
 
-
-        choice_init();
-    }
-
-
-    // ----------------------------------------------------------
-
-    private int choice_get_icon0()
-    {
-
-        switch(choice) {
-        case CHOICE_TEMPO:
-            return ICON_METRONOME;
-        case CHOICE_LOFI:
-            return ICON_LOFI;
-        default:
-            return -1;
-        }
-    }
-
-    private int choice_get_icon1()
-    {
-
-        switch(choice) {
-        default:
-            return -1;
-        }
-    }
-
-    private void choice_init()
-    {
-        // get initial configuration and values
-        switch(choice) {
-        case CHOICE_TEMPO:
-            Program prog = (Program) target;
-            configure(MIN_TEMPO, MAX_TEMPO, prog.getTempo());
-            break;
-        case CHOICE_LOFI:
-            final Lofi lofi = (Lofi)target;
-            configure(MIN_LOFI_BITS, MAX_LOFI_BITS, (int)lofi.getConfig(0));
-            break;
-        }
+        configure( params.getMin(0), params.getMax(0), params.get(0));
     }
 
     private void choice_update()
@@ -212,23 +162,14 @@ public class ChoiceScene extends Scene
         mark.setImmediate(BaseItem.ITEM_Y, y1 - mark.getH() / 2);
 
         text.setImmediate(BaseItem.ITEM_Y, y1);
-        text.setText("" + y);
+        text.setText("" + (int)(0.5f + y));
 
         final float yc = mark.getY() + (mark.getH() - desc0.getH()) / 2;
         desc0.setPosition(mark.getX() + desc0.getW() / 2, yc);
         desc1.setPosition(mark.getX() + mark.getW() - 1.5f * desc0.getW(), yc);
 
         // update world
-        switch(choice) {
-        case CHOICE_TEMPO:
-            Program prog = (Program) target;
-            prog.setTempo(y);
-            break;
-        case CHOICE_LOFI:
-            final Lofi lofi = (Lofi)target;
-            lofi.setConfig(0, y);
-            break;
-        }
+        params.set(0, y);
     }
 
     // ----------------------------------------------------------
@@ -256,11 +197,11 @@ public class ChoiceScene extends Scene
             hit_canvas = canvas.hit(x, y);
             seen_down = true;
         }
-        
+
         // we are seeing another scenes remaining touches)
         if(!seen_down)
             return false;
-        
+
         if(hit_canvas) {
             set(x, y);
         }

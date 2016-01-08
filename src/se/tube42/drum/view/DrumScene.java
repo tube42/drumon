@@ -344,17 +344,11 @@ public class DrumScene extends Scene implements SequencerListener
 
         switch(mode) {
         case 0:
-            if(prog.getTempoMultiplier() == 4) {
-                i0 = ICON_NOTE16;
-            } else if(prog.getTempoMultiplier() == 2) {
-                i0 = ICON_NOTE8;
-            } else {
-                i0 = ICON_NOTE4;
-            }
+            // assuming the icon order is 1/4,  1/8 and 1/16
+            i0 = ICON_NOTE4 + prog.getTempoMultiplier();
             break;
         case 1:
-            i0 = seq.isPaused() ? ICON_PLAY : ICON_PAUSE;
-            i1 = prog.getBank(voice) == 0 ? ICON_A : ICON_B;
+            i0 = prog.getBank(voice) == 0 ? ICON_A : ICON_B;
             i3 = prog.getFlag(FLAG_48) ? ICON_48 : ICON_44;
             break;
         case 2:
@@ -364,6 +358,7 @@ public class DrumScene extends Scene implements SequencerListener
             v3 = World.mixer.getEffectChain().isEnabled(3);
             break;
         case 3:
+            i2 = seq.isPaused() ? ICON_PLAY : ICON_PAUSE;
             break;
         }
 
@@ -383,8 +378,8 @@ public class DrumScene extends Scene implements SequencerListener
 
         switch(op) {
         case TOOL_TEMPO_MUL:
-            int n = World.prog.getTempoMultiplier() * 2;
-            if(n > 4) n = 1;
+            int n = World.prog.getTempoMultiplier() + 1;
+            if(n > MAX_TEMPO_MUL) n =  MIN_TEMPO_MUL;
             World.prog.setTempoMultiplier(n);
             break;
 
@@ -396,10 +391,10 @@ public class DrumScene extends Scene implements SequencerListener
             break;
 
         case TOOL_TEMPO_SET:
-            get_choice(World.prog, CHOICE_TEMPO, 0);
+            get_choice(World.prog.getTempoParameters(), ICON_METRONOME, -1);
             break;
 
-        case TOOL_SEQ_PAUSE:
+        case TOOL_MISC_PAUSE:
             World.seq.setPause(! World.seq.isPaused());
             break;
 
@@ -434,9 +429,10 @@ public class DrumScene extends Scene implements SequencerListener
             break;
 
         case TOOL_MISC_VOL:
-            get_choice2(World.prog, CHOICE2_VOLUME, voice);
+            get_choice2(World.prog.getVolumeParameters(voice),
+                      VOICE_ICONS[voice]);
             break;
-        case TOOL_MISC_CLEAR:
+        case TOOL_SEQ_CLEAR:
             clear_pads(voice, false);
             break;
         case TOOL_MISC_SAVE:
@@ -456,23 +452,21 @@ public class DrumScene extends Scene implements SequencerListener
         switch(op) {
         case TOOL_FX_LOFI:
             get_choice(World.mixer.getEffectChain().getEffect(FX_LOFI),
-                      CHOICE_LOFI, 0);
+                      ICON_LOFI, -1);
             break;
 
         case TOOL_FX_DELAY:
-            get_choice2(World.mixer.getEffectChain().getEffect(FX_DELAY),
-                      CHOICE2_DELAY, -1);
+            get_choice2(World.mixer.getEffectChain().getEffect(FX_DELAY), ICON_DELAY);
             break;
 
         case TOOL_FX_FILTER:
-            get_choice2(World.mixer.getEffectChain().getEffect(FX_FILTER),
-                      CHOICE2_FILTER, -1);
+            get_choice2(World.mixer.getEffectChain().getEffect(FX_FILTER), ICON_FILTER);
             break;
 
         case TOOL_FX_COMP:
-            get_choice2(World.mixer.getEffectChain().getEffect(FX_COMP),
-                      CHOICE2_COMPRESS, -1);
+            get_choice2(World.mixer.getEffectChain().getEffect(FX_COMP), ICON_COMPRESS);
             break;
+
         case TOOL_TEMPO_DETECT:
             World.prog.setTempo( 120 );
             msg_show("120", 0, -1);
@@ -483,7 +477,7 @@ public class DrumScene extends Scene implements SequencerListener
                 shuffle_pads(i);
             break;
 
-        case TOOL_MISC_CLEAR:
+        case TOOL_SEQ_CLEAR:
             for(int i = 0; i < VOICES; i++)
                 clear_pads(i, true);
             break;
@@ -556,15 +550,15 @@ public class DrumScene extends Scene implements SequencerListener
     // ------------------------------------------------
     // Choices
 
-    private void get_choice(Object target, int choice, int id)
+    private void get_choice(Parameters params, int icon0, int icon1)
     {
-        World.scene_choice.setChoice(target, choice, id);
+        World.scene_choice.set(params, icon0, icon1);
         World.mgr.setScene(World.scene_choice, 120);
     }
 
-    private void get_choice2(Object target, int choice, int id)
+    private void get_choice2(Parameters params, int icon)
     {
-        World.scene_choice2.setChoice(target, choice, id);
+        World.scene_choice2.set(params, icon);
         World.mgr.setScene(World.scene_choice2, 120);
     }
 

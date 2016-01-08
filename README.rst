@@ -13,7 +13,7 @@ Downloads:
 * `Google Play <https://play.google.com/store/apps/details?id=se.tube42.drum.android>`_
 * `F-Droid <https://f-droid.org/repository/browse/?fdid=se.tube42.drum.android>`_
 * `APK <https://tube42.github.io/drum/bin/drum-release.apk>`_ (signed with Play key)
-
+* `Desktopn version (requires Java) <https://tube42.github.io/drum/bin/drum_app.jar>`_
 
 Building
 --------

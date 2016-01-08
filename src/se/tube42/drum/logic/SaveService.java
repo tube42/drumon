@@ -16,7 +16,7 @@ public final class SaveService
     private final static String
           HEADER = "drumon-",
           TAIL = "drum-done",
-          SAVE_NAME = "DrumonSave-"
+          SAVE_NAME = "DrumonSave-A-"
           ;
 
     private final static int
@@ -121,7 +121,7 @@ public final class SaveService
             for(int i = 0; i < EffectChain.SIZE; i++) {
                 Effect comp = fx.getEffect(i);
                 for(int j = 0; j < (fxcount & 0xF); j++)
-                    dos.writeFloat( comp.getConfig(j));
+                    dos.writeFloat( comp.get(j));
                 fxcount >>= 4;
             }
 
@@ -206,7 +206,7 @@ public final class SaveService
                 Effect comp = fx.getEffect(i);
                 comp.reset();
                 for(int j = 0; j < (fxcount & 0xF); j++)
-                    comp.setConfig(j, dis.readFloat() );
+                    comp.set(j, dis.readFloat() );
                 fxcount >>= 4;
             }
 

@@ -71,7 +71,8 @@ public class Sequencer
     public int nextBeat()
     {
         final int max = 30 * World.freq;
-        int n = (max - tcnt) / (prog.getTempo() * prog.getTempoMultiplier());
+        final int m = 1 << prog.getTempoMultiplier();
+        int n = (max - tcnt) / (prog.getTempo() * m);
 
         // error handler??
         if(n < 1) n = World.freq / 4;
@@ -89,8 +90,9 @@ public class Sequencer
         }
 
         final int max = 30 * World.freq;
+        final int m = 1 << prog.getTempoMultiplier();
 
-        tcnt += samples * prog.getTempo() * prog.getTempoMultiplier();
+        tcnt += samples * prog.getTempo() * m;
 
         if(tcnt > max) {
             tcnt -= max;
@@ -103,7 +105,7 @@ public class Sequencer
             bcnt = (bcnt + 1) & 31;
             
             // if we are doing 4/4 skip the odd ones
-            if((bcnt & 1) != 0 && prog.getFlag(FLAG_48))
+            if((bcnt & 1) != 0 && !prog.getFlag(FLAG_48))
                 return false;
 
             if(listener != null)
@@ -115,10 +117,9 @@ public class Sequencer
                     final int variant = prog.getSampleVariant(i);
 
                     // check if there is any volume variation
-                    final int max_var = prog.getVolumeVariation(i);
-                    if(max_var > 0) {
-                        final int rand_var = 100 - max_var + ServiceProvider.getRandomInt(2 * max_var);
-                        amp *=  rand_var / 100f;
+                    final float vr = prog.getVolumeVariation(i) / 100.0f;
+                    if(vr > 0) {
+                        amp *= ServiceProvider.getRandom( 1 - vr, 1 + vr);
                     }
 
                     World.sounds[i].start(variant, amp);

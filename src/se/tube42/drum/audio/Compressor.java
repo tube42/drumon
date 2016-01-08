@@ -19,56 +19,25 @@ public final class Compressor extends Effect
 
     public Compressor()
     {
+        super(2);
+        configure(CONFIG_SRC, 0, 1);
+        configure(CONFIG_DST, 0, 1);
         reset();
     }
 
-    // --------------------------------------------------------
-
     public void reset()
     {
-        setConfig(CONFIG_SRC, 0.2f);
-        setConfig(CONFIG_DST, 0.8f);
-    }
-
-
-    public int getConfigSize()
-    {
-        return 2; // nothing
-    }
-
-    public void setConfig(int index, float f)
-    {
-        switch(index) {
-        case CONFIG_SRC:
-            src = f;
-            update();
-            break;
-
-        case CONFIG_DST:
-            dst = f;
-            update();
-            break;
-        }
-    }
-
-    public float getConfig(int index)
-    {
-        switch(index) {
-        case CONFIG_SRC:
-            return src;
-
-        case CONFIG_DST:
-            return dst;
-
-        default:
-            return 0;
-        }
+        set(CONFIG_SRC, 0.2f);
+        set(CONFIG_DST, 0.8f);
     }
 
     // --------------------------------------------------------
 
-    public void update()
+    protected void onUpdate(int index, float val)
     {
+        src = get(CONFIG_SRC);
+        dst = get(CONFIG_DST);
+
         // avoid div by zero
         src = Math.max(0.001f, src);
         dst = Math.max(0.001f, dst);
@@ -83,12 +52,12 @@ public final class Compressor extends Effect
 
     private final float comp(float in)
     {
-            if(in < src && in > -src)
-                return in * mul1;
-            else if(in > 0)
-                return in * mul2 + add2;
-            else
-                return in * mul2 - add2;
+        if(in < src && in > -src)
+            return in * mul1;
+        else if(in > 0)
+            return in * mul2 + add2;
+        else
+            return in * mul2 - add2;
     }
 
     public void process(final float [] data,

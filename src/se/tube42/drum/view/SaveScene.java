@@ -152,7 +152,6 @@ public class SaveScene extends Scene
     {
         final SystemService sys = SystemService.getInstance();
         
-        
         if(sys.setClipboard(str)) {
             sys.showMessage("Data was copied to clipboard. You can now email it to your friends and enemies...");
         } else {

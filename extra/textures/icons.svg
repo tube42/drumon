@@ -60,10 +60,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="4.8535122"
-     inkscape:cx="47.353821"
+     inkscape:cx="22.629457"
      inkscape:cy="33.068207"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="false"
      inkscape:window-width="1134"
      inkscape:window-height="804"
@@ -924,7 +924,7 @@
        sodipodi:nodetypes="sssssscscsssssssssscccccsssssssss" />
     <g
        id="g3264"
-       transform="matrix(0.7378638,0,0,0.7378638,0.17902978,272.75641)">
+       transform="matrix(0.7378638,0,0,0.7378638,-15.82097,272.75641)">
       <text
          xml:space="preserve"
          style="font-size:28.89169693px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
@@ -964,7 +964,7 @@
     </g>
     <g
        id="g3272"
-       transform="matrix(0.73984524,0,0,0.73984524,-13.843984,259.07334)">
+       transform="matrix(0.73984524,0,0,0.73984524,2.1560166,259.07334)">
       <text
          sodipodi:linespacing="125%"
          id="text3252"

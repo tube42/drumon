@@ -8,11 +8,12 @@ import static se.tube42.drum.data.Constants.*;
  * Effect base class
  */
 
-public abstract class Effect
+public abstract class Effect extends Parameters
 {
 
-    public Effect()
+    public Effect(int parameters)
     {
+        super(parameters);
     }
 
 
@@ -20,21 +21,4 @@ public abstract class Effect
     public abstract void process(final float [] data, int offset, int size);
 
     public abstract void reset();
-
-    // configuration empty implementation
-    public int getConfigSize()
-    {
-        return 0; // nothing
-    }
-
-    public void setConfig(int index, float f)
-    {
-        // EMPTY
-    }
-
-    public float getConfig(int index)
-    {
-        return 0; // EMPTY
-    }
-
 }

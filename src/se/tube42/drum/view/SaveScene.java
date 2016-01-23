@@ -126,8 +126,8 @@ public class SaveScene extends Scene
             final float t = ServiceProvider.getRandom(0.4f, 0.7f);
             buttons[i].setSize(World.size_tile * 2 - gap, World.size_tile - gap);
             buttons[i].setPosition(t,
-                      World.x0_tile - gap / 2 + World.stripe_tile * x * 2,
-                      - gap / 2 + y0 + World.stripe_tile * y);
+                      World.x0_tile  + gap / 2 + World.stripe_tile * x * 2,
+                      gap / 2 + y0 + World.stripe_tile * y);
         }
     }
     

@@ -26,8 +26,8 @@ public class LayoutService
         size_pad1 = rlsb(Math.min(w0 / 4, h0 / 4), 3);
         stripe_pad1 = Math.min(w0 / 4, h0 / 4);
         w_pad1 = h_pad1 = size_pad1 * 4;
-        x0_pad1 = x0 + (w0 - w_pad1 - size_pad1 + stripe_pad1) / 2;
-        y0_pad1 = y0 + (h0 - h_pad1 - size_pad1 + stripe_pad1) / 2;        
+        x0_pad1 = x0 + (w0 - 3 * stripe_pad1 - size_pad1) / 2;
+        y0_pad1 = y0 + (h0 - 3 * stripe_pad1 - size_pad1) / 2;
 
         // pad2
         size_pad2 = rlsb(Math.min(w0 / 8, h0 / 8), 1);
@@ -35,8 +35,8 @@ public class LayoutService
         stripe_pad2_y = h0 / 4;
         w_pad2 = stripe_pad2_x * 8;
         h_pad2 = stripe_pad2_y * 4;
-        x0_pad2 = x0 + (w0 - w_pad2 - size_pad2 + stripe_pad2_x) / 2;
-        y0_pad2 = y0 + (h0 - h_pad2 - size_pad2 + stripe_pad2_y) / 2;
+        x0_pad2 = x0 + (w0 - size_pad2 - 7 * stripe_pad2_x) / 2;
+        y0_pad2 = y0 + (h0 - size_pad2 - 3 * stripe_pad2_y) / 2;
     }
 
     private static void layout_win2(int x0, int y0, int w0, int h0)

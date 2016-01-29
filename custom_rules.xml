@@ -2,97 +2,41 @@
   <property name="proj" value="drum" />
   <property name="apkplz" value="drum-release.apk" />
   <property name="site" location="../tube42.github.io/drum" />
-  <property name="gdx_version" value="1.5.4" />
-  <property name="gdx_checksum" value="158d2faeddb36e0656119ad586885a0fc53b02e3fe5b3ffcf7bb8b783db15f22" />
 
 
   <!-- download and compile or unpack external dependencies -->
   <target name="downloaddeps">
-    <mkdir dir="${user.home}/.android" />
-    <mkdir dir="${user.home}/.android/.dl" />
-
     <delete dir="libs" />
-    <mkdir dir=".dl" />
     <mkdir dir="libs" />
-    <mkdir dir="libs/dl" />
     <mkdir dir="libs/pc" />
-    <mkdir dir="libs/bin" />
 
     <!-- update submodules, build them and copy the jars -->
     <exec executable="git" failifexecutionfails="true">
       <arg line="submodule update --init"/>
     </exec>
+
     <exec executable="git" failifexecutionfails="true">
       <arg line="submodule foreach ant dist"/>
     </exec>
 
     <copy todir="libs" >
-      <fileset dir="submodules/composition" includes="*_lib.jar"/>
-      <fileset dir="submodules/kickstarter" includes="*_lib.jar"/>
-      <fileset dir="submodules/tweeny" includes="*_lib.jar"/>
+      <fileset dir="submodules/base42" includes="Base42_android_lib.jar"/>
     </copy>
 
-    <copy todir="libs/bin" >
-      <fileset dir="submodules/composition" includes="*_app.jar"/>
-      <fileset dir="submodules/marm" includes="*_app.jar"/>
+    <copy todir="libs/pc" >
+      <fileset dir="submodules/base42" includes="Base42_desktop_*.jar"/>
     </copy>
-
-    <!-- download libgdx -->
-    <get skipexisting="true" src="https://libgdx.badlogicgames.com/releases/libgdx-${gdx_version}.zip"
-      dest="${user.home}/.android/.dl/gdx-${gdx_version}.zip" />
-
-    <!-- verify libgdx file -->
-    <checksum file="${user.home}/.android/.dl/gdx-${gdx_version}.zip"
-      algorithm="SHA-256" property="gdx_checksum_computed" />
-    <condition property="gdx_verify" >
-      <not>
-        <equals arg1="${gdx_checksum_computed}" arg2="${gdx_checksum}" forcestring="true" />
-      </not>
-    </condition>
-    <fail message="libGDX damadged! ${gdx_checksum} != ${gdx_checksum_computed}"
-      if="${gdx_verify}" />
-
-    <!-- and unpack it to a temporary dir -->
-    <unzip src="${user.home}/.android/.dl/gdx-${gdx_version}.zip" dest="libs/tmp"/>
-    <unjar src="libs/tmp/gdx.jar" dest="libs/common" />
-    <unjar src="libs/tmp/extensions/gdx-freetype/gdx-freetype.jar" dest="libs/common" />
 
     <!-- bin -->
-    <copy file="libs/tmp//extensions/gdx-tools/gdx-tools.jar" todir="libs/bin" />
-    <echo file="libs/bin/hiero" >#!/bin/sh
-      java -cp libs/pc/libgdx_desktop.jar:libs/bin/gdx-tools.jar com.badlogic.gdx.tools.hiero.Hiero $*
+    <echo file="libs/pc/hiero" >#!/bin/sh
+      java -cp libs/pc/Base42_desktop_lib.jar:libs/pc/Base42_desktop_bin.jar com.badlogic.gdx.tools.hiero.Hiero $*
     </echo>
-    <chmod file="libs/bin/hiero" perm="+x"/>
+    <chmod file="libs/pc/hiero" perm="+x"/>
 
-
-    <!-- desktop -->
-    <unjar src="libs/tmp/gdx-backend-lwjgl-natives.jar" dest="libs/desktop" />
-    <unjar src="libs/tmp/gdx-backend-lwjgl.jar" dest="libs/desktop" />
-    <unjar src="libs/tmp/gdx-natives.jar" dest="libs/desktop" />
-    <unjar src="libs/tmp/extensions/gdx-freetype/gdx-freetype-natives.jar" dest="libs/desktop" />
-    <jar jarfile="libs/pc/libgdx_desktop.jar">
-      <fileset dir="libs/common" />
-      <fileset dir="libs/desktop" />
-    </jar>
-
-
-    <!-- android -->
-    <unjar src="libs/tmp/gdx-backend-android.jar" dest="libs/android/" />
-    <copydir src="libs/tmp/armeabi/" dest="libs/android/lib/armeabi" />
-    <copydir src="libs/tmp/armeabi-v7a/" dest="libs/android/lib/armeabi-v7a" />
-    <copydir src="libs/tmp/x86" dest="libs/android/lib/x86" />
-    <copydir src="libs/tmp/extensions/gdx-freetype/armeabi" dest="libs/android/lib/armeabi" />
-    <copydir src="libs/tmp/extensions/gdx-freetype/armeabi-v7a" dest="libs/android/lib/armeabi-v7a" />
-    <copydir src="libs/tmp/extensions/gdx-freetype/x86" dest="libs/android/lib/x86" />
-    <jar jarfile="libs/libgdx_android.jar" >
-      <fileset dir="libs/common" />
-      <fileset dir="libs/android"/>
-    </jar>
-
-    <delete dir="libs/android"/>
-    <delete dir="libs/desktop"/>
-    <delete dir="libs/common"/>
-    <delete dir="libs/tmp"/>
+    <echo file="libs/pc/marm" >#!/bin/sh
+      java -cp libs/pc/Base42_desktop_lib.jar:libs/pc/Base42_desktop_bin.jar se.tube42.marm.Main $*
+    </echo>
+    <chmod file="libs/pc/marm" perm="+x"/>
   </target>
 
     <!-- try to compile assets locallly, set artscompile.failed if it fails -->
@@ -112,6 +56,7 @@
     <!-- download assets and unpack them into the project these are pre-compiled assets.  -->
     <target name="artsdownload" if="artscompile.failed">
       <echo>USING DOWNLOADED ASSETS!</echo>
+      <mkdir dir=".dl" />
       <get skipexisting="false" src="http://tube42.github.io/${proj}/assets/assets.zip"
         dest=".dl/assets.zip" />
       <unzip src=".dl/assets.zip" dest="./"/>
@@ -124,15 +69,9 @@
 
   <!-- for desktop -->
   <path id="cp">
-    <fileset dir="libs">
-      <include name="Tweeny_lib.jar"/>
-      <include name="Kickstarter_lib.jar"/>
-    </fileset>
-
     <fileset dir="libs/pc">
-      <include name="libgdx_desktop.jar"/>
+      <include name="Base42_desktop_lib.jar"/>
     </fileset>
-
     <pathelement path="build/"/>
   </path>
 
@@ -158,7 +97,7 @@
 
   <!-- create jar for the desktop -->
   <target name="dist" depends="compile_local" >
-    <jar jarfile="libs/bin/app.jar">
+    <jar jarfile="libs/pc/app.jar">
       <fileset dir="assets"/>
       <fileset dir="build"/>
       <manifest>
@@ -167,9 +106,8 @@
     </jar>
 
     <zip destfile="${proj}_app.jar">
-      <zipgroupfileset dir="libs" includes="*.jar"/>
-      <zipgroupfileset dir="libs/pc" includes="*.jar"/>
-      <zipgroupfileset dir="libs/bin" includes="app.jar"/>
+      <zipgroupfileset dir="libs/pc" includes="Base42_desktop_lib.jar"/>
+      <zipgroupfileset dir="libs/pc" includes="app.jar"/>
     </zip>
   </target>
 

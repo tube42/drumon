@@ -4,8 +4,7 @@
 
 INKSCAPE=inkscape
 
-MARM = java -jar submodules/marm/marm_app.jar hiero=libs/bin/hiero
-COMPO= java -jar submodules/composition/Composition_app.jar
+MARM=libs/pc/marm  hiero=libs/pc/hiero
 
 ##
 
@@ -32,10 +31,6 @@ marm:
 	rm -rf assets/2
 	rm -rf assets/4
 	$(MARM) resize extra/textures assets
-
-
-compo:
-	$(COMPO) assets/compo/compo.bin
 
 ##
 

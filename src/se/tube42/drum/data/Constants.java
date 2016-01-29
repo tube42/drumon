@@ -56,6 +56,7 @@ public final class Constants
           TILE_PAD0 = 0,
           TILE_PAD1 = 1,
           TILE_MARKER = 2,
+          TILE_CIRCLE = 3,
           TILE_BUTTON0 = 4,
           TILE_BUTTON1 = 5
           ;

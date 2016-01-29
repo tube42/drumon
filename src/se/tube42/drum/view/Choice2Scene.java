@@ -37,8 +37,9 @@ public class Choice2Scene extends Scene
         canvas.setColor(0xFFFFFF);
         canvas.setIndex(0);
         icon = new SpriteItem(World.tex_icons);
-        mark = new SpriteItem(World.tex_rect);
+        mark = new SpriteItem(World.tex_tiles);
         mark.setColor(0xA01010);
+        mark.setIndex(TILE_CIRCLE);
 
         getLayer(0).add(canvas);
         getLayer(0).add(mark);

@@ -14,7 +14,7 @@
    height="64"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="tiles.svg">
   <defs
      id="defs4">
@@ -129,15 +129,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.390625"
+     inkscape:zoom="6.3359375"
      inkscape:cx="64"
      inkscape:cy="32"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1317"
-     inkscape:window-height="744"
-     inkscape:window-x="49"
+     inkscape:window-width="1243"
+     inkscape:window-height="776"
+     inkscape:window-x="37"
      inkscape:window-y="24"
      inkscape:window-maximized="1" />
   <metadata
@@ -226,7 +226,7 @@
      style="display:inline">
     <path
        transform="matrix(2.0386344,0,0,1.1703273,-12.548385,990.20202)"
-       d="m 16.456303,12.099351 a 2.4526222,4.2723093 0 1 1 -4.905244,0 2.4526222,4.2723093 0 1 1 4.905244,0 z"
+       d="m 16.456303,12.099351 a 2.4526222,4.2723093 0 0 1 -2.452622,4.272309 2.4526222,4.2723093 0 0 1 -2.452622,-4.272309 2.4526222,4.2723093 0 0 1 2.452622,-4.2723094 2.4526222,4.2723093 0 0 1 2.452622,4.2723094 z"
        sodipodi:ry="4.2723093"
        sodipodi:rx="2.4526222"
        sodipodi:cy="12.099351"
@@ -254,7 +254,7 @@
          sodipodi:cy="47.841236"
          sodipodi:rx="7.9735394"
          sodipodi:ry="6.8445425"
-         d="m 85.662626,47.841236 c 0,3.780137 -3.569875,6.844543 -7.973539,6.844543 -4.403664,0 -7.973539,-3.064406 -7.973539,-6.844543 0,-3.780136 3.569875,-6.844542 7.973539,-6.844542 4.403664,0 7.973539,3.064406 7.973539,6.844542 z"
+         d="m 85.662626,47.841236 a 7.9735394,6.8445425 0 0 1 -7.973539,6.844543 7.9735394,6.8445425 0 0 1 -7.973539,-6.844543 7.9735394,6.8445425 0 0 1 7.973539,-6.844542 7.9735394,6.8445425 0 0 1 7.973539,6.844542 z"
          transform="matrix(1.379563,0,0,0.82206927,4.8230112,906.96347)" />
     </g>
     <rect
@@ -280,5 +280,11 @@
        id="rect4175"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ssssssssssssssssss" />
+    <circle
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none"
+       id="path4168"
+       cx="112"
+       cy="1004.3622"
+       r="15" />
   </g>
 </svg>

@@ -614,8 +614,10 @@ public class DrumScene extends Scene implements SequencerListener
 
             // mark played sound
             for(int i = 0; i < VOICES; i++) {
-                if( (samples & (1 << i)) != 0)
-                    tile_voices[i].mark1();
+                if( (samples & (1 << i)) != 0) {
+                    final float amp = World.sounds[i].getAmp();
+                    tile_voices[i].mark1(amp);
+                }
             }
         }
     }

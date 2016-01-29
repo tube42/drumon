@@ -36,15 +36,15 @@ public class VoiceItem extends PressItem
     }
 
 
-    public void mark1()
+    public void mark1(float amnt)
     {
-        final float r = ServiceProvider.getRandom(0.05f, 0.1f);
-        set(ITEM_R, -5).configure(1 * r, null)
-              .tail(+5).configure(2 * r, null)
-              .tail(-3).configure(1 * r, null)
-              .tail(+3).configure(1 * r, null)
-           .tail(0f).configure(1 * r, null);
-
+        amnt = Math.abs(amnt);
+        amnt = Math.min(1.4f, amnt);
+        amnt = Math.max(0.2f, amnt);
+        amnt *= 8;
+        final float r = ServiceProvider.getRandom(0.3f, 0.35f);
+        set(ITEM_R, +amnt, -amnt / 2).configure(r, null)
+              .tail(0).configure(r, TweenEquation.BACK_OUT);
     }
 
     public void setVariant(int sample, int bank)

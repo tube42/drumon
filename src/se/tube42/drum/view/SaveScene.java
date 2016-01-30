@@ -71,29 +71,19 @@ public class SaveScene extends Scene
             saves[i].setData( SaveService.getSave(i));
         }
 
-        // in animation:
-        for(int i = 0; i < saves.length; i++) {
-            final float t = ServiceProvider.getRandom(0.2f, 0.5f);
-            saves[i].set(BaseItem.ITEM_S, 0.2f, 1f).configure(t, TweenEquation.BACK_OUT);
-        }
-
-        for(int i = 0; i < buttons.length; i++) {
-            final float t = ServiceProvider.getRandom(0.2f, 0.5f);
-            buttons[i].set(BaseItem.ITEM_S, 0.8f, 1f).configure(t, TweenEquation.BACK_OUT);
-        }
+        animate(true);
         
         // initial update
         update_saves();
         update_buttons();
         update_clipboard();
-        
     }
 
 
     public void onHide()
     {
         super.onHide();
-
+        animate(false);
     }
 
     
@@ -101,7 +91,25 @@ public class SaveScene extends Scene
     { 
         update_clipboard();
     }
-   
+
+    private void animate(boolean in_)
+    {
+        // in animation:
+        for(int i = 0; i < saves.length; i++) {
+            final SaveItem si = saves[i];
+            final float t = ServiceProvider.getRandom(0.3f, 0.4f);
+            si.set(BaseItem.ITEM_Y, in_, World.sh, si.y2 , t, TweenEquation.BACK_OUT);
+            si.setImmediate(BaseItem.ITEM_X, si.x2);
+        }
+
+        for(int i = 0; i < buttons.length; i++) {
+            final ButtonItem bi = buttons[i];
+            final float t = ServiceProvider.getRandom(0.4f, 0.5f);
+            bi.set(BaseItem.ITEM_A, in_, 0.0f, 1f, t / 2, null);
+            bi.set(BaseItem.ITEM_Y, in_, -bi.getH(), bi.y2, t, TweenEquation.BACK_OUT);
+            bi.setImmediate(BaseItem.ITEM_X, bi.x2);
+        }
+    }
     // ------------------------------------------------
 
     public void resize(int w, int h)
@@ -110,11 +118,12 @@ public class SaveScene extends Scene
         for(int i = 0; i < NUM_SAVES; i++) {
             final int x = i & 3;
             final int y = i >> 2;
-            final float t = ServiceProvider.getRandom(0.2f, 0.3f);
-            saves[i].setSize(World.size_pad1, World.size_pad1);
-            saves[i].setPosition(t,
-                      World.x0_pad1 + World.stripe_pad1 * x,
-                      World.y0_pad1 + World.stripe_pad1 * y);
+            final SaveItem si = saves[i];
+            final float t = ServiceProvider.getRandom(0.2f, 0.4f);
+            si.setSize(World.size_pad1, World.size_pad1);
+            si.setPosition(t,
+                      si.x2 = World.x0_pad1 + World.stripe_pad1 * x,
+                      si.y2 = World.y0_pad1 + World.stripe_pad1 * y);
         }
 
         // 2x3
@@ -123,11 +132,12 @@ public class SaveScene extends Scene
         for(int i = 0; i < buttons.length; i++) {
             final int x = i & 1;
             final int y = i >> 1;
-            final float t = ServiceProvider.getRandom(0.4f, 0.7f);
-            buttons[i].setSize(World.size_tile * 2 - gap, World.size_tile - gap);
-            buttons[i].setPosition(t,
-                      World.x0_tile  + gap / 2 + World.stripe_tile * x * 2,
-                      gap / 2 + y0 + World.stripe_tile * y);
+            final ButtonItem bi = buttons[i];
+            final float t = ServiceProvider.getRandom(0.2f, 0.4f);
+            bi.setSize(World.size_tile * 2 - gap, World.size_tile - gap);
+            bi.setPosition(t,
+                      bi.x2 = World.x0_tile  + gap / 2 + World.stripe_tile * x * 2,
+                      bi.y2 = gap / 2 + y0 + World.stripe_tile * y);
         }
     }
     

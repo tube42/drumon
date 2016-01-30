@@ -49,6 +49,16 @@ public class Program extends Flags
         }
     }
 
+    // flags
+    public int getMeasure()
+    {
+        return getRawFlags() & 7;
+    }
+
+    public void setMeasure(int s)
+    {
+        setRawFlags( (s & 7) |  (getRawFlags() & ~7));
+    }
 
     //
     public int getSampleVariant(int voice)

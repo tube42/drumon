@@ -16,11 +16,17 @@ import static se.tube42.drum.data.Constants.*;
 
 public class Sequencer
 {
+    // The beats are laid out like this:
+    //  0   1   2   3   4   5   | 6   7
+    //  8   9   10  11  12  13  | 14  15
+    //  16  17  18  19  20  21  | 22  23
+    //  24  25  26  27  28  29  | 30  31
+    // the odd ones are only in 4/8  and 3/8
+    // the ones after | are not in the tenary measures
     private int tcnt, bcnt;
     private boolean pause;
     private Program prog;
-	private SequencerListener listener;
-
+    private SequencerListener listener;
 
     public Sequencer(Program prog)
     {
@@ -33,10 +39,10 @@ public class Sequencer
         bcnt = 31; // next will be 0
     }
 
-	public void setListener(SequencerListener listener)
-	{
-		this.listener = listener;
-	}
+    public void setListener(SequencerListener listener)
+    {
+        this.listener = listener;
+    }
 
     public void reset()
     {
@@ -80,8 +86,6 @@ public class Sequencer
         return n;
     }
 
-    //
-
     public boolean update(int samples)
     {
         if(pause) {
@@ -103,9 +107,13 @@ public class Sequencer
             }
 
             bcnt = (bcnt + 1) & 31;
-            
-            // if we are doing 4/4 skip the odd ones
-            if((bcnt & 1) != 0 && !prog.getFlag(FLAG_48))
+
+            final int mes = prog.getMeasure();
+            // correct beat for tenary where we skip 4th (or 7th & 8th)
+            bcnt = Measure.tenaryCorrection(mes, bcnt);
+
+            // if we are doing x/4 skip the odd ones
+            if(!Measure.plays(mes, bcnt))
                 return false;
 
             if(listener != null)

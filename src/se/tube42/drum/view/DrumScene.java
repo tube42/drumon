@@ -153,35 +153,41 @@ public class DrumScene extends Scene implements SequencerListener
     {
         final int w = World.sw;
         final int h = World.sh;
+        final int m = World.prog.getMeasure();
 
         // position pads:
-        if(World.prog.getFlag(FLAG_48)) {
-            // 4 / 8
+        if(m == MEASURE_88 || m == MEASURE_68) {
             marker.setSize(World.size_pad2, World.size_pad2);
-
+            final int x0 = World.x0_pad2 + (m == MEASURE_68 ? World.stripe_pad2_x : 0);
+            final int y0 = World.y0_pad2;
             for(int y = 0; y < 4; y++) {
                 for(int x = 0; x < 8; x++) {
                     final PadItem pad = tile_pads[x + y * 8];
-                    pad.flags |= BaseItem.FLAG_VISIBLE;
                     pad.setSize(World.size_pad2, World.size_pad2);
-                    pad.x2 = World.x0_pad2 + World.stripe_pad2_x * x;
-                    pad.y2 = World.y0_pad2 + World.stripe_pad2_y * (3 - y);
+                    pad.x2 = x0 + World.stripe_pad2_x * x;
+                    pad.y2 = y0 + World.stripe_pad2_y * (3 - y);
                 }
             }
-        } else {
-            // 4 / 4
+        } else { // MEASURE_44 or MEASURE_34
             marker.setSize(World.size_pad1, World.size_pad1);
-
+            final int x0 = World.x0_pad1 + (m == MEASURE_34 ? World.stripe_pad1 / 2 : 0);
+            final int y0 = World.y0_pad1;
             for(int y = 0; y < 4; y++) {
                 for(int x = 0; x < 8; x++) {
                     final PadItem pad = tile_pads[x + y * 8];
-                    if( (x & 1) != 0)
-                        pad.flags &= ~BaseItem.FLAG_VISIBLE;
                     pad.setSize(World.size_pad1, World.size_pad1);
-                    pad.x2 = World.x0_pad1 + World.stripe_pad1 * (x / 2);
-                    pad.y2 = World.y0_pad1 + World.stripe_pad1 * (3 - y);
+                    pad.x2 = x0 + World.stripe_pad1 * (x / 2);
+                    pad.y2 = y0 + World.stripe_pad1 * (3 - y);
                 }
             }
+        }
+
+        // hide the ones that are not visible:
+        for(int i = 0; i < PADS; i++) {
+            if( !Measure.plays(m, i))
+                tile_pads[i].flags &= ~BaseItem.FLAG_VISIBLE;
+            else
+                tile_pads[i].flags |= BaseItem.FLAG_VISIBLE;
         }
 
         // position the rest
@@ -264,10 +270,16 @@ public class DrumScene extends Scene implements SequencerListener
 
     private void shuffle_pads(int voice)
     {
-        int mask = ~(World.prog.getFlag(FLAG_48) ? 0 : 1);
-        for(int i = 0; i < PADS * 5; i++) {
-            int a = ServiceProvider.getRandomInt(PADS) & mask;
-            int b = ServiceProvider.getRandomInt(PADS) & mask;
+        final int m = World.prog.getMeasure();
+        for(int i = 0; i < PADS * 5;) {
+            int a = ServiceProvider.getRandomInt(PADS);
+            int b = ServiceProvider.getRandomInt(PADS);
+
+            // dont touch them if they are not playable in current metre
+            if(!Measure.plays(m, a) || !Measure.plays(m, b))
+                continue;
+
+            i++;
             if(World.prog.get(voice, a) && !World.prog.get(voice, b)) {
                 select_pad(voice, a);
                 select_pad(voice, b);
@@ -349,7 +361,7 @@ public class DrumScene extends Scene implements SequencerListener
             break;
         case 1:
             i0 = prog.getBank(voice) == 0 ? ICON_A : ICON_B;
-            i3 = prog.getFlag(FLAG_48) ? ICON_48 : ICON_44;
+            i3 = ICON_44 + prog.getMeasure();
             break;
         case 2:
             v0 = World.mixer.getEffectChain().isEnabled(0);
@@ -406,8 +418,9 @@ public class DrumScene extends Scene implements SequencerListener
             shuffle_pads(voice);
             break;
 
-        case TOOL_SEQ_44_48:
-            World.prog.toggleFlag(FLAG_48);
+        case TOOL_SEQ_MEASURE:
+            World.prog.setMeasure(Measure.getNextMeasure(
+                      World.prog.getMeasure()));
             update(false, false, true, false);
             reposition(false);
             return;

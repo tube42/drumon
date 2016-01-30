@@ -41,7 +41,10 @@ public final class Constants
           ;
 
     public static final int
-          FLAG_48 = 0
+          MEASURE_44 = 0,
+          MEASURE_34 = 1,
+          MEASURE_88 = 2,
+          MEASURE_68 = 3
           ;
 
     // effect chain
@@ -79,6 +82,8 @@ public final class Constants
           ICON_B = 9,
           ICON_DEL = 10,
           ICON_SETTINGS = 11,
+          ICON_VOLUME = 12,
+          ICON_SAVE = 13,
           ICON_PAUSE = 14,
           ICON_PLAY = 15,
           ICON_METRONOME = 16,
@@ -95,11 +100,10 @@ public final class Constants
           ICON_FILTER = 25,
           ICON_DELAY = 26,
           ICON_COMPRESS = 27,
-
-          ICON_VOLUME = 28,
-          ICON_SAVE = 29,
-          ICON_44 = 30,
-          ICON_48 = 31
+          ICON_44 = 28,
+          ICON_48 = 29,
+          ICON_34 = 30,
+          ICON_68 = 31
           ;
 
     // ---------------------------------------
@@ -143,10 +147,10 @@ public final class Constants
           TOOL_TEMPO_MUL = 0,
           TOOL_TEMPO_DETECT = 1,
           TOOL_TEMPO_SET = 2,
-          TOOL_SEQ_AB = 4,          
+          TOOL_SEQ_AB = 4,
           TOOL_SEQ_CLEAR = 5,
           TOOL_SEQ_SHUFFLE = 6,
-          TOOL_SEQ_44_48 = 7,
+          TOOL_SEQ_MEASURE = 7,
           TOOL_FX_LOFI = 8,
           TOOL_FX_FILTER = 9,
           TOOL_FX_DELAY = 10,

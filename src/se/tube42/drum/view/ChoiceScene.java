@@ -16,9 +16,10 @@ public class ChoiceScene extends Scene
 {
     private Parameters params;
     private float y_min, y_max, y;
-
+    private int idx1;
+    
     private SpriteItem canvas, mark;
-    private SpriteItem desc0, desc1;
+    private SpriteItem desc0;
 
     private BaseText text;
     private boolean hit_canvas, seen_down;
@@ -35,7 +36,6 @@ public class ChoiceScene extends Scene
         canvas.setIndex(0);
 
         desc0 = new SpriteItem(World.tex_icons);
-        desc1 = new SpriteItem(World.tex_icons);
 
         mark = new SpriteItem(World.tex_rect);
         mark.setColor(0xA01010);
@@ -50,7 +50,6 @@ public class ChoiceScene extends Scene
         getLayer(0).add(text);
 
         getLayer(1).add(desc0);
-        getLayer(1).add(desc1);
     }
 
     // ------------------------------------------------
@@ -122,7 +121,6 @@ public class ChoiceScene extends Scene
         canvas.setPosition(x0, y0);
 
         desc0.setSize(World.size_tile / 2, World.size_tile / 2);
-        desc1.setSize(World.size_tile / 2, World.size_tile / 2);
 
         text.setPosition( w / 2, h / 2);
 
@@ -133,8 +131,9 @@ public class ChoiceScene extends Scene
     }
 
     // ----------------------------------------------------------
-    public void set(Parameters params, int icon0, int icon1)
+    public void set(Parameters params, int idx1, int icon0)
     {
+        this.idx1 = idx1;
         this.params = params;
 
         if(icon0 != -1) {
@@ -144,14 +143,7 @@ public class ChoiceScene extends Scene
             desc0.flags &= ~BaseItem.FLAG_VISIBLE;
         }
 
-        if(icon1 != -1) {
-            desc1.setIndex(icon1);
-            desc1.flags |= BaseItem.FLAG_VISIBLE;
-        } else {
-            desc1.flags &= ~BaseItem.FLAG_VISIBLE;
-        }
-
-        configure( params.getMin(0), params.getMax(0), params.get(0));
+        configure( params.getMin(idx1), params.getMax(idx1), params.get(idx1));
     }
 
     private void choice_update()
@@ -166,10 +158,9 @@ public class ChoiceScene extends Scene
 
         final float yc = mark.getY() + (mark.getH() - desc0.getH()) / 2;
         desc0.setPosition(mark.getX() + desc0.getW() / 2, yc);
-        desc1.setPosition(mark.getX() + mark.getW() - 1.5f * desc0.getW(), yc);
 
         // update world
-        params.set(0, y);
+        params.set(idx1, y);
     }
 
     // ----------------------------------------------------------

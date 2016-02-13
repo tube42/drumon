@@ -403,7 +403,7 @@ public class DrumScene extends Scene implements SequencerListener
             break;
 
         case TOOL_TEMPO_SET:
-            get_choice(World.prog.getTempoParameters(), ICON_METRONOME, -1);
+            get_choice(World.prog.getTempoParameters(), ICON_METRONOME, 0, -1);
             break;
 
         case TOOL_MISC_PAUSE:
@@ -442,8 +442,8 @@ public class DrumScene extends Scene implements SequencerListener
             break;
 
         case TOOL_MISC_VOL:
-            get_choice2(World.prog.getVolumeParameters(voice),
-                      VOICE_ICONS[voice]);
+            get_choice(World.prog.getVolumeParameters(voice),
+                      VOICE_ICONS[voice], 0, 1);
             break;
         case TOOL_SEQ_CLEAR:
             clear_pads(voice, false);
@@ -458,26 +458,26 @@ public class DrumScene extends Scene implements SequencerListener
 
     private void longpress_tool(int id)
     {
-        final int op = TOOLS * mode + id;
-
+        final int op = TOOLS * mode + id;        
+        final EffectChain ef = World.mixer.getEffectChain();
+        
         tile_tools[id].mark0();
 
         switch(op) {
         case TOOL_FX_LOFI:
-            get_choice(World.mixer.getEffectChain().getEffect(FX_LOFI),
-                      ICON_LOFI, -1);
+            get_choice(ef.getEffect(FX_LOFI), ICON_LOFI, 0, -1);
             break;
 
         case TOOL_FX_DELAY:
-            get_choice2(World.mixer.getEffectChain().getEffect(FX_DELAY), ICON_DELAY);
+            get_choice(ef.getEffect(FX_DELAY), ICON_DELAY, 0, 1);
             break;
 
         case TOOL_FX_FILTER:
-            get_choice2(World.mixer.getEffectChain().getEffect(FX_FILTER), ICON_FILTER);
+            get_choice(ef.getEffect(FX_FILTER), ICON_FILTER, 0, 1);
             break;
 
         case TOOL_FX_COMP:
-            get_choice2(World.mixer.getEffectChain().getEffect(FX_COMP), ICON_COMPRESS);
+            get_choice(ef.getEffect(FX_COMP), ICON_COMPRESS, 0, 1);
             break;
 
         case TOOL_TEMPO_DETECT:
@@ -562,20 +562,19 @@ public class DrumScene extends Scene implements SequencerListener
 
     // ------------------------------------------------
     // Choices
-
-    private void get_choice(Parameters params, int icon0, int icon1)
+    
+    private void get_choice(Parameters params, int icon, int idx1, int idx2)
     {
-        World.scene_choice.set(params, icon0, icon1);
-        World.mgr.setScene(World.scene_choice, 120);
+        if(idx1 == -1)
+            return;
+        if(idx2 == -1) {
+            World.scene_choice.set(params, idx1, icon);
+            World.mgr.setScene(World.scene_choice, 120);
+        } else {
+            World.scene_choice2.set(params, idx1, idx2, icon);
+            World.mgr.setScene(World.scene_choice2, 120);            
+        }
     }
-
-    private void get_choice2(Parameters params, int icon)
-    {
-        World.scene_choice2.set(params, icon);
-        World.mgr.setScene(World.scene_choice2, 120);
-    }
-
-
 
     // ------------------------------------------------
     // SequencerListener interface:

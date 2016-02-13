@@ -18,7 +18,8 @@ public class Choice2Scene extends Scene
     private Parameters params;
     private float x_min, x_max, x;
     private float y_min, y_max, y;
-
+    private int idx1, idx2;
+    
     private SpriteItem canvas, mark;
     private SpriteItem icon;
 
@@ -132,9 +133,11 @@ public class Choice2Scene extends Scene
     }
 
     // ----------------------------------------------------------
-    public void set(Parameters params, int iconnr)
+    public void set(Parameters params, int idx1, int idx2, int iconnr)
     {
         this.params = params;
+        this.idx1 = idx1;
+        this.idx2 = idx2;
 
         if(iconnr == -1) {
             icon.flags &= ~BaseItem.FLAG_VISIBLE;
@@ -143,9 +146,9 @@ public class Choice2Scene extends Scene
             icon.flags |= BaseItem.FLAG_VISIBLE;
         }
 
-        configure(
-                  params.getMin(0), params.getMax(0), params.get(0),
-                  params.getMin(1), params.getMax(1), params.get(1)
+        configure(params.getMin(idx1), params.getMax(idx1), 
+                  params.get(idx1), params.getMin(idx2),
+                  params.getMax(idx2), params.get(idx2)
                   );
     }
 
@@ -167,8 +170,8 @@ public class Choice2Scene extends Scene
                   );
 
         // update world
-        params.set(0, x);
-        params.set(1, y);
+        params.set(idx1, x);
+        params.set(idx2, y);
     }
 
     // ----------------------------------------------------------

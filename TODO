@@ -1,5 +1,9 @@
 TODO
 
+ * rewriting get_choice/get_choice2:
+    - remove Program.getTempoParameters() and make Program a paramter
+    - same for Program.getVolumeParameters()
+    - add labels to parameter members and show them on choice scenes
  * re-write the low-pass to decrease load
   
 DONE

@@ -8,32 +8,36 @@ import static se.tube42.drum.data.Constants.*;
  * the sequencer program
  */
 
-public class Program extends Flags
+public class Program extends Parameters
 {
-    private Parameters tempo;
-    private Parameters[] volumes;
+    public final static int
+          PARAM_VOLUME_n = 0,
+          PARAM_VOLUME_VAR_n = VOICES,
+          PARAM_TEMPO = VOICES * 2 + 0,
+          PARAM_TEMPO_MUL = VOICES * 2 + 1
+          ;
 
     private int [][]data;
     private int bank_active;
     private int [] sample_variants;
     private int voice;
+    private int flags;
 
     public Program(float [] amps)
     {
+        super(2 + 2 * VOICES);
+        this.flags = 0;
         this.data = new int[VOICE_BANKS][VOICES];
         this.sample_variants = new int[VOICES];
 
-        // temp parameters
-        tempo = new Parameters(2);
-        tempo.configure(0, MIN_TEMPO, MAX_TEMPO, 120);
-        tempo.configure(1, MIN_TEMPO_MUL, MAX_TEMPO_MUL, 1);
+        // tempo parameters
+        configure(PARAM_TEMPO, MIN_TEMPO, MAX_TEMPO, 120);
+        configure(PARAM_TEMPO_MUL, MIN_TEMPO_MUL, MAX_TEMPO_MUL, 1);
 
         // volume parameters:
-        volumes = new Parameters[VOICES];
         for(int i = 0; i < VOICES; i++) {
-            volumes[i] = new Parameters(2);
-            volumes[i].configure(0, MIN_VOLUME_VAR, MAX_VOLUME_VAR, 20);
-            volumes[i].configure(1, MIN_VOLUME, MAX_VOLUME, amps[i]);
+            configure(PARAM_VOLUME_VAR_n + i, MIN_VOLUME_VAR, MAX_VOLUME_VAR, 20);
+            configure(PARAM_VOLUME_n + i, MIN_VOLUME, MAX_VOLUME, amps[i]);
         }
 
         setVoice(0);
@@ -50,14 +54,22 @@ public class Program extends Flags
     }
 
     // flags
+    public int getRawFlags()
+    {
+        return flags;
+    }
+    public void setRawFlags(int flags)
+    {
+        this.flags = flags;
+    }
     public int getMeasure()
     {
-        return getRawFlags() & 7;
+        return flags & 7;
     }
 
     public void setMeasure(int s)
     {
-        setRawFlags( (s & 7) |  (getRawFlags() & ~7));
+        flags =  (s & 7) | ( flags & ~7);
     }
 
     //
@@ -77,28 +89,24 @@ public class Program extends Flags
     //
     // Volume
     //
-    public Parameters getVolumeParameters(int voice)
+    public final int getVolumeVariation(int voice)
     {
-        return volumes[voice];
-    }
-    public int getVolumeVariation(int voice)
-    {
-        return volumes[voice].getInt(0);
+        return getInt(PARAM_VOLUME_VAR_n + voice);
     }
 
-    public void setVolumeVariation(int voice, int var)
+    public final void setVolumeVariation(int voice, int var)
     {
-        volumes[voice].set(0, var);
+        set(PARAM_VOLUME_VAR_n + voice, var);
     }
 
     public float getVolume(int voice)
     {
-        return volumes[voice].get(1);
+        return getInt(PARAM_VOLUME_n + voice);
     }
 
     public void setVolume(int voice, float v)
     {
-        volumes[voice].set(1, v);
+        set(PARAM_VOLUME_n + voice, v);
     }
 
     //
@@ -116,29 +124,24 @@ public class Program extends Flags
     //
     // temp
     //
-
-    public Parameters getTempoParameters()
+    public final int getTempo()
     {
-        return tempo;
-    }
-    public int getTempo()
-    {
-        return tempo.getInt(0);
+        return getInt(PARAM_TEMPO);
     }
 
-    public void setTempo(int t)
+    public final void setTempo(int t)
     {
-        tempo.set(0, t);
+        set(PARAM_TEMPO, t);
     }
 
-    public int getTempoMultiplier()
+    public final int getTempoMultiplier()
     {
-        return tempo.getInt(1);
+        return getInt(PARAM_TEMPO_MUL);
     }
 
-    public void setTempoMultiplier(int t)
+    public final void setTempoMultiplier(int t)
     {
-        tempo.set(1, t);
+        set(PARAM_TEMPO_MUL, t);
     }
 
     //

@@ -11,8 +11,8 @@ import static se.tube42.drum.data.Constants.*;
 public final class Filter extends Effect
 {
     public static final int
-          CONFIG_FREQ = 0,
-          CONFIG_RAD = 1
+          PARAM_FREQ = 0,
+          PARAM_RAD = 1
           ;
 
     private float x0, y0, y1, y2;
@@ -21,8 +21,8 @@ public final class Filter extends Effect
     public Filter()
     {
         super(2);
-        configure(CONFIG_FREQ, 0, 0.3f);
-        configure(CONFIG_RAD, 0, 0.95f);
+        configure(PARAM_FREQ, 0, 0.3f);
+        configure(PARAM_RAD, 0, 0.95f);
         reset();
     }
 
@@ -31,8 +31,8 @@ public final class Filter extends Effect
     public void reset()
     {
         x0 = y0 = y1 = y2 = 0;
-        set(CONFIG_FREQ, 0.2f);
-        set(CONFIG_RAD, 0.5f);
+        set(PARAM_FREQ, 0.2f);
+        set(PARAM_RAD, 0.5f);
     }
 
     public int getConfigSize()
@@ -43,8 +43,8 @@ public final class Filter extends Effect
 
     protected void onUpdate(int index, float f)
     {
-        final float freq = get(CONFIG_FREQ);
-        final float rad = get(CONFIG_RAD);
+        final float freq = get(PARAM_FREQ);
+        final float rad = get(PARAM_RAD);
 
         final double w = 2 * Math.PI * freq;
         final double cw = Math.cos(w);

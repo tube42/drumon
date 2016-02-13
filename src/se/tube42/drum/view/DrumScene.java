@@ -403,7 +403,8 @@ public class DrumScene extends Scene implements SequencerListener
             break;
 
         case TOOL_TEMPO_SET:
-            get_choice(World.prog.getTempoParameters(), ICON_METRONOME, 0, -1);
+            get_choice(World.prog, ICON_METRONOME,
+                      Program.PARAM_TEMPO, -1);
             break;
 
         case TOOL_MISC_PAUSE:
@@ -442,8 +443,9 @@ public class DrumScene extends Scene implements SequencerListener
             break;
 
         case TOOL_MISC_VOL:
-            get_choice(World.prog.getVolumeParameters(voice),
-                      VOICE_ICONS[voice], 0, 1);
+            get_choice(World.prog, VOICE_ICONS[voice],
+                      Program.PARAM_VOLUME_VAR_n + voice,
+                      Program.PARAM_VOLUME_n + voice);
             break;
         case TOOL_SEQ_CLEAR:
             clear_pads(voice, false);

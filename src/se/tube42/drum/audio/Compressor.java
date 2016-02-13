@@ -11,8 +11,8 @@ import static se.tube42.drum.data.Constants.*;
 public final class Compressor extends Effect
 {
     public static final int
-          CONFIG_SRC = 0,
-          CONFIG_DST = 1;
+          PARAM_SRC = 0,
+          PARAM_DST = 1;
 
     private float src, dst;
     private float mul1, mul2, add2;
@@ -20,23 +20,23 @@ public final class Compressor extends Effect
     public Compressor()
     {
         super(2);
-        configure(CONFIG_SRC, 0, 1);
-        configure(CONFIG_DST, 0, 1);
+        configure(PARAM_SRC, 0, 1);
+        configure(PARAM_DST, 0, 1);
         reset();
     }
 
     public void reset()
     {
-        set(CONFIG_SRC, 0.2f);
-        set(CONFIG_DST, 0.8f);
+        set(PARAM_SRC, 0.2f);
+        set(PARAM_DST, 0.8f);
     }
 
     // --------------------------------------------------------
 
     protected void onUpdate(int index, float val)
     {
-        src = get(CONFIG_SRC);
-        dst = get(CONFIG_DST);
+        src = get(PARAM_SRC);
+        dst = get(PARAM_DST);
 
         // avoid div by zero
         src = Math.max(0.001f, src);

@@ -12,7 +12,7 @@ import static se.tube42.drum.data.Constants.*;
 public final class Lofi extends Effect
 {
     public static final int
-          CONFIG_BITS = 0
+          PARAM_BITS = 0
           ;
 
     private int mask;
@@ -20,7 +20,7 @@ public final class Lofi extends Effect
     public Lofi()
     {
         super(1);
-        configure(CONFIG_BITS, 2, 15);
+        configure(PARAM_BITS, 2, 15);
         reset();
     }
 
@@ -28,13 +28,13 @@ public final class Lofi extends Effect
 
     public void reset()
     {
-        set(CONFIG_BITS, 7);
+        set(PARAM_BITS, 7);
     }
 
 
     protected void onUpdate(int index, float f)
     {
-        final int bits = (int)(0.5f + get(CONFIG_BITS));
+        final int bits = (int)(0.5f + get(PARAM_BITS));
         this.mask = (1 << bits) -1;
     }
 

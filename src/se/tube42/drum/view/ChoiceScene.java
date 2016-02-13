@@ -142,7 +142,6 @@ public class ChoiceScene extends Scene
         } else {
             desc0.flags &= ~BaseItem.FLAG_VISIBLE;
         }
-
         configure( params.getMin(idx1), params.getMax(idx1), params.get(idx1));
     }
 

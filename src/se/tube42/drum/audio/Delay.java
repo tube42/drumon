@@ -11,8 +11,8 @@ import static se.tube42.drum.data.Constants.*;
 public final class Delay extends Effect
 {
     public static final int
-          CONFIG_TIME = 0,
-          CONFIG_AMP = 1          
+          PARAM_TIME = 0,
+          PARAM_AMP = 1
           ;
 
     private float amp, time;
@@ -22,10 +22,10 @@ public final class Delay extends Effect
     public Delay(int freq)
     {
         super(2);
-        configure(CONFIG_AMP, 0.1f, 0.8f);
-        configure(CONFIG_TIME, 0.05f, 1.0f);
+        configure(PARAM_AMP, 0.1f, 0.8f);
+        configure(PARAM_TIME, 0.05f, 1.0f);
         this.freq = freq;
-        this.buffer = new float[(int)(freq * getMax(CONFIG_TIME) + 2 * SIMD_WIDTH)];
+        this.buffer = new float[(int)(freq * getMax(PARAM_TIME) + 2 * SIMD_WIDTH)];
         reset();
     }
 
@@ -34,17 +34,17 @@ public final class Delay extends Effect
     public void reset()
     {
         curr = 0;
-        set(CONFIG_AMP, 0.2f);
-        set(CONFIG_TIME, 0.32f);
+        set(PARAM_AMP, 0.2f);
+        set(PARAM_TIME, 0.32f);
     }
 
     protected void onUpdate(int index, float f)
     {
         switch(index) {
-        case CONFIG_AMP:
+        case PARAM_AMP:
             amp = f;
             break;
-        case CONFIG_TIME:
+        case PARAM_TIME:
             time = f;
             len = ~3 & (int)(3 + freq * time);
             // make sure we are not past our new buffer

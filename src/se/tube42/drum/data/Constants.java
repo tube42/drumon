@@ -82,7 +82,6 @@ public final class Constants
           ICON_B = 9,
           ICON_DEL = 10,
           ICON_SETTINGS = 11,
-          ICON_VOLUME = 12,
           ICON_SAVE = 13,
           ICON_PAUSE = 14,
           ICON_PLAY = 15,
@@ -155,7 +154,6 @@ public final class Constants
           TOOL_FX_FILTER = 9,
           TOOL_FX_DELAY = 10,
           TOOL_FX_COMP = 11,
-          TOOL_MISC_VOL = 12,
           TOOL_MISC_PAUSE = 14,
           TOOL_MISC_SAVE = 15
           ;
@@ -171,7 +169,7 @@ public final class Constants
         ICON_LOFI, ICON_FILTER, ICON_DELAY, ICON_COMPRESS,
 
         // settings
-       ICON_VOLUME, -1, ICON_PAUSE, ICON_SAVE
+       -1, -1, ICON_PAUSE, ICON_SAVE
     };
 
     // ---------------------------------------

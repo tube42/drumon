@@ -21,17 +21,23 @@ public class EffectChain
 
     public EffectChain()
     {
-        enabled = 0;
-
         // build the chain
         effects = new Effect[SIZE];
         effects[FX_LOFI] = new Lofi();
         effects[FX_FILTER] = new Filter();
         effects[FX_DELAY] = new Delay(World.freq);
         effects[FX_COMP] = new Compressor();
+
+        reset();
     }
 
     // ------------------------------------------
+    public void reset()
+    {
+        enabled = 0;
+        for(Effect e : effects)
+            e.reset();
+    }
 
     public Effect [] getEffects()
     {

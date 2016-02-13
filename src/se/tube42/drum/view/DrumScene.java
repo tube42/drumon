@@ -68,7 +68,7 @@ public class DrumScene extends Scene implements SequencerListener
         tile_voices = new VoiceItem[VOICES];
         for(int i = 0; i < VOICES; i++, index++) {
             final VoiceItem vi = new VoiceItem(VOICE_ICONS[i], COLOR_VOICES);
-            vi.register(CLASS_VOICE, i, false);
+            vi.register(CLASS_VOICE, i, true);
             tiles[index] = tile_voices[i] = vi;
         }
 
@@ -130,7 +130,7 @@ public class DrumScene extends Scene implements SequencerListener
             reposition(false);
             for(int i = 0; i < tiles.length; i++) {
                 final float t = ServiceProvider.getRandom(0.2f, 0.3f);
-                tiles[i].set(BaseItem.ITEM_A, 0, 1).configure(t, null);
+                tiles[i].set(BaseItem.ITEM_A, 1).configure(t, null);
             }
 
             // update beat right away, dont wait until the next one
@@ -145,7 +145,7 @@ public class DrumScene extends Scene implements SequencerListener
     {
         for(int i = 0; i < tiles.length; i++) {
             final float t = ServiceProvider.getRandom(0.2f, 0.3f);
-            tiles[i].set(BaseItem.ITEM_A, 1, 0).configure(t, null);
+            tiles[i].set(BaseItem.ITEM_A, 0).configure(t, null);
         }
     }
 
@@ -334,6 +334,14 @@ public class DrumScene extends Scene implements SequencerListener
         update(false, true, false, false);
     }
 
+    private void longpress_sound(int voice)
+    {
+        // long press on voice => change voice volume
+        get_choice(World.prog, VOICE_ICONS[voice],
+                  Program.PARAM_VOLUME_VAR_n + voice,
+                  Program.PARAM_VOLUME_n + voice);
+    }
+
     // ------------------------------------------------
     // TOOLS
 
@@ -442,11 +450,6 @@ public class DrumScene extends Scene implements SequencerListener
             World.mixer.getEffectChain().toggle(3);
             break;
 
-        case TOOL_MISC_VOL:
-            get_choice(World.prog, VOICE_ICONS[voice],
-                      Program.PARAM_VOLUME_VAR_n + voice,
-                      Program.PARAM_VOLUME_n + voice);
-            break;
         case TOOL_SEQ_CLEAR:
             clear_pads(voice, false);
             break;
@@ -460,7 +463,7 @@ public class DrumScene extends Scene implements SequencerListener
 
     private void longpress_tool(int id)
     {
-        final int op = TOOLS * mode + id;        
+        final int op = TOOLS * mode + id;
         final EffectChain ef = World.mixer.getEffectChain();
         
         tile_tools[id].mark0();
@@ -495,6 +498,8 @@ public class DrumScene extends Scene implements SequencerListener
         case TOOL_SEQ_CLEAR:
             for(int i = 0; i < VOICES; i++)
                 clear_pads(i, true);
+            World.prog.reset();
+            World.mixer.getEffectChain().reset();
             break;
         }
 
@@ -544,6 +549,8 @@ public class DrumScene extends Scene implements SequencerListener
         case CLASS_TOOL:
             longpress_tool(hit.id);
             break;
+        case CLASS_VOICE:
+            longpress_sound(hit.id);
         }
     }
 
@@ -574,7 +581,7 @@ public class DrumScene extends Scene implements SequencerListener
             World.mgr.setScene(World.scene_choice, 120);
         } else {
             World.scene_choice2.set(params, idx1, idx2, icon);
-            World.mgr.setScene(World.scene_choice2, 120);            
+            World.mgr.setScene(World.scene_choice2, 120);
         }
     }
 

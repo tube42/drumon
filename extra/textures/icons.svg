@@ -60,7 +60,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="4.7421875"
-     inkscape:cx="32"
+     inkscape:cx="0.57990115"
      inkscape:cy="64"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -880,26 +880,6 @@
            id="path4155"
            inkscape:connector-curvature="0" />
       </g>
-    </g>
-    <g
-       transform="matrix(1.1584867,0,0,1.1584867,-1.2678933,-229.51754)"
-       id="g3846">
-      <path
-         inkscape:connector-curvature="0"
-         style="fill:#000000;fill-opacity:1;stroke:none"
-         d="m 8.2784295,1038.3683 0,1.9687 c 2.2144065,0.017 4.0312485,1.8262 4.0312485,4.0313 0,2.205 -1.816842,3.9832 -4.0312485,4 l 0,2 c 3.3191475,-0.017 6.0312485,-2.6968 6.0312485,-6 0,-3.3033 -2.712101,-5.9834 -6.0312485,-6 z"
-         id="path3848" />
-      <path
-         sodipodi:nodetypes="ccccccc"
-         inkscape:connector-curvature="0"
-         id="path3850"
-         d="m 7.3968905,1050.3561 -2.297482,-2.6181 -3.409087,0 0,-6.7394 3.409087,0 2.297482,-2.6425 z"
-         style="fill:#000000;fill-opacity:1;stroke:none" />
-      <path
-         inkscape:connector-curvature="0"
-         style="fill:#000000;fill-opacity:1;stroke:none"
-         d="m 8.2784295,1041.337 0,6.0313 c 1.662143,-0.017 3.0312485,-1.3438 3.0312485,-3 0,-1.6563 -1.3691055,-3.0147 -3.0312485,-3.0313 z"
-         id="path3852" />
     </g>
     <g
        transform="matrix(0.46875,0,0,0.46875,81.063475,564.6387)"

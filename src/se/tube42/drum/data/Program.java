@@ -22,10 +22,12 @@ public class Program extends Parameters
     private int [] sample_variants;
     private int voice;
     private int flags;
+    private float [] default_amps;
 
     public Program(float [] amps)
     {
         super(2 + 2 * VOICES);
+        this.default_amps = amps;
         this.flags = 0;
         this.data = new int[VOICE_BANKS][VOICES];
         this.sample_variants = new int[VOICES];
@@ -47,10 +49,16 @@ public class Program extends Parameters
     public void reset()
     {
         for(int i = 0; i < VOICES; i++) {
+            set(PARAM_VOLUME_VAR_n + i, 20);
+            set(PARAM_VOLUME_n + i, default_amps[i]);
             setBank(i, 0);
             setSampleVariant(i, 0);
             clear(i, true);
         }
+
+        set(PARAM_TEMPO, 120);
+        set(PARAM_TEMPO_MUL, 1);
+        setVoice(0);
     }
 
     // flags

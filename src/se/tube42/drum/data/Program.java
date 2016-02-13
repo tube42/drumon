@@ -63,7 +63,11 @@ public class Program extends Parameters
 
     public String getLabel(int index)
     {
-        if(index == PARAM_TEMPO)
+        if(index < VOICES)
+            return "volume";
+        else if(index < 2 * VOICES)
+            return "variation";
+        else if(index == PARAM_TEMPO)
             return "tempo";
         else if(index == PARAM_TEMPO_MUL)
             return "multiplicate";

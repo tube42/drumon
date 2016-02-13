@@ -16,12 +16,17 @@ public class Parameters
         this.max = new float[size];
         this.curr = new float[size];
 
-        // set somesort ofdefault values
+        // set some sort of default values
         for(int i = 0; i < size; i++) {
             min[i] = 0;
             max[i] = 1;
             curr[i] = 0;
         }
+    }
+
+    public String getLabel(int index)
+    {
+        return null; // override this
     }
 
     public void configure(int index, float min, float max, float val)

@@ -35,6 +35,11 @@ public final class Filter extends Effect
         set(PARAM_RAD, 0.5f);
     }
 
+    public String getLabel(int i)
+    {
+        return (i == PARAM_FREQ) ? "frequency" : "radius";
+    }
+
     public int getConfigSize()
     {
         return 2;

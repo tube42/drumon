@@ -31,6 +31,11 @@ public final class Compressor extends Effect
         set(PARAM_DST, 0.8f);
     }
 
+    public String getLabel(int i)
+    {
+        return (i == PARAM_SRC) ? "source" : "destination";
+    }
+
     // --------------------------------------------------------
 
     protected void onUpdate(int index, float val)

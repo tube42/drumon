@@ -21,7 +21,7 @@ public class ChoiceScene extends Scene
     private SpriteItem canvas, mark;
     private SpriteItem desc0;
 
-    private BaseText text;
+    private BaseText text_val, text_label;
     private boolean hit_canvas, seen_down;
     private float y0, yd;
 
@@ -40,15 +40,18 @@ public class ChoiceScene extends Scene
         mark = new SpriteItem(World.tex_rect);
         mark.setColor(0xA01010);
 
-        text = new BaseText(World.font1);
-        text.setColor(0x000000);
-        text.setAlignment(-0.5f, +0.5f);
+        text_val = new BaseText(World.font1);
+        text_val.setColor(0x000000);
+        text_val.setAlignment(-0.5f, +0.5f);
 
+        text_label = new BaseText(World.font2);
+        text_label.setColor(0x808080);
+        text_label.setAlignment(-0.5f, 1.5f);
 
         getLayer(0).add(canvas);
+        getLayer(0).add(text_label);
         getLayer(0).add(mark);
-        getLayer(0).add(text);
-
+        getLayer(0).add(text_val);
         getLayer(1).add(desc0);
     }
 
@@ -62,7 +65,9 @@ public class ChoiceScene extends Scene
         canvas.set(BaseItem.ITEM_S, 1.4f, 1).configure(0.1f, null);
 
         mark.set(BaseItem.ITEM_A, 0, 1).configure(0.3f, null);
-        text.set(BaseItem.ITEM_A, 0, 1).configure(0.5f, null);
+        text_val.set(BaseItem.ITEM_A, 0, 1).configure(0.5f, null);
+        text_label.set(BaseItem.ITEM_A, 0, 1).configure(0.5f, null);
+
         seen_down = false;
     }
 
@@ -75,19 +80,11 @@ public class ChoiceScene extends Scene
         canvas.set(BaseItem.ITEM_S, 1, 1.4f).configure(0.1f, null);
 
         mark.set(BaseItem.ITEM_A, 1, 0).configure(0.3f, null);
-        text.set(BaseItem.ITEM_A, 1, 0).configure(0.5f, null);
+        text_val.set(BaseItem.ITEM_A, 1, 0).configure(0.5f, null);
+        text_label.set(BaseItem.ITEM_A, 1, 0).configure(0.5f, null);
     }
 
     // ------------------------------------------------
-
-    private void configure(float min, float max, float curr)
-    {
-        if(min == max) max++; // avoid div by zero
-        this.y_min = min;
-        this.y_max = max;
-        this.y = Math.min(y_max, Math.max(y_min, curr));
-        choice_update();
-    }
 
     private boolean set(int x, int y)
     {
@@ -122,7 +119,8 @@ public class ChoiceScene extends Scene
 
         desc0.setSize(World.size_tile / 2, World.size_tile / 2);
 
-        text.setPosition( w / 2, h / 2);
+        text_val.setPosition( w / 2, h / 2);
+        text_label.setPosition( w / 2, canvas.getY());
 
         this.y0 = y0 + mark.getH() / 2 + 1;
         this.yd = Math.max(1, canvas.getH() - mark.getH() - 2);
@@ -142,7 +140,21 @@ public class ChoiceScene extends Scene
         } else {
             desc0.flags &= ~BaseItem.FLAG_VISIBLE;
         }
-        configure( params.getMin(idx1), params.getMax(idx1), params.get(idx1));
+
+        y_min = params.getMin(idx1);
+        y_max = params.getMax(idx1);
+        if(y_min == y_max) y_max ++; // Avoid div by zero
+        this.y = Math.min(y_max, Math.max(y_min, params.get(idx1)));
+
+        final String label = params.getLabel(idx1);
+        if(label != null && label.length() > 0) {
+            text_label.setText(label);
+            text_label.flags |= BaseItem.FLAG_VISIBLE;
+        } else {
+            text_label.flags &= ~BaseItem.FLAG_VISIBLE;
+        }
+
+        choice_update();
     }
 
     private void choice_update()
@@ -152,8 +164,8 @@ public class ChoiceScene extends Scene
         final float y1 = y0 + yd * yn;
         mark.setImmediate(BaseItem.ITEM_Y, y1 - mark.getH() / 2);
 
-        text.setImmediate(BaseItem.ITEM_Y, y1);
-        text.setText("" + (int)(0.5f + y));
+        text_val.setImmediate(BaseItem.ITEM_Y, y1);
+        text_val.setText("" + (int)(0.5f + y));
 
         final float yc = mark.getY() + (mark.getH() - desc0.getH()) / 2;
         desc0.setPosition(mark.getX() + desc0.getW() / 2, yc);

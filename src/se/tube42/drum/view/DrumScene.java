@@ -500,6 +500,7 @@ public class DrumScene extends Scene implements SequencerListener
                 clear_pads(i, true);
             World.prog.reset();
             World.mixer.getEffectChain().reset();
+            select_sound(0, true);
             break;
         }
 

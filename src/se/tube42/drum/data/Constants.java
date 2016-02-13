@@ -9,7 +9,7 @@ public final class Constants
 
     public static final String
           CHARSET1 = "0123456789%",
-          CHARSET2 = "abcdefghijklmnopqrstuvwxyz!?"
+          CHARSET2 = "abcdefghijklmnopqrstuvwxyz:=!?"
           ;
 
     public static final float

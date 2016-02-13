@@ -31,6 +31,10 @@ public final class Lofi extends Effect
         set(PARAM_BITS, 7);
     }
 
+    public String getLabel(int i)
+    {
+        return "bits removed";
+    }
 
     protected void onUpdate(int index, float f)
     {

@@ -61,6 +61,15 @@ public class Program extends Parameters
         setVoice(0);
     }
 
+    public String getLabel(int index)
+    {
+        if(index == PARAM_TEMPO)
+            return "tempo";
+        else if(index == PARAM_TEMPO_MUL)
+            return "multiplicate";
+        else
+            return null;
+    }
     // flags
     public int getRawFlags()
     {

@@ -38,6 +38,11 @@ public final class Delay extends Effect
         set(PARAM_TIME, 0.32f);
     }
 
+    public String getLabel(int i)
+    {
+        return (i == PARAM_AMP) ? "feedbak" : "delay";
+    }
+
     protected void onUpdate(int index, float f)
     {
         switch(index) {

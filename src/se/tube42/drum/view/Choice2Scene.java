@@ -19,8 +19,8 @@ public class Choice2Scene extends Scene
     private float x_min, x_max, x;
     private float y_min, y_max, y;
     private int idx1, idx2;
-    private BaseText label1, label2;
-    
+    private BaseText label;
+
     private SpriteItem canvas, mark;
     private SpriteItem icon;
 
@@ -43,16 +43,12 @@ public class Choice2Scene extends Scene
         mark.setColor(0xA01010);
         mark.setIndex(TILE_CIRCLE);
 
-        label1 = new BaseText(World.font2);
-        label2 = new BaseText(World.font2);
-        label1.setColor(0x808080);
-        label2.setColor(0x808080);
-        label1.setAlignment(-0.5f, +1.5f);
-        label2.setAlignment(-0.5f, -0.5f);
+        label = new BaseText(World.font2);
+        label.setColor(0x808080);
+        label.setAlignment(-0.5f, +1.5f);
 
         getLayer(0).add(canvas);
-        getLayer(0).add(label1);
-        getLayer(0).add(label2);
+        getLayer(0).add(label);
         getLayer(0).add(mark);
         getLayer(1).add(icon);
     }
@@ -139,8 +135,7 @@ public class Choice2Scene extends Scene
         xd = Math.max(1, canvas.getW() - mark.getW() - 2);
         yd = Math.max(1, canvas.getH() - mark.getH() - 2);
 
-        label1.setPosition( w / 2, canvas.getY());
-        label2.setPosition( w / 2, canvas.getY() + canvas.getH());
+        label.setPosition( w / 2, canvas.getY());
 
         choice_update();
     }
@@ -159,26 +154,29 @@ public class Choice2Scene extends Scene
             icon.flags |= BaseItem.FLAG_VISIBLE;
         }
 
-        configure(params.getMin(idx1), params.getMax(idx1), 
+        configure(params.getMin(idx1), params.getMax(idx1),
                   params.get(idx1), params.getMin(idx2),
                   params.getMax(idx2), params.get(idx2)
                   );
 
-        configure_label(label1, "x=", params.getLabel(idx1));
-        configure_label(label2, "y=", params.getLabel(idx2));
+	// set label
+	final String t1 = params.getLabel(idx1);
+	final String t2 = params.getLabel(idx2);
+
+	if(t1 != null && t2 != null)
+	    label.setText(t2 + " / " + t1);
+	else if(t1 != null)
+	    label.setText(t1);
+	else if(t2 != null)
+	    label.setText(t2);
+
+	if(t1 == null && t2 == null)
+            label.flags &= ~BaseItem.FLAG_VISIBLE;
+	else
+	    label.flags |= BaseItem.FLAG_VISIBLE;
     }
 
     // ----------------------------------------------------------
-    private void configure_label(BaseText item,
-              String prefix, String label)
-    {
-        if(label != null && label.length() > 0) {
-            item.setText(prefix + label);
-            item.flags |= BaseItem.FLAG_VISIBLE;
-        } else {
-            item.flags &= ~BaseItem.FLAG_VISIBLE;
-        }
-    }
 
     private void choice_update()
     {

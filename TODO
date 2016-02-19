@@ -1,8 +1,7 @@
 TODO
 
- * need 90deg rotated text, y-label in Choice2 should be vertical
  * re-write the low-pass to decrease load
-  
+
 DONE
  * fix noisy ride sample
  * add tool change animation
@@ -10,7 +9,7 @@ DONE
  * mix and play sound
  * make sure each write is exactly buffer_size or N5 will die.
  * add tempo indicator
- * samples for 48K and 44.1K 
+ * samples for 48K and 44.1K
  * add multiple banks
  * add code to select between versions of the same drum
  * control ideas:
@@ -20,9 +19,9 @@ DONE
     - shuffle this pattern
  * see if the resampling code can be imporved
  * replace GDX nighlies with 1.4.2 release when its here!
- * add base and random velocity to each voice 
+ * add base and random velocity to each voice
  * add 2D choice scene
- * use 2D choice to change Compressor breakpoint   
+ * use 2D choice to change Compressor breakpoint
  * add import/export via the clipboard
 
  * rewriting get_choice/get_choice2:
@@ -33,5 +32,5 @@ DONE
 
 
 WONTFIX:
- * code should be optimized for 48K and 44.1K 
- 
+ * code should be optimized for 48K and 44.1K
+ * need 90deg rotated text, y-label in Choice2 should be vertical

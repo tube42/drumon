@@ -40,7 +40,7 @@ public final class Delay extends Effect
 
     public String getLabel(int i)
     {
-        return (i == PARAM_AMP) ? "feedbak" : "delay";
+        return (i == PARAM_AMP) ? "feedback" : "delay";
     }
 
     protected void onUpdate(int index, float f)

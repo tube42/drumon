@@ -122,7 +122,7 @@ public class Program extends Parameters
 
     public float getVolume(int voice)
     {
-        return getInt(PARAM_VOLUME_n + voice);
+        return get(PARAM_VOLUME_n + voice);
     }
 
     public void setVolume(int voice, float v)

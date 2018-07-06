@@ -1,4 +1,6 @@
 language: android
+install: 
+  - sudo apt install -y ant
 android:
   components:
     - build-tools-21.1.1
@@ -7,6 +9,7 @@ android:
     - platform-tools
   licenses:
     - 'android-sdk-license-.+'
+
 
 script:
     - ant setup

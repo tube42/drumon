@@ -6,13 +6,11 @@ DRUM ON
 
 This is a FOSS drum app for Android.
 
-.. image:: http://tube42.github.io/drum/img/img00.png
+.. image:: extra/screenshot/img00.png
 
 Downloads:
 
 * `F-Droid <https://f-droid.org/repository/browse/?fdid=se.tube42.drum.android>`_
-* `APK <https://tube42.github.io/drum/bin/drum-release.apk>`_ (signed with Play key)
-* `Desktop version (requires Java) <https://tube42.github.io/drum/bin/drum_app.jar>`_
 
 Building
 --------
@@ -46,7 +44,7 @@ That is,
 
     sudo apt-get install sox imagemagick inkscape
     make setup
-    
+
 To build the assets, you should do
 
 .. code:: shell

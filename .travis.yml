@@ -1,10 +1,8 @@
 language: android
-install: 
-  - sudo apt install -y ant
 android:
   components:
-    - build-tools-21.1.1
-    - android-21
+    - build-tools-26.0.2
+    - android-26
     - tools
     - platform-tools
   licenses:
@@ -12,10 +10,9 @@ android:
 
 
 script:
-    - ant setup
-    - ant compile_local
-    - ant dist
-    - ant debug
+    - ./gradlew check
+    - ./gradlew desktop:build
+    - ./gradlew android:build
 
 cache:
   directories:

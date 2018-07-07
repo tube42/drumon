@@ -1,6 +1,6 @@
 
 
-OUT=../../assets/samples
+OUT=../../android/assets/samples
 WAV = $(wildcard *.wav)
 AU = $(patsubst %.wav,$(OUT)/%.au,$(WAV))
 

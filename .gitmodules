@@ -1,3 +1,3 @@
-[submodule "submodules/base42"]
-	path = submodules/base42
-	url = https://github.com/tube42/base42.git
+[submodule "submodules/marm"]
+	path = submodules/marm
+	url = https://github.com/tube42/marm

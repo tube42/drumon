@@ -17,29 +17,19 @@ Downloads:
 Building
 --------
 
-To build this app, you will need
-
-1. java, ant, android SDK and all that
-2. The rest (libgdx, marm, tweeny, ks, ...) is downloaded when you do setup
-3. Assets, a default set is downloaded during setup
-
-To setup the project and download required libraries, binaries (all FOSS) and assets
-
-.. code:: shell
-
-    ant setup
+To run this app, you will need Java and Android SDKs.
 
 To build the project and run on desktop
 
 .. code:: shell
 
-    ant run
+    ./gradlew desktop:run
 
 To build for android and upload it to your device
 
 .. code:: shell
 
-    ant debug install
+    ./gradlew installDebug
 
 Assets
 ------
@@ -55,7 +45,7 @@ That is,
 .. code:: shell
 
     sudo apt-get install sox imagemagick inkscape
-
+    make setup
     
 To build the assets, you should do
 
@@ -63,4 +53,3 @@ To build the assets, you should do
 
     make
 
-Note that "ant setup" will overwrite your generated assets.

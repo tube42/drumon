@@ -21,6 +21,11 @@ android {
         applicationId "se.tube42.drumon"
         minSdkVersion 17
         targetSdkVersion 26
+
+		// app version
+        versionCode 26
+        versionName "0.2.6"
+
     }
 }
 

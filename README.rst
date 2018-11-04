@@ -8,7 +8,7 @@ This is a FOSS drum app for Android.
 
 .. raw:: html
    
-   <a href="https://f-droid.org/app/se.tube42.drum.android"><img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="100"></a>
+   <a href="https://f-droid.org/packages/se.tube42.drum.android"><img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="100"></a>
 
 Screenshot
 ----------
@@ -37,9 +37,9 @@ Assets
 
 Asset sources are found under the extra folder. To compile assets you will need the following tools:
 
-1. "sox" for converting samples
-2. ImageMagic for converting PNG images
-3. Inkscape for rendering SVG files
+1. "sox" (for converting samples)
+2. ImageMagic (for converting PNG images)
+3. Inkscape (for rendering SVG files)
 
 That is,
 
@@ -53,4 +53,3 @@ To build the assets, you should do
 .. code:: shell
 
     make
-

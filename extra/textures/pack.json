@@ -1,13 +1,13 @@
 {
-        stripWhitespaceX: true,
-        stripWhitespaceY: true,
-	minWidth: 128,
-        minHeight: 128,        
-	paddingX: 1,
-	paddingY: 1,
-	pot: true,
-	rotation: false,
-	wrapX: ClampToEdge,
-	wrapY: ClampToEdge,
-	fast: false
+  stripWhitespaceX: true,
+  stripWhitespaceY: true,
+  minWidth: 128,
+  minHeight: 128,
+  paddingX: 1,
+  paddingY: 1,
+  pot: true,
+  rotation: false,
+  wrapX: ClampToEdge,
+  wrapY: ClampToEdge,
+  fast: false
 }

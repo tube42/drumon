@@ -4,9 +4,9 @@ bin
 build
 libs
 gen
-
+.idea/
 local.properties
-
+*.iml
 .gradle
 .vscode
 

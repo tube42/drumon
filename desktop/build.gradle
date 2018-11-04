@@ -1,10 +1,10 @@
 apply plugin: "java"
 
-sourceCompatibility = 1.6
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceCompatibility = 1.8
+sourceSets.main.java.srcDirs = ["src/"]
 
 project.ext.mainClassName = "se.tube42.drum.desktop.DesktopMain"
-project.ext.assetsDir = new File("../android/assets");
+project.ext.assetsDir = new File("../android/assets")
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
@@ -26,8 +26,8 @@ task debug(dependsOn: classes, type: JavaExec) {
 task dist(type: Jar) {
     from files(sourceSets.main.output.classesDir)
     from files(sourceSets.main.output.resourcesDir)
-    from {configurations.compile.collect {zipTree(it)}}
-    from files(project.assetsDir);
+    from { configurations.compile.collect { zipTree(it) } }
+    from files(project.assetsDir)
 
     manifest {
         attributes 'Main-Class': project.mainClassName
@@ -35,4 +35,3 @@ task dist(type: Jar) {
 }
 
 dist.dependsOn classes
-

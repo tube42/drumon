@@ -1,25 +1,19 @@
 package se.tube42.drum.view;
 
+import se.tube42.lib.item.BaseItem;
 
-import se.tube42.lib.tweeny.*;
-import se.tube42.lib.item.*;
-
-
-public abstract class BaseButton extends BaseItem
-{    
+public abstract class BaseButton extends BaseItem {
     /* package */ boolean active, hasLongpress;
     /* package */ long timeDown;
     /* package */ int class_, id;
-    
-    public BaseButton()
-    {
+
+    public BaseButton() {
         this.active = true;
-        this.timeDown = -1;        
+        this.timeDown = -1;
         this.flags |= BaseItem.FLAG_TOUCHABLE;
     }
-    
-    public void register(int class_, int id, boolean hasLongpress)
-    {
+
+    public void register(int class_, int id, boolean hasLongpress) {
         this.class_ = class_;
         this.id = id;
         this.hasLongpress = hasLongpress;

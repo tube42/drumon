@@ -1,14 +1,14 @@
 
 package se.tube42.drum.audio;
 
-import java.io.*;
+import com.badlogic.gdx.audio.AudioDevice;
+import com.badlogic.gdx.utils.Disposable;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.audio.*;
-import com.badlogic.gdx.utils.*;
+import se.tube42.drum.data.Profiler;
+import se.tube42.drum.data.World;
 
-import se.tube42.drum.data.*;
-import static se.tube42.drum.data.Constants.*;
+import static se.tube42.drum.data.Constants.DEBUG;
+import static se.tube42.drum.data.Constants.SIMD_WIDTH;
 
 /*
  * mixer is the audio loop.
@@ -18,13 +18,12 @@ import static se.tube42.drum.data.Constants.*;
  */
 
 public final class Mixer
-implements Runnable, Disposable
-{
+        implements Runnable, Disposable {
     private AudioDevice ad;
     private Thread thread;
 
     private int buffer_size;
-    private float [] buffer;
+    private float[] buffer;
     private volatile boolean stopped;
 
     private Profiler prof;
@@ -32,21 +31,19 @@ implements Runnable, Disposable
     private Output output;
     private EffectChain chain;
 
-    public Mixer(Output output)
-    {
+    public Mixer(Output output) {
         this.buffer_size = (World.samples + SIMD_WIDTH - 1) & ~(SIMD_WIDTH - 1);
         this.buffer = new float[buffer_size];
         System.out.println("MIXER: buffer-size=" + buffer_size +
-                  " SIMD-width=" + SIMD_WIDTH);
+                " SIMD-width=" + SIMD_WIDTH);
         this.output = output;
         this.chain = new EffectChain();
         this.prof = new Profiler(20);
         this.thread = null;
     }
 
-    public void start()
-    {
-        if(thread == null) {
+    public void start() {
+        if (thread == null) {
             System.out.println("MIXER: started " + stopped);
             stopped = false;
             thread = new Thread(this);
@@ -54,27 +51,23 @@ implements Runnable, Disposable
         }
     }
 
-    public void stop()
-    {
+    public void stop() {
         stopped = true;
         thread = null;
         System.out.println("MIXER: stopped " + stopped);
     }
 
-    public void dispose()
-    {
+    public void dispose() {
         stop();
     }
 
     // ---------------------------------------------------------
 
-    public EffectChain getEffectChain()
-    {
+    public EffectChain getEffectChain() {
         return chain;
     }
 
-    public Output getOutput()
-    {
+    public Output getOutput() {
         return output;
     }
 
@@ -85,49 +78,49 @@ implements Runnable, Disposable
 
     // ---------------------------------------------------------
 
-    public void run()
-    {
+    public void run() {
         final Output output = this.output;
         int errcnt = 0;
 
         try {
             Thread.sleep(1500);
-        } catch(Exception exx) {}
+        } catch (Exception exx) {
+        }
 
         output.open();
 
-        while(!stopped) {
+        while (!stopped) {
             try {
-                for(int i = 0; i < buffer_size; i++) {
+                for (int i = 0; i < buffer_size; i++) {
                     buffer[i] = 0;
                 }
 
                 int cnt = World.seq.nextBeat();
 
                 /* ensure it aligns to SIMD with! */
-                if(cnt < buffer_size) {
+                if (cnt < buffer_size) {
                     cnt = (cnt + SIMD_WIDTH / 2 - 1) & ~(SIMD_WIDTH - 1);
                 }
 
                 /* dont go outside buffer count */
-                if(cnt >= buffer_size) {
+                if (cnt >= buffer_size) {
                     cnt = buffer_size;
                 }
 
-                if(DEBUG) {
+                if (DEBUG) {
                     prof.start(cnt); /* profiler started */
                 }
 
                 /* process samples */
                 World.seq.update(cnt);
-                for(int i = 0; i < World.sounds.length ; i++) {
+                for (int i = 0; i < World.sounds.length; i++) {
                     World.sounds[i].write(buffer, 0, cnt);
                 }
 
                 final int rem = buffer_size - cnt;
-                if(rem > 0) {
+                if (rem > 0) {
                     World.seq.update(rem);
-                    for(int i = 0; i < World.sounds.length ; i++) {
+                    for (int i = 0; i < World.sounds.length; i++) {
                         World.sounds[i].write(buffer, cnt, rem);
                     }
                 }
@@ -135,28 +128,28 @@ implements Runnable, Disposable
                 /* process effects */
                 chain.process(buffer, 0, buffer_size);
 
-                if(DEBUG) {
+                if (DEBUG) {
                     prof.finish(); /* profiler finished */
                 }
 
                 /* write results */
-                if(!output.write(buffer, 0, buffer_size))
+                if (!output.write(buffer, 0, buffer_size))
                     break;
 
                 /* note that we didn't crash this time :) */
-                if(errcnt > 0)
+                if (errcnt > 0)
                     errcnt--;
-            } catch(Exception e) {
+            } catch (Exception e) {
                 System.err.println("ERROR: " + e);
                 errcnt++;
-                if(errcnt > 10)
+                if (errcnt > 10)
                     stopped = true;
                 try {
                     Thread.sleep(50 + 50 * errcnt);
-                } catch(Exception ignored) { }
+                } catch (Exception ignored) {
+                }
             }
         }
         output.close();
     }
-
 }

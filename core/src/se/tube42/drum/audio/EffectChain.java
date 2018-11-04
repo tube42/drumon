@@ -1,26 +1,21 @@
 
 package se.tube42.drum.audio;
 
-import java.io.*;
+import se.tube42.drum.data.World;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.audio.*;
-import com.badlogic.gdx.utils.*;
-
-import se.tube42.drum.data.*;
-
-import static se.tube42.drum.data.Constants.*;
+import static se.tube42.drum.data.Constants.FX_COMP;
+import static se.tube42.drum.data.Constants.FX_DELAY;
+import static se.tube42.drum.data.Constants.FX_FILTER;
+import static se.tube42.drum.data.Constants.FX_LOFI;
 
 
-public class EffectChain
-{
+public class EffectChain {
     public static final int SIZE = 4;
 
     private int enabled;
-    private Effect [] effects;
+    private Effect[] effects;
 
-    public EffectChain()
-    {
+    public EffectChain() {
         // build the chain
         effects = new Effect[SIZE];
         effects[FX_LOFI] = new Lofi();
@@ -32,20 +27,17 @@ public class EffectChain
     }
 
     // ------------------------------------------
-    public void reset()
-    {
+    public void reset() {
         enabled = 0;
-        for(Effect e : effects)
+        for (Effect e : effects)
             e.reset();
     }
 
-    public Effect [] getEffects()
-    {
+    public Effect[] getEffects() {
         return effects;
     }
 
-    public Effect getEffect(int index)
-    {
+    public Effect getEffect(int index) {
         return effects[index];
     }
 
@@ -61,21 +53,18 @@ public class EffectChain
         enabled = e;
     }
 
-    public boolean isEnabled(int n)
-    {
-        return (enabled  & (1 << n)) != 0;
+    public boolean isEnabled(int n) {
+        return (enabled & (1 << n)) != 0;
     }
 
-    public void toggle(int n)
-    {
+    public void toggle(int n) {
         enabled ^= 1 << n;
     }
 
 
-    public void process(float [] data, int offset, int size)
-    {
-        for(int i = 0; i < effects.length; i++) {
-            if(isEnabled(i))
+    public void process(float[] data, int offset, int size) {
+        for (int i = 0; i < effects.length; i++) {
+            if (isEnabled(i))
                 effects[i].process(data, offset, size);
         }
     }

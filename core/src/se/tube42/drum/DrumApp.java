@@ -1,35 +1,39 @@
 package se.tube42.drum;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.math.*;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import se.tube42.lib.tweeny.*;
-import se.tube42.lib.ks.*;
-import se.tube42.lib.scene.*;
-import se.tube42.lib.util.*;
-import se.tube42.lib.service.*;
+import se.tube42.drum.audio.DeviceOutput;
+import se.tube42.drum.audio.Mixer;
+import se.tube42.drum.audio.Sequencer;
+import se.tube42.drum.data.Program;
+import se.tube42.drum.data.Sample;
+import se.tube42.drum.data.World;
+import se.tube42.drum.logic.LayoutService;
+import se.tube42.drum.logic.ServiceProvider;
+import se.tube42.drum.view.Choice2Scene;
+import se.tube42.drum.view.ChoiceScene;
+import se.tube42.drum.view.DrumScene;
+import se.tube42.drum.view.SaveScene;
+import se.tube42.lib.scene.SceneManager;
+import se.tube42.lib.service.AssetService;
+import se.tube42.lib.tweeny.Item;
+import se.tube42.lib.util.BaseApp;
 
+import static se.tube42.drum.data.Constants.CHARSET1;
+import static se.tube42.drum.data.Constants.CHARSET2;
+import static se.tube42.drum.data.Constants.DEF_AMPS;
+import static se.tube42.drum.data.Constants.SAMPLES;
+import static se.tube42.drum.data.Constants.VOICES;
 
-import se.tube42.drum.view.*;
-import se.tube42.drum.logic.*;
-import se.tube42.drum.audio.*;
-import se.tube42.drum.data.*;
-import static se.tube42.drum.data.Constants.*;
+public class DrumApp extends BaseApp {
 
-public class DrumApp extends BaseApp
-{
-
-    public DrumApp()
-    {
-
+    public DrumApp() {
     }
 
-
-    public void onCreate(SceneManager mgr, Item bgc)
-    {
-    	ServiceProvider.init();
+    public void onCreate(SceneManager mgr, Item bgc) {
+        ServiceProvider.init();
 
         // set size before loading assets
         onResize(World.sw, World.sh);
@@ -57,30 +61,27 @@ public class DrumApp extends BaseApp
 
         World.mgr.setScene(World.scene_drum);
 
-    	// TEMP until we fix the code handling back:
-		Gdx.input.setCatchBackKey(false);
+        // TEMP until we fix the code handling back:
+        Gdx.input.setCatchBackKey(false);
 
         // start the mixer!
         World.mixer.start();
     }
 
-    public void onUpdate(float dt, long dtl)
-    {
+    public void onUpdate(float dt, long dtl) {
         ServiceProvider.service(dtl); // this will update job manager, tween manager and so on
     }
 
-    public void onResize(int w, int h)
-    {
+    public void onResize(int w, int h) {
         LayoutService.resize(w, h);
     }
 
     // ----------------------------------------------
 
-    private void load_assets()
-    {
+    private void load_assets() {
         int ascale = World.ui_scale;
-        if(ascale == 3) ascale = 2;
-        if(ascale > 4)  ascale = 4;
+        if (ascale == 3) ascale = 2;
+        if (ascale > 4) ascale = 4;
 
         String aname = "" + ascale;
         System.out.println("USING " + aname);
@@ -102,27 +103,27 @@ public class DrumApp extends BaseApp
 
 
         World.font1 = AssetService.createFonts(
-                  "fonts/Roboto-Regular.ttf",
-                  CHARSET1, ascale * 16)[0];
+                "fonts/Roboto-Regular.ttf",
+                CHARSET1, ascale * 16)[0];
 
         World.font2 = AssetService.createFonts(
-                  "fonts/RobotoCondensed-Light.ttf",
-                  CHARSET2, ascale * 12)[0];
+                "fonts/RobotoCondensed-Light.ttf",
+                CHARSET2, ascale * 12)[0];
 
         try {
             World.sounds = new Sample[VOICES];
-            for(int i = 0; i < VOICES ; i++) {
+            for (int i = 0; i < VOICES; i++) {
                 final int vcount = SAMPLES[i].length;
-                final float [][] data = new float[vcount][];
-                for(int j = 0; j < vcount; j++) {
+                final float[][] data = new float[vcount][];
+                for (int j = 0; j < vcount; j++) {
                     data[j] = ServiceProvider.loadSample(
-                              "samples/" + SAMPLES[i][j], World.freq);
+                            "samples/" + SAMPLES[i][j], World.freq);
                 }
 
                 World.sounds[i] = new Sample(data);
             }
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("ERROR " + e);
             System.err.flush();
             System.exit(20);
@@ -130,8 +131,8 @@ public class DrumApp extends BaseApp
     }
 
 
-    @Override public void pause()
-    {
+    @Override
+    public void pause() {
         ServiceProvider.autoSave();
         World.mgr.onPause();
         World.mixer.stop();
@@ -139,16 +140,15 @@ public class DrumApp extends BaseApp
     }
 
 
-    @Override public void resume()
-    {
+    @Override
+    public void resume() {
         super.resume();
         World.mixer.start();
         World.mgr.onResume();
 
     }
 
-    public void dispose()
-    {
+    public void dispose() {
         System.out.println("Disposing...\n");
         World.mixer.dispose();
         super.dispose();

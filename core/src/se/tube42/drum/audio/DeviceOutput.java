@@ -1,27 +1,21 @@
 
 package se.tube42.drum.audio;
 
-import java.io.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.AudioDevice;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.audio.*;
-import com.badlogic.gdx.utils.*;
-
-import se.tube42.drum.data.*;
+import se.tube42.drum.data.World;
 
 
-public class DeviceOutput implements Output
-{
+public class DeviceOutput implements Output {
     private AudioDevice ad;
 
-    public DeviceOutput()
-    {
+    public DeviceOutput() {
         this.ad = null;
     }
 
-    public void open()
-    {
-        if(ad != null) {
+    public void open() {
+        if (ad != null) {
             close();
         }
 
@@ -32,28 +26,25 @@ public class DeviceOutput implements Output
         int lat = ad.getLatency();
 
         System.out.println(
-                  "AudioDevice latency=" + lat + "samp/" +
-                  (1000 * lat / (float)freq) + " ms " +
-                  " freq=" + freq +
-                  " mono=" + ad.isMono()
-                  );
-
+                "AudioDevice latency=" + lat + "samp/" +
+                        (1000 * lat / (float) freq) + " ms " +
+                        " freq=" + freq +
+                        " mono=" + ad.isMono()
+        );
     }
 
-    public boolean write(float []buffer, int offset, int size)
-    {
+    public boolean write(float[] buffer, int offset, int size) {
         try {
             ad.writeSamples(buffer, 0, size);
             return true;
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("ERROR " + e);
             return false;
         }
     }
 
-    public void close()
-    {
-        if(ad != null) {
+    public void close() {
+        if (ad != null) {
             System.out.println("DEVICE OUTPUT: closing...");
             ad.dispose();
             ad = null;

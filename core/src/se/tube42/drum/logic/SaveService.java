@@ -1,42 +1,41 @@
 
 package se.tube42.drum.logic;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
-import se.tube42.lib.service.*;
+import se.tube42.drum.audio.Effect;
+import se.tube42.drum.audio.EffectChain;
+import se.tube42.drum.data.Program;
+import se.tube42.drum.data.World;
+import se.tube42.lib.service.StorageService;
 
-import se.tube42.drum.audio.*;
-import se.tube42.drum.data.*;
+import static se.tube42.drum.data.Constants.VOICES;
+import static se.tube42.drum.data.Constants.VOICE_BANKS;
 
-import static se.tube42.drum.data.Constants.*;
-
-
-public final class SaveService
-{
+public final class SaveService {
     private final static String
-          HEADER = "drumon-",
-          TAIL = "drum-done",
-          SAVE_NAME = "DrumonSave-A-"
-          ;
+            HEADER = "drumon-",
+            TAIL = "drum-done",
+            SAVE_NAME = "DrumonSave-A-";
 
     private final static int
-          VERSION = 4,
-          CHECKSUM_SIZE = 4,
-          SAVE_SIZE = 1
-          ;
+            VERSION = 4,
+            CHECKSUM_SIZE = 4,
+            SAVE_SIZE = 1;
 
     // -----------------------------------------------------------
     // storageAccess
     // -----------------------------------------------------------
 
-    public static String getSave(int num)
-    {
-        return StorageService.load(SAVE_NAME + "." + num, (String)null);
+    public static String getSave(int num) {
+        return StorageService.load(SAVE_NAME + "." + num, null);
     }
 
-    public static void setSave(int num, String data)
-    {
-        if(data != null) {
+    public static void setSave(int num, String data) {
+        if (data != null) {
             StorageService.save(SAVE_NAME + "." + num, data);
             StorageService.flush();
         }
@@ -45,26 +44,24 @@ public final class SaveService
     // ------------------------------------------------
     //  helper functions
 
-    private static String calcChecksum(String str)
-    {
+    private static String calcChecksum(String str) {
         int sum = 0;
 
-        for(int i = 0; i < str.length(); i++)
+        for (int i = 0; i < str.length(); i++)
             sum = sum + (str.charAt(i) << (i & 3));
 
         return EncodingService.shortToHex(sum & 0xFFFF);
     }
 
     // valid save data? works only for new format
-    public static boolean isValidSave(String str)
-    {
-        if(str == null) return false;
+    public static boolean isValidSave(String str) {
+        if (str == null) return false;
         str = str.trim();
 
-        if(str.startsWith(HEADER)) {
+        if (str.startsWith(HEADER)) {
             String s1 = str.substring(0, str.length() - CHECKSUM_SIZE);
             String s2 = str.substring(str.length() - CHECKSUM_SIZE);
-            return s2.equals( calcChecksum(s1));
+            return s2.equals(calcChecksum(s1));
         }
         return false;
     }
@@ -75,8 +72,7 @@ public final class SaveService
     // -----------------------------------------------------------
 
     // serialize current program
-    public static String currentToString()
-    {
+    public static String currentToString() {
         try {
             final Program p = World.prog;
             final EffectChain fx = World.mixer.getEffectChain();
@@ -98,18 +94,18 @@ public final class SaveService
             dos.writeByte(p.getVoice());
             dos.writeInt(p.getRawFlags());
 
-            for(int i = 0; i < VOICES; i++) {
+            for (int i = 0; i < VOICES; i++) {
                 final int banks = p.getUsedBanks(i);
 
                 int voiceflags = 0;
-                voiceflags |= (0x0F & p.getSampleVariant(i)) << 0;
+                voiceflags |= (0x0F & p.getSampleVariant(i));
                 voiceflags |= (0xFF & p.getVolumeVariation(i)) << 4;
                 voiceflags |= (0x0F & banks) << 12;
 
                 dos.writeInt(voiceflags);
-                dos.writeFloat( p.getVolume(i));
-                for(int j = 0; j < banks; j++)
-                    dos.writeInt( p.getRawData(j, i));
+                dos.writeFloat(p.getVolume(i));
+                for (int j = 0; j < banks; j++)
+                    dos.writeInt(p.getRawData(j, i));
             }
 
             // serialize fx
@@ -118,40 +114,39 @@ public final class SaveService
             fxflags |= 0x0F & fx.getEnabledRaw();
             fxflags |= fxcount << 4;
             dos.writeInt(fxflags);
-            for(int i = 0; i < EffectChain.SIZE; i++) {
+            for (int i = 0; i < EffectChain.SIZE; i++) {
                 Effect comp = fx.getEffect(i);
-                for(int j = 0; j < (fxcount & 0xF); j++)
-                    dos.writeFloat( comp.get(j));
+                for (int j = 0; j < (fxcount & 0xF); j++)
+                    dos.writeFloat(comp.get(j));
                 fxcount >>= 4;
             }
 
             // encode and add checksum
             dos.flush();
-            final String str = HEADER + EncodingService.encode64( baos.toByteArray() );
+            final String str = HEADER + EncodingService.encode64(baos.toByteArray());
             return str + calcChecksum(str);
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("SAVE ERROR: " + e);
             return null;
         }
     }
 
     // load current program from a string
-    public static boolean stringToCurrent(String str)
-    {
-        if(str == null || str.length() < 20)
+    public static boolean stringToCurrent(String str) {
+        if (str == null || str.length() < 20)
             return false;
 
         // in case this was a copy-paste, we may have extra spaces
         str = str.trim();
 
-        if(!str.startsWith(HEADER))
+        if (!str.startsWith(HEADER))
             return false;
 
         // check and remove checksum
         String s1 = str.substring(0, str.length() - CHECKSUM_SIZE);
         String s2 = str.substring(str.length() - CHECKSUM_SIZE);
-        if(!s2.equals( calcChecksum(s1)))
+        if (!s2.equals(calcChecksum(s1)))
             return false;
         str = s1.substring(HEADER.length());
 
@@ -159,8 +154,8 @@ public final class SaveService
             final Program p = World.prog;
             final EffectChain fx = World.mixer.getEffectChain();
 
-            byte [] bytes = EncodingService.decode64(str);
-            if(bytes == null)  {
+            byte[] bytes = EncodingService.decode64(str);
+            if (bytes == null) {
                 System.err.println("ERROR: could not decode string: " + str);
                 return false;
             }
@@ -172,13 +167,13 @@ public final class SaveService
             final int fileflags = dis.readInt();
 
             // deserialze to p
-            p.setRawBanks( dis.readInt());
-            p.setTempo( dis.readShort() );
-            p.setTempoMultiplier( dis.readByte() );
-            p.setVoice( dis.readByte() );
-            p.setRawFlags( dis.readInt() );
+            p.setRawBanks(dis.readInt());
+            p.setTempo(dis.readShort());
+            p.setTempoMultiplier(dis.readByte());
+            p.setVoice(dis.readByte());
+            p.setRawFlags(dis.readInt());
 
-            for(int i = 0; i < VOICES; i++) {
+            for (int i = 0; i < VOICES; i++) {
                 final int voiceflags = dis.readInt();
                 p.setVolume(i, dis.readFloat());
 
@@ -188,9 +183,9 @@ public final class SaveService
 
                 p.setSampleVariant(i, samplevar);
                 p.setVolumeVariation(i, volvar);
-                for(int j = 0; j < VOICE_BANKS; j++) {
+                for (int j = 0; j < VOICE_BANKS; j++) {
                     int data = 0;
-                    if(j < banks)
+                    if (j < banks)
                         data = dis.readInt();
                     p.setRawData(j, i, data);
                 }
@@ -200,18 +195,18 @@ public final class SaveService
             final int fxflags = dis.readInt();
             final int fxenabled = 0x0F & fxflags;
             int fxcount = (fxflags >> 4) & 0xFFFF;
-            fx.setEnabledRaw( fxenabled);
+            fx.setEnabledRaw(fxenabled);
 
-            for(int i = 0; i < EffectChain.SIZE; i++) {
+            for (int i = 0; i < EffectChain.SIZE; i++) {
                 Effect comp = fx.getEffect(i);
                 comp.reset();
-                for(int j = 0; j < (fxcount & 0xF); j++)
-                    comp.set(j, dis.readFloat() );
+                for (int j = 0; j < (fxcount & 0xF); j++)
+                    comp.set(j, dis.readFloat());
                 fxcount >>= 4;
             }
 
             return true;
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("LOAD ERROR: " + e);
             return false;
         }
@@ -222,10 +217,9 @@ public final class SaveService
     // -----------------------------------------------------------
 
     // save this
-    public static boolean save(int num)
-    {
+    public static boolean save(int num) {
         final String data = currentToString();
-        if(data != null) {
+        if (data != null) {
             setSave(num, data);
             return true;
         } else {
@@ -234,9 +228,8 @@ public final class SaveService
     }
 
     // load from a save
-    public static boolean load(int num)
-    {
+    public static boolean load(int num) {
         final String str = getSave(num);
-        return str == null ? false : stringToCurrent(str);
+        return stringToCurrent(str);
     }
 }

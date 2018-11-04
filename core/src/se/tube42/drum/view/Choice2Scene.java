@@ -1,20 +1,17 @@
 package se.tube42.drum.view;
 
+import com.badlogic.gdx.Input.Keys;
 
-import com.badlogic.gdx.Input.*;
+import se.tube42.drum.data.Parameters;
+import se.tube42.drum.data.World;
+import se.tube42.lib.item.BaseItem;
+import se.tube42.lib.item.BaseText;
+import se.tube42.lib.item.SpriteItem;
+import se.tube42.lib.scene.Scene;
 
+import static se.tube42.drum.data.Constants.TILE_CIRCLE;
 
-import se.tube42.lib.tweeny.*;
-import se.tube42.lib.scene.*;
-import se.tube42.lib.item.*;
-
-import se.tube42.drum.data.*;
-import se.tube42.drum.audio.*;
-
-import static se.tube42.drum.data.Constants.*;
-
-public class Choice2Scene extends Scene
-{
+public class Choice2Scene extends Scene {
     private Parameters params;
     private float x_min, x_max, x;
     private float y_min, y_max, y;
@@ -27,8 +24,7 @@ public class Choice2Scene extends Scene
     private boolean hit_canvas, seen_down;
     private float x0, y0, xd, yd;
 
-    public Choice2Scene()
-    {
+    public Choice2Scene() {
         super("choice2");
 
         // default value to avoid div by zero for now
@@ -55,8 +51,7 @@ public class Choice2Scene extends Scene
 
     // ------------------------------------------------
 
-    public void onShow()
-    {
+    public void onShow() {
         super.onShow();
 
         canvas.set(BaseItem.ITEM_A, 0, 1).configure(0.2f, null);
@@ -66,8 +61,7 @@ public class Choice2Scene extends Scene
         seen_down = false;
     }
 
-    public void onHide()
-    {
+    public void onHide() {
         super.onHide();
 
         canvas.set(BaseItem.ITEM_A, 1, 0).configure(0.2f, null);
@@ -80,12 +74,11 @@ public class Choice2Scene extends Scene
     // ------------------------------------------------
 
     private void configure(
-              float x_min, float x_max, float x,
-              float y_min, float y_max, float y)
-    {
+            float x_min, float x_max, float x,
+            float y_min, float y_max, float y) {
         // avoid div by zero
-        if(x_min == x_max) x_max++;
-        if(y_min == y_max) y_max++;
+        if (x_min == x_max) x_max++;
+        if (y_min == y_max) y_max++;
 
         this.x_min = x_min;
         this.x_max = x_max;
@@ -98,9 +91,8 @@ public class Choice2Scene extends Scene
     }
 
 
-    private boolean set(int x, int y)
-    {
-        if(!canvas.hit(x, y))
+    private boolean set(int x, int y) {
+        if (!canvas.hit(x, y))
             return false;
 
         final float xn = (x - x0) / xd;
@@ -110,7 +102,7 @@ public class Choice2Scene extends Scene
         final float xc = Math.max(x_min, Math.min(x_max, xm));
         final float yc = Math.max(y_min, Math.min(y_max, ym));
 
-        if(xc != this.x || yc != this.y) {
+        if (xc != this.x || yc != this.y) {
             this.x = xc;
             this.y = yc;
             choice_update();
@@ -120,8 +112,7 @@ public class Choice2Scene extends Scene
 
     // ------------------------------------------------
 
-    public void resize(int w, int h)
-    {
+    public void resize(int w, int h) {
         final int gap = World.ui_portrait ? World.size_tile / 2 : 2;
         final int s = Math.min(w, h) - 2 * gap;
 
@@ -135,19 +126,18 @@ public class Choice2Scene extends Scene
         xd = Math.max(1, canvas.getW() - mark.getW() - 2);
         yd = Math.max(1, canvas.getH() - mark.getH() - 2);
 
-        label.setPosition( w / 2, canvas.getY());
+        label.setPosition(w / 2, canvas.getY());
 
         choice_update();
     }
 
     // ----------------------------------------------------------
-    public void set(Parameters params, int idx1, int idx2, int iconnr)
-    {
+    public void set(Parameters params, int idx1, int idx2, int iconnr) {
         this.params = params;
         this.idx1 = idx1;
         this.idx2 = idx2;
 
-        if(iconnr == -1) {
+        if (iconnr == -1) {
             icon.flags &= ~BaseItem.FLAG_VISIBLE;
         } else {
             icon.setIndex(iconnr);
@@ -155,43 +145,42 @@ public class Choice2Scene extends Scene
         }
 
         configure(params.getMin(idx1), params.getMax(idx1),
-                  params.get(idx1), params.getMin(idx2),
-                  params.getMax(idx2), params.get(idx2)
-                  );
+                params.get(idx1), params.getMin(idx2),
+                params.getMax(idx2), params.get(idx2)
+        );
 
-	// set label
-	final String t1 = params.getLabel(idx1);
-	final String t2 = params.getLabel(idx2);
+        // set label
+        final String t1 = params.getLabel(idx1);
+        final String t2 = params.getLabel(idx2);
 
-	if(t1 != null && t2 != null)
-	    label.setText(t2 + " / " + t1);
-	else if(t1 != null)
-	    label.setText(t1);
-	else if(t2 != null)
-	    label.setText(t2);
+        if (t1 != null && t2 != null)
+            label.setText(t2 + " / " + t1);
+        else if (t1 != null)
+            label.setText(t1);
+        else if (t2 != null)
+            label.setText(t2);
 
-	if(t1 == null && t2 == null)
+        if (t1 == null && t2 == null)
             label.flags &= ~BaseItem.FLAG_VISIBLE;
-	else
-	    label.flags |= BaseItem.FLAG_VISIBLE;
+        else
+            label.flags |= BaseItem.FLAG_VISIBLE;
     }
 
     // ----------------------------------------------------------
 
-    private void choice_update()
-    {
+    private void choice_update() {
         // uppdate view
-        final float xn = (x - x_min) / (float) (x_max - x_min);
-        final float yn = (y - y_min) / (float) (y_max - y_min);
+        final float xn = (x - x_min) / (x_max - x_min);
+        final float yn = (y - y_min) / (y_max - y_min);
         final float x1 = x0 + xd * xn;
         final float y1 = y0 + yd * yn;
         mark.setImmediate(BaseItem.ITEM_X, x1 - mark.getW() / 2);
         mark.setImmediate(BaseItem.ITEM_Y, y1 - mark.getH() / 2);
 
         icon.setPosition(
-                  mark.getX() - (icon.getW() - mark.getW()) / 2,
-                  mark.getY() - (icon.getH() - mark.getH()) / 2
-                  );
+                mark.getX() - (icon.getW() - mark.getW()) / 2,
+                mark.getY() - (icon.getH() - mark.getH()) / 2
+        );
 
         // update world
         params.set(idx1, x);
@@ -200,15 +189,13 @@ public class Choice2Scene extends Scene
 
     // ----------------------------------------------------------
 
-    public void go_back()
-    {
+    public void go_back() {
         World.mgr.setScene(World.scene_drum, 160);
     }
 
-    public boolean type(int key, boolean down)
-    {
-        if(down) {
-            if(key == Keys.BACK || key == Keys.ESCAPE) {
+    public boolean type(int key, boolean down) {
+        if (down) {
+            if (key == Keys.BACK || key == Keys.ESCAPE) {
                 go_back();
                 return true;
             }
@@ -216,29 +203,26 @@ public class Choice2Scene extends Scene
         return false;
     }
 
-
-    public boolean touch(int p, int x, int y, boolean down, boolean drag)
-    {
-        if(down && !drag) {
+    public boolean touch(int p, int x, int y, boolean down, boolean drag) {
+        if (down && !drag) {
             seen_down = true;
             hit_canvas = canvas.hit(x, y);
         }
 
         /* probably remaining touches from another scene */
-        if(!seen_down)
+        if (!seen_down)
             return false;
 
-        if(hit_canvas) {
+        if (hit_canvas) {
             set(x, y);
         }
 
         /* clicked outside ? */
-        if(!down) {
-            if(!hit_canvas && !canvas.hit(x, y))
+        if (!down) {
+            if (!hit_canvas && !canvas.hit(x, y))
                 go_back();
         }
 
         return true;
     }
-
 }

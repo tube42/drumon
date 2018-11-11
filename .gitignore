@@ -1,13 +1,13 @@
 *~
 *.class
 bin
-build
+build/
 libs
 gen
-
+.idea/
 local.properties
-
-.gradle
+*.iml
+.gradle/
 .vscode
 
 .settings

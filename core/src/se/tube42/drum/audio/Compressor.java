@@ -1,9 +1,6 @@
 
 package se.tube42.drum.audio;
 
-import se.tube42.drum.data.*;
-import static se.tube42.drum.data.Constants.*;
-
 /*
  * simple and dirty compressor with no memory
  */
@@ -55,7 +52,7 @@ public final class Compressor extends Effect
     }
 
 
-    private final float comp(float in)
+    private float comp(float in)
     {
         if(in < src && in > -src)
             return in * mul1;

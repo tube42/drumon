@@ -1,23 +1,14 @@
 package se.tube42.drum.android;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.net.Uri;
-import android.content.Intent;
-import android.widget.Toast;
-
 import android.content.*;
 import android.media.*;
+import android.os.Bundle;
 
-import com.badlogic.gdx.backends.android.AndroidApplication;
-import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-
-
-import se.tube42.lib.service.*;
+import com.badlogic.gdx.backends.android.*;
 
 import se.tube42.drum.*;
-import se.tube42.drum.logic.*;
 import se.tube42.drum.data.*;
+import se.tube42.lib.service.*;
 
 // import se.tube42.drum.logic.SystemHandler;
 

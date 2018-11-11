@@ -1,21 +1,14 @@
 package se.tube42.drum.view;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.audio.*;
 import com.badlogic.gdx.Input.*;
 
-import se.tube42.lib.tweeny.*;
-import se.tube42.lib.ks.*;
-import se.tube42.lib.scene.*;
-import se.tube42.lib.util.*;
-import se.tube42.lib.item.*;
-import se.tube42.lib.service.*;
-
-import se.tube42.drum.data.*;
 import se.tube42.drum.audio.*;
+import se.tube42.drum.data.*;
 import se.tube42.drum.logic.*;
+import se.tube42.lib.item.*;
+import se.tube42.lib.scene.*;
+import se.tube42.lib.tweeny.*;
 
 import static se.tube42.drum.data.Constants.*;
 
@@ -128,12 +121,12 @@ public class DrumScene extends Scene implements SequencerListener
             marker.setBeat(0);
         } else {
             reposition(false);
-            for(int i = 0; i < tiles.length; i++) {
+            for (BaseButton tile : tiles) {
                 final float t = ServiceProvider.getRandom(0.2f, 0.3f);
-                tiles[i].set(BaseItem.ITEM_A, 1).configure(t, null);
+                tile.set(BaseItem.ITEM_A, 1).configure(t, null);
             }
 
-            // update beat right away, dont wait until the next one
+            // update beat right away, don't wait until the next one
             marker.setBeat( World.seq.getBeat() );
         }
 
@@ -143,9 +136,9 @@ public class DrumScene extends Scene implements SequencerListener
 
     public void onHide()
     {
-        for(int i = 0; i < tiles.length; i++) {
+        for (BaseButton tile : tiles) {
             final float t = ServiceProvider.getRandom(0.2f, 0.3f);
-            tiles[i].set(BaseItem.ITEM_A, 0).configure(t, null);
+            tile.set(BaseItem.ITEM_A, 0).configure(t, null);
         }
     }
 

@@ -3,8 +3,6 @@ package se.tube42.drum.logic;
 
 import java.io.*;
 
-import se.tube42.lib.service.*;
-
 public final class SampleService
 {
 
@@ -23,8 +21,7 @@ public final class SampleService
         dos.writeInt(0);
 
 
-        for(int i = 0; i < data.length; i++)
-            dos.writeShort((short)(data[i] * (1 << 15)));
+        for (float aData : data) dos.writeShort((short) (aData * (1 << 15)));
 
         dos.flush();
         dos.close();
@@ -65,8 +62,7 @@ public final class SampleService
         is.close();
 
         // resample
-        final float [] resampled = resample(samples, freq_in, freq);
-        return resampled;
+        return resample(samples, freq_in, freq);
     }
 
 

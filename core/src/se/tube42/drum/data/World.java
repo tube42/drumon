@@ -1,22 +1,18 @@
 
 package se.tube42.drum.data;
 
-import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 
-import se.tube42.lib.item.*;
-import se.tube42.lib.util.*;
+import se.tube42.drum.audio.*;
+import se.tube42.drum.logic.*;
+import se.tube42.drum.view.*;
 import se.tube42.lib.scene.*;
 import se.tube42.lib.tweeny.*;
-
-import se.tube42.drum.view.*;
-import se.tube42.drum.logic.*;
-import se.tube42.drum.audio.*;
-import static se.tube42.drum.data.Constants.*;
+import se.tube42.lib.util.*;
 
 public final class World extends UIC
 {
-    // prefered configuration. this is filled by platform code
+    // preferred configuration. this is filled by platform code
     public static int freq = 44100;
     public static int samples = 512;
 

@@ -1,11 +1,8 @@
 package se.tube42.drum.android;
 
 import android.app.*;
+import android.content.*;
 import android.widget.*;
-import android.text.*;
-import android.content.ClipboardManager;
-import android.content.ClipData;
-
 
 import se.tube42.drum.logic.*;
 
@@ -18,7 +15,7 @@ public class AndroidService extends SystemService
     {
         this.activity = activity;
         this.cman = (ClipboardManager)
-              activity.getSystemService(activity.CLIPBOARD_SERVICE);
+              activity.getSystemService(Context.CLIPBOARD_SERVICE);
     }
 
 
@@ -53,11 +50,9 @@ public class AndroidService extends SystemService
     public void showMessage(final String msg)
     {
         try {
-            final Runnable r = new Runnable() {
-                public void run() {
-                    Toast t = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
-                    t.show();
-                }
+            final Runnable r = () -> {
+                Toast t = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
+                t.show();
             };
 
             activity.runOnUiThread(r);

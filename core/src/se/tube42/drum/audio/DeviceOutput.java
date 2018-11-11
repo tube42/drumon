@@ -1,11 +1,8 @@
 
 package se.tube42.drum.audio;
 
-import java.io.*;
-
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.*;
-import com.badlogic.gdx.utils.*;
 
 import se.tube42.drum.data.*;
 

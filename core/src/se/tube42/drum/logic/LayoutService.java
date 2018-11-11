@@ -1,10 +1,6 @@
 
 package se.tube42.drum.logic;
 
-import java.io.*;
-
-import se.tube42.drum.data.*;
-import static se.tube42.drum.data.Constants.*;
 import static se.tube42.drum.data.World.*;
 
 public class LayoutService

@@ -1,13 +1,11 @@
 
 package se.tube42.drum.audio;
 
-import java.io.*;
-
-import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.*;
 import com.badlogic.gdx.utils.*;
 
 import se.tube42.drum.data.*;
+
 import static se.tube42.drum.data.Constants.*;
 
 /*
@@ -109,7 +107,7 @@ implements Runnable, Disposable
                     cnt = (cnt + SIMD_WIDTH / 2 - 1) & ~(SIMD_WIDTH - 1);
                 }
 
-                /* dont go outside buffer count */
+                /* don't go outside buffer count */
                 if(cnt >= buffer_size) {
                     cnt = buffer_size;
                 }

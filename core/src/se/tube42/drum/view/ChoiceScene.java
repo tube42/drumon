@@ -3,21 +3,16 @@ package se.tube42.drum.view;
 
 import com.badlogic.gdx.Input.*;
 
-
-import se.tube42.lib.tweeny.*;
-import se.tube42.lib.scene.*;
-import se.tube42.lib.item.*;
-
 import se.tube42.drum.data.*;
-import se.tube42.drum.audio.*;
-import static se.tube42.drum.data.Constants.*;
+import se.tube42.lib.item.*;
+import se.tube42.lib.scene.*;
 
 public class ChoiceScene extends Scene
 {
     private Parameters params;
     private float y_min, y_max, y;
     private int idx1;
-    
+
     private SpriteItem canvas, mark;
     private SpriteItem desc0;
 
@@ -108,13 +103,11 @@ public class ChoiceScene extends Scene
         final int s = Math.min(w, h) - 2 * gap;
         final int x0 = (w - s) / 2;
         final int y0 = (h - s) / 2;
-        final int w1 = s;
-        final int h1 = s;
 
-        mark.setSize(w1 - World.size_tile / 4, World.size_tile);
+        mark.setSize(s - World.size_tile / 4, World.size_tile);
         mark.setPosition((w - mark.getW()) / 2, 0);
 
-        canvas.setSize(w1, h1);
+        canvas.setSize(s, s);
         canvas.setPosition(x0, y0);
 
         desc0.setSize(World.size_tile / 2, World.size_tile / 2);
@@ -160,7 +153,7 @@ public class ChoiceScene extends Scene
     private void choice_update()
     {
 
-        final float yn = (y - y_min) / (float) (y_max - y_min);
+        final float yn = (y - y_min) / (y_max - y_min);
         final float y1 = y0 + yd * yn;
         mark.setImmediate(BaseItem.ITEM_Y, y1 - mark.getH() / 2);
 

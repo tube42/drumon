@@ -1,15 +1,10 @@
 package se.tube42.drum.view;
 
-
 import com.badlogic.gdx.Input.*;
 
-
-import se.tube42.lib.tweeny.*;
-import se.tube42.lib.scene.*;
-import se.tube42.lib.item.*;
-
 import se.tube42.drum.data.*;
-import se.tube42.drum.audio.*;
+import se.tube42.lib.item.*;
+import se.tube42.lib.scene.*;
 
 import static se.tube42.drum.data.Constants.*;
 
@@ -181,8 +176,8 @@ public class Choice2Scene extends Scene
     private void choice_update()
     {
         // uppdate view
-        final float xn = (x - x_min) / (float) (x_max - x_min);
-        final float yn = (y - y_min) / (float) (y_max - y_min);
+        final float xn = (x - x_min) / (x_max - x_min);
+        final float yn = (y - y_min) / (y_max - y_min);
         final float x1 = x0 + xd * xn;
         final float y1 = y0 + yd * yn;
         mark.setImmediate(BaseItem.ITEM_X, x1 - mark.getW() / 2);

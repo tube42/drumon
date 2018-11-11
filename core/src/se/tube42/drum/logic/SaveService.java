@@ -31,7 +31,7 @@ public final class SaveService
 
     public static String getSave(int num)
     {
-        return StorageService.load(SAVE_NAME + "." + num, (String)null);
+        return StorageService.load(SAVE_NAME + "." + num, null);
     }
 
     public static void setSave(int num, String data)
@@ -171,7 +171,7 @@ public final class SaveService
             final byte version = dis.readByte();
             final int fileflags = dis.readInt();
 
-            // deserialze to p
+            // deserialize to p
             p.setRawBanks( dis.readInt());
             p.setTempo( dis.readShort() );
             p.setTempoMultiplier( dis.readByte() );
@@ -237,6 +237,6 @@ public final class SaveService
     public static boolean load(int num)
     {
         final String str = getSave(num);
-        return str == null ? false : stringToCurrent(str);
+        return stringToCurrent(str);
     }
 }

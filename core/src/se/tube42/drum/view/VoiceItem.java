@@ -49,8 +49,8 @@ public class VoiceItem extends PressItem
 
     public void setVariant(int sample, int bank)
     {
-        dec0 = sample == 0 ? -1 : DECALS_NUM + sample;
-        dec1 = bank == 0 ? -1 : DECALS_ALPHA + 1;
+        dec0 = sample == 0 ? -1 : ICON_DECALS_1 + sample;
+        dec1 = bank == 0 ? -1 : ICON_DECALS_A + 1;
     }
 
 
@@ -71,7 +71,7 @@ public class VoiceItem extends PressItem
             final float h4 = h / 4;
 
             if(dec0 != -1) {
-                sb.draw(World.tex_decals[dec0],
+                sb.draw(World.tex_icons[dec0],
                         x + hp, h2 + y + hp,
                         w4, h4,
                         w2, h2,
@@ -79,7 +79,7 @@ public class VoiceItem extends PressItem
             }
 
             if(dec1 != -1) {
-                sb.draw(World.tex_decals[dec1],
+                sb.draw(World.tex_icons[dec1],
                         w2 + x + hp, y + hp,
                         w4, h4,
                         w2, h2,

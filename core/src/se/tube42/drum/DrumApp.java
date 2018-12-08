@@ -91,10 +91,7 @@ public class DrumApp extends BaseApp
         World.tex_tiles = AssetService.divide(tmp, 4, 2);
 
         tmp = AssetService.load(aname + "/icons.png", true);
-        World.tex_icons = AssetService.divide(tmp, 4, 8);
-
-        tmp = AssetService.load(aname + "/decals.png", true);
-        World.tex_decals = AssetService.divide(tmp, 4, 2);
+        World.tex_icons = AssetService.divide(tmp, 8, 8);
 
         tmp = AssetService.load(aname + "/rect.png", false);
         World.tex_rect = new TextureRegion[1];

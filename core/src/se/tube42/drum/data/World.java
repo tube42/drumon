@@ -38,7 +38,6 @@ public final class World extends UIC
     public static TextureRegion []tex_rect;
     public static TextureRegion []tex_tiles;
     public static TextureRegion []tex_icons;
-    public static TextureRegion []tex_decals;
 
     // misc
     public static SceneManager mgr;

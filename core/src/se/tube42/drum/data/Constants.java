@@ -65,11 +65,6 @@ public final class Constants
           ;
 
     public static final int
-          DECALS_NUM = 0,
-          DECALS_ALPHA = 4
-          ;
-
-    public static final int
           ICON_KICK = 0,
           ICON_SNARE = 1,
           ICON_TOM = 2,
@@ -81,7 +76,8 @@ public final class Constants
           ICON_A = 8,
           ICON_B = 9,
           ICON_DEL = 10,
-          ICON_SETTINGS = 11,
+		  ICON_SETTINGS = 11,
+		  ICON_HELP = 12,
           ICON_SAVE = 13,
           ICON_PAUSE = 14,
           ICON_PLAY = 15,
@@ -98,11 +94,19 @@ public final class Constants
           ICON_LOFI = 24,
           ICON_FILTER = 25,
           ICON_DELAY = 26,
-          ICON_COMPRESS = 27,
-          ICON_44 = 28,
-          ICON_48 = 29,
-          ICON_34 = 30,
-          ICON_68 = 31
+		  ICON_COMPRESS = 27,
+
+		  ICON_BG_STOP = 28,
+		  ICON_BG_PLAY = 29,
+
+          ICON_44 = 32,
+          ICON_48 = 33,
+          ICON_34 = 34,
+		  ICON_68 = 35,
+		  ICON_4x3 = 36,
+
+		  ICON_DECALS_1 = 56,
+          ICON_DECALS_A = 60
           ;
 
     // ---------------------------------------

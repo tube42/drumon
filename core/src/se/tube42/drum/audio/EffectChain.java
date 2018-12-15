@@ -66,11 +66,11 @@ public class EffectChain
         return (enabled  & (1 << n)) != 0;
     }
 
-    public void toggle(int n)
+    public boolean toggle(int n)
     {
-        enabled ^= 1 << n;
+		enabled ^= 1 << n;
+		return isEnabled(n);
     }
-
 
     public void process(float [] data, int offset, int size)
     {

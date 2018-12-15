@@ -377,7 +377,8 @@ public class DrumScene extends Scene implements SequencerListener
             v2 = World.mixer.getEffectChain().isEnabled(2);
             v3 = World.mixer.getEffectChain().isEnabled(3);
             break;
-        case 3:
+		case 3:
+			i0 = Settings.bg_play ? ICON_BG_PLAY :  ICON_BG_STOP;
             i2 = seq.isPaused() ? ICON_PLAY : ICON_PAUSE;
             break;
         }
@@ -393,6 +394,8 @@ public class DrumScene extends Scene implements SequencerListener
     {
         final int voice = World.prog.getVoice();
         final int op = TOOLS * mode + id;
+		String msg = null;
+		boolean tmp;
 
         tile_tools[id].mark0();
 
@@ -411,8 +414,7 @@ public class DrumScene extends Scene implements SequencerListener
             break;
 
         case TOOL_TEMPO_SET:
-            get_choice(World.prog, ICON_METRONOME,
-                      Program.PARAM_TEMPO, -1);
+            get_choice(World.prog, ICON_METRONOME, Program.PARAM_TEMPO, -1);
             break;
 
         case TOOL_MISC_PAUSE:
@@ -424,7 +426,8 @@ public class DrumScene extends Scene implements SequencerListener
             break;
 
         case TOOL_SEQ_SHUFFLE:
-            shuffle_pads(voice);
+			shuffle_pads(voice);
+			msg = "Shuffled track";
             break;
 
         case TOOL_SEQ_MEASURE:
@@ -435,29 +438,41 @@ public class DrumScene extends Scene implements SequencerListener
             return;
 
         case TOOL_FX_LOFI:
-            World.mixer.getEffectChain().toggle(0);
+			tmp = World.mixer.getEffectChain().toggle(0);
+			msg = "lo-fi effect " + (tmp ? "on": "off");
             break;
 
         case TOOL_FX_FILTER:
-            World.mixer.getEffectChain().toggle(1);
+			tmp = World.mixer.getEffectChain().toggle(1);
+			msg = "filter effect " + (tmp ? "on": "off");
             break;
 
         case TOOL_FX_DELAY:
-            World.mixer.getEffectChain().toggle(2);
+			tmp = World.mixer.getEffectChain().toggle(2);
+			msg = "delay effect " + (tmp ? "on": "off");
             break;
 
         case TOOL_FX_COMP:
-            World.mixer.getEffectChain().toggle(3);
+			tmp = World.mixer.getEffectChain().toggle(3);
+			msg = "compressor " + (tmp ? "on": "off");
             break;
 
         case TOOL_SEQ_CLEAR:
-            clear_pads(voice, false);
-            break;
+			clear_pads(voice, false);
+			msg = "Cleared track";
+			break;
+		case TOOL_MISC_BACKGROUND:
+			Settings.bg_play = ! Settings.bg_play;
+			msg = Settings.bg_play ? "Play in background" : "Pause in background";
+			break;
         case TOOL_MISC_SAVE:
             World.mgr.setScene(World.scene_save, 120);
             break;
         }
 
+		if(msg != null) {
+			SystemService.getInstance().showMessage(msg);
+		}
         update(false, false, true, false);
     }
 
@@ -465,7 +480,8 @@ public class DrumScene extends Scene implements SequencerListener
     {
         final int op = TOOLS * mode + id;
         final EffectChain ef = World.mixer.getEffectChain();
-        
+		String msg = null;
+
         tile_tools[id].mark0();
 
         switch(op) {
@@ -492,7 +508,8 @@ public class DrumScene extends Scene implements SequencerListener
 
         case TOOL_SEQ_SHUFFLE:
             for(int i = 0; i < VOICES; i++)
-                shuffle_pads(i);
+				shuffle_pads(i);
+			msg = "Shuffled song";
             break;
 
         case TOOL_SEQ_CLEAR:
@@ -500,9 +517,15 @@ public class DrumScene extends Scene implements SequencerListener
                 clear_pads(i, true);
             World.prog.reset();
             World.mixer.getEffectChain().reset();
-            select_sound(0, true);
+			select_sound(0, true);
+
+			msg = "Cleared song";
             break;
         }
+
+		if(msg != null) {
+			SystemService.getInstance().showMessage(msg);
+		}
 
         update(true, true, true, false);
     }
@@ -572,7 +595,7 @@ public class DrumScene extends Scene implements SequencerListener
 
     // ------------------------------------------------
     // Choices
-    
+
     private void get_choice(Parameters params, int icon, int idx1, int idx2)
     {
         if(idx1 == -1)

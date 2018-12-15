@@ -157,7 +157,8 @@ public final class Constants
           TOOL_FX_LOFI = 8,
           TOOL_FX_FILTER = 9,
           TOOL_FX_DELAY = 10,
-          TOOL_FX_COMP = 11,
+		  TOOL_FX_COMP = 11,
+		  TOOL_MISC_BACKGROUND = 12,
           TOOL_MISC_PAUSE = 14,
           TOOL_MISC_SAVE = 15
           ;
@@ -173,7 +174,7 @@ public final class Constants
         ICON_LOFI, ICON_FILTER, ICON_DELAY, ICON_COMPRESS,
 
         // settings
-       -1, -1, ICON_PAUSE, ICON_SAVE
+		ICON_BG_STOP, -1, ICON_PAUSE, ICON_SAVE
     };
 
     // ---------------------------------------

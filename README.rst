@@ -7,13 +7,12 @@ DRUM ON
 This is a FOSS drum app for Android.
 
 .. raw:: html
-   
+
    <a href="https://f-droid.org/app/se.tube42.drum.android"><img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="100"></a>
 
-Screenshot
-----------
 
-.. image:: extra/screenshot/img00.png
+.. image:: extra/screenshot/demo.gif
+
 
 Building
 --------
@@ -53,4 +52,3 @@ To build the assets, you should do
 .. code:: shell
 
     make
-

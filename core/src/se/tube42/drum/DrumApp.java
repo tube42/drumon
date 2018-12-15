@@ -129,9 +129,11 @@ public class DrumApp extends BaseApp
 
     @Override public void pause()
     {
-        ServiceProvider.autoSave();
-        World.mgr.onPause();
-        World.mixer.stop();
+		ServiceProvider.autoSave();
+		if(!Settings.bg_play) {
+        	World.mgr.onPause();
+			World.mixer.stop();
+		}
         super.pause();
     }
 
@@ -146,7 +148,12 @@ public class DrumApp extends BaseApp
 
     public void dispose()
     {
-        System.out.println("Disposing...\n");
+		System.out.println("Disposing...\n");
+
+		// assuming we allowed bg-play, we might need to update stop music now
+		World.mgr.onPause();
+		World.mixer.stop();
+
         World.mixer.dispose();
         super.dispose();
     }

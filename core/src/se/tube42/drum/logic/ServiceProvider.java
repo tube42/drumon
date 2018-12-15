@@ -23,7 +23,8 @@ public class ServiceProvider
 
     public static void init()
     {
-        StorageService.init("drum.0");
+		StorageService.init("drum.0");
+		SettingsService.load();
     }
 
 
@@ -33,6 +34,7 @@ public class ServiceProvider
 
     public static void autoLoad()
     {
+		SettingsService.load();
         if(World.prog != null)
             SaveService.load(-1);
     }
@@ -40,7 +42,8 @@ public class ServiceProvider
     public static void autoSave()
     {
         if(World.prog != null)
-            SaveService.save(-1);
+			SaveService.save(-1);
+		SettingsService.save();
     }
 
 

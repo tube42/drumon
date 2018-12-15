@@ -16,7 +16,7 @@ allprojects {
 
     ext {
         appName = "Drum On"
-        gdxVersion = '1.9.6'
+        gdxVersion = '1.9.7'
         roboVMVersion = '2.3.1'
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
@@ -76,7 +76,7 @@ project(":core") {
 
 		compile "se.tube42.tweeny:tweeny:0.3.1"
         compile "se.tube42.ks:ks:0.3.1"
-        compile "se.tube42.base42:base42:0.3.4"
+        compile "se.tube42.base42:base42:0.3.5"
     }
 }
 

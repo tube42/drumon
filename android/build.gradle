@@ -1,6 +1,6 @@
 android {
-    buildToolsVersion "26.0.2"
-    compileSdkVersion 26
+    buildToolsVersion "28.0.2"
+    compileSdkVersion 28
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -20,11 +20,11 @@ android {
     defaultConfig {
         applicationId "se.tube42.drum.android"
         minSdkVersion 17
-        targetSdkVersion 26
+        targetSdkVersion 28
 
 		// app version
-        versionCode 27
-        versionName "0.2.7"
+        versionCode 28
+        versionName "0.2.8"
 
     }
 }

@@ -1,5 +1,5 @@
 android {
-    buildToolsVersion "28.0.2"
+    buildToolsVersion "28.0.3"
     compileSdkVersion 28
     sourceSets {
         main {
@@ -27,6 +27,11 @@ android {
         versionName "0.2.8"
 
     }
+	compileOptions {
+        encoding = 'UTF-8'
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 
@@ -34,11 +39,11 @@ android {
 // the natives configuration, and extracts them to the proper libs/ folders
 // so they get packed with the APK.
 task copyAndroidNatives() {
-    file("libs/armeabi/").mkdirs();
-    file("libs/armeabi-v7a/").mkdirs();
-    file("libs/arm64-v8a/").mkdirs();
-    file("libs/x86_64/").mkdirs();
-    file("libs/x86/").mkdirs();
+    file("libs/armeabi/").mkdirs()
+    file("libs/armeabi-v7a/").mkdirs()
+    file("libs/arm64-v8a/").mkdirs()
+    file("libs/x86_64/").mkdirs()
+    file("libs/x86/").mkdirs()
 
     configurations.natives.files.each { jar ->
         def outputDir = null

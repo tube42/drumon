@@ -23,8 +23,8 @@ android {
         targetSdkVersion 28
 
 		// app version
-        versionCode 28
-        versionName "0.2.8"
+        versionCode 29
+        versionName "0.2.9"
 
     }
 }

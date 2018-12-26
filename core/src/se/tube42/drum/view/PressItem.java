@@ -43,13 +43,19 @@ implements TweenListener
     }
 
 
-    public void mark0()
+    public void animPress()
     {
         final float r = ServiceProvider.getRandom(0.1f, 0.2f);
-
         set(ITEM_S, 1.05f).configure(r, null)
               .tail(1.00f).configure(r, null);
+	}
+	public void animAction(float amount)
+    {
+
+		set(BaseItem.ITEM_S, 1, 1.2f).configure(0.15f,null)
+			.tail(1).configure(0.1f, null);
     }
+
 
     //
     public void setTile(int tile)
@@ -101,7 +107,7 @@ implements TweenListener
         final float a = getAlpha();
         final float s = getScale();
         final float x = getX() + get(ITEM_V);
-        final float y = getY();
+        final float y = getY() + get(ITEM_U);
         final float r = getRotation();
         final float w2 = w / 2;
         final float h2 = h / 2;

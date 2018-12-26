@@ -30,7 +30,7 @@ public class SaveScene extends Scene
     private ButtonItem [] buttons;
     private String restore_data, temp_data, clipboard_data;
     private int curr_save;
-    
+
     public SaveScene()
     {
         super("save");
@@ -72,7 +72,7 @@ public class SaveScene extends Scene
         }
 
         animate(true);
-        
+
         // initial update
         update_saves();
         update_buttons();
@@ -86,9 +86,9 @@ public class SaveScene extends Scene
         animate(false);
     }
 
-    
-    public void onResume() 
-    { 
+
+    public void onResume()
+    {
         update_clipboard();
     }
 
@@ -140,14 +140,14 @@ public class SaveScene extends Scene
                       bi.y2 = gap / 2 + y0 + World.stripe_tile * y);
         }
     }
-    
+
     // ------------------------------------------------
-    
+
     // is any text available in the clipboard and is it a valid save?
     private void update_clipboard()
     {
         final SystemService sys = SystemService.getInstance();
-        
+
         clipboard_data = sys.getClipboard();
         if(clipboard_data != null) {
             clipboard_data = clipboard_data.trim();
@@ -157,18 +157,18 @@ public class SaveScene extends Scene
         }
         update_buttons();
     }
-    
+
     private void export_to_clipboard(String str)
     {
         final SystemService sys = SystemService.getInstance();
-        
+
         if(sys.setClipboard(str)) {
             sys.showMessage("Data was copied to clipboard. You can now email it to your friends and enemies...");
         } else {
             sys.showMessage("Could not copy data to clipboard");
         }
     }
-         
+
 
     // ----------------------------------------------------------
     // save items
@@ -183,7 +183,7 @@ public class SaveScene extends Scene
     private void press_save(int index)
     {
         curr_save = index;
-        saves[index].mark0();
+        saves[index].animPress();
 
         // temp load song if it has any
         temp_data = SaveService.getSave(index);
@@ -205,10 +205,10 @@ public class SaveScene extends Scene
         buttons[BT_SAVE].setActive(curr_save != -1);
         buttons[BT_SAVE].setColor(temp_data != null
                   ? COLOR_BUTTON_WARN : COLOR_BUTTON); // overwriting!
-        
+
         buttons[BT_IMPORT].setActive(clipboard_data != null);
         buttons[BT_EXPORT].setActive(true);
-        
+
         // not implemented:
         buttons[BT_DEL].setActive(false);
 
@@ -220,7 +220,7 @@ public class SaveScene extends Scene
             return;
 
 
-        buttons[index].mark0();
+        buttons[index].animPress();
 
         switch(index) {
         case BT_SAVE:
@@ -235,19 +235,19 @@ public class SaveScene extends Scene
                 go_back();
             }
             break;
-            
+
         case BT_IMPORT:
             if(clipboard_data != null) {
                 restore_data = clipboard_data;
                 go_back();
             }
             break;
-            
+
         case BT_EXPORT:
             export_to_clipboard(restore_data);
             update_clipboard(); // for testing...
             break;
-            
+
         case BT_CANCEL:
             go_back();
             break;

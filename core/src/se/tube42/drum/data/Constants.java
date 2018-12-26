@@ -69,10 +69,10 @@ public final class Constants
           ICON_SNARE = 1,
           ICON_TOM = 2,
           ICON_CLAP = 3,
-          ICON_HC = 4,
-          ICON_HO = 5,
-          ICON_SYMBAL = 6,
-          ICON_TICK = 7,
+          ICON_TICK = 4,
+          ICON_HC = 5,
+          ICON_HO = 6,
+          ICON_SYMBAL = 7,
           ICON_A = 8,
           ICON_B = 9,
           ICON_DEL = 10,
@@ -133,14 +133,6 @@ public final class Constants
     // ---------------------------------------
     // pads
     // ---------------------------------------
-
-    // ---------------------------------------
-    // voices
-    // ---------------------------------------
-    public static final int [] VOICE_ICONS = {
-        ICON_KICK, ICON_SNARE, ICON_TOM, ICON_CLAP,
-        ICON_TICK, ICON_HC, ICON_HO, ICON_SYMBAL,
-    };
 
 
     // ---------------------------------------

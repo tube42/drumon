@@ -64,13 +64,20 @@ public class DrumScene extends Scene implements SequencerListener
             tiles[index] = tile_pads[i] = pi;
         }
 
-        // VOICES
+		// VOICES
         tile_voices = new VoiceItem[VOICES];
         for(int i = 0; i < VOICES; i++, index++) {
-            final VoiceItem vi = new VoiceItem(VOICE_ICONS[i], COLOR_VOICES);
+            final VoiceItem vi = new VoiceItem(ICON_KICK + i, COLOR_VOICES);
             vi.register(CLASS_VOICE, i, true);
             tiles[index] = tile_voices[i] = vi;
         }
+
+		// voice with modified action animation:
+		tile_voices[ICON_KICK - ICON_KICK].setAnimType(VoiceItem.ANIM_SCALE);
+		tile_voices[ICON_SNARE - ICON_KICK ].setAnimType(VoiceItem.ANIM_DOWN);
+		tile_voices[ICON_TOM - ICON_KICK].setAnimType(VoiceItem.ANIM_DOWN);
+		tile_voices[ICON_HC - ICON_KICK ].setAnimType(VoiceItem.ANIM_UP);
+		tile_voices[ICON_HO - ICON_KICK ].setAnimType(VoiceItem.ANIM_UP);
 
         // tools
         tile_tools = new PressItem[TOOLS];
@@ -290,7 +297,7 @@ public class DrumScene extends Scene implements SequencerListener
     private void select_pad(int voice, int pad)
     {
         World.prog.set(voice, pad, !World.prog.get(voice, pad));
-        tile_pads[pad].mark0();
+        tile_pads[pad].animPress();
         if(voice == World.prog.getVoice())
             update_pad(pad);
     }
@@ -330,14 +337,14 @@ public class DrumScene extends Scene implements SequencerListener
                 tile_pads[i].setColor( (i & 1) == 0 ? c : c2);
         }
 
-        tile_voices[voice].mark0();
+        tile_voices[voice].animPress();
         update(false, true, false, false);
     }
 
     private void longpress_sound(int voice)
     {
         // long press on voice => change voice volume
-        get_choice(World.prog, VOICE_ICONS[voice],
+        get_choice(World.prog, ICON_KICK + voice,
                   Program.PARAM_VOLUME_VAR_n + voice,
                   Program.PARAM_VOLUME_n + voice);
     }
@@ -397,7 +404,7 @@ public class DrumScene extends Scene implements SequencerListener
 		String msg = null;
 		boolean tmp;
 
-        tile_tools[id].mark0();
+        tile_tools[id].animPress();
 
         switch(op) {
         case TOOL_TEMPO_MUL:
@@ -482,7 +489,7 @@ public class DrumScene extends Scene implements SequencerListener
         final EffectChain ef = World.mixer.getEffectChain();
 		String msg = null;
 
-        tile_tools[id].mark0();
+        tile_tools[id].animPress();
 
         switch(op) {
         case TOOL_FX_LOFI:
@@ -653,15 +660,17 @@ public class DrumScene extends Scene implements SequencerListener
 
             // mark played pad
             if(samples != 0) {
-                final int mask = 1 << World.prog.getVoice();
-                tile_pads[beat].mark1((samples & mask) == 0 ? 1.1f : 1.2f);
+				final int mask = 1 << World.prog.getVoice();
+				if( (samples & mask) != 0) {
+					tile_pads[beat].animAction(0);
+				}
             }
 
             // mark played sound
             for(int i = 0; i < VOICES; i++) {
                 if( (samples & (1 << i)) != 0) {
                     final float amp = World.sounds[i].getAmp();
-                    tile_voices[i].mark1(amp);
+                    tile_voices[i].animAction(amp);
                 }
             }
         }

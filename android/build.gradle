@@ -76,6 +76,6 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'se.tube42.drumon/se.tube42.drumon.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'se.tube42.drum.android/se.tube42.drum.android.MainActivity'
 }
 

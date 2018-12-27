@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+	<!-- Yes Google, backup all of it. I don't have any secrets for you anyway -->
+    <include domain="sharedpref" path="."/>
+</full-backup-content>

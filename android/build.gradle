@@ -1,5 +1,5 @@
 android {
-    buildToolsVersion "28.0.3"
+    buildToolsVersion "28.0.2"
     compileSdkVersion 28
     sourceSets {
         main {
@@ -12,13 +12,13 @@ android {
             jniLibs.srcDirs = ['libs']
         }
 
-        instrumentTest.setRoot('tests')
+        // instrumentTest.setRoot('tests')
     }
     packagingOptions {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "se.tube42.drum.android"
+        applicationId "set.tube42.drum.android"
         minSdkVersion 17
         targetSdkVersion 28
 
@@ -31,6 +31,11 @@ android {
         encoding = 'UTF-8'
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        disable 'GoogleAppIndexingWarning' // no thanks google
+        // baseline file("lint-baseline.xml")
     }
 }
 

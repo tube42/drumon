@@ -10,6 +10,7 @@
 
     <application
         android:allowBackup="true"
+		android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/ic_launcher"
         android:label="Drum On!"
         android:theme="@style/GdxTheme" >

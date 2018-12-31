@@ -18,7 +18,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "set.tube42.drum.android"
+        applicationId "se.tube42.drum.android"
         minSdkVersion 17
         targetSdkVersion 28
 

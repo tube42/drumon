@@ -13,6 +13,12 @@ This is a FOSS drum app for Android.
 
 .. image:: extra/screenshot/demo.gif
 
+It all started some years ago when someone showed me an iOS app that was
+supposed to be 'intuitive' and 'magical'. I bet myself I could create
+something better for Android in just a weekend.
+
+And I did exactly that, it just took a couple of years...
+
 
 Building
 --------

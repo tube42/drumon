@@ -22,12 +22,12 @@ public final class World extends UIC
 
     // UI
     public static boolean ui_portrait;
-    public static int ui_scale, ui_gap;
+    public static int ui_scale, ui_ascale, ui_gap;
     public static int win1_x0, win1_y0, win1_w, win1_h;
     public static int win2_x0, win2_y0, win2_w, win2_h;
 
     // drum scene details
-    public static int size_pad1, size_pad2, size_tile;
+    public static int size_pad1, size_pad2, size_tile, size_button;
     public static int stripe_pad1, stripe_pad2_x, stripe_pad2_y, stripe_tile;
     public static int w_pad1, h_pad1, x0_pad1, y0_pad1;
     public static int w_pad2, h_pad2, x0_pad2, y0_pad2;
@@ -45,7 +45,8 @@ public final class World extends UIC
     public static DrumScene scene_drum;
     public static ChoiceScene scene_choice;
     public static Choice2Scene scene_choice2;
-    public static SaveScene scene_save;
+	public static SaveScene scene_save;
+	public static AboutScene scene_about;
 
 
     public static TempoDetector td = new TempoDetector();

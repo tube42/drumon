@@ -21,7 +21,7 @@ public class MarkerItem extends SpriteItem
 {
     private int last;
     private PadItem [] pads;
-    
+
     public MarkerItem(PadItem [] pads)
     {
         super(World.tex_tiles);

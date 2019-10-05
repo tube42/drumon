@@ -3,6 +3,8 @@ TODO
  * re-write the low-pass to decrease load
 
 DONE
+ * fix first marker not being correct
+ * add about page
  * fix noisy ride sample
  * add tool change animation
  * tile interface with touch patterns

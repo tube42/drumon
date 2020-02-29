@@ -27,7 +27,7 @@ public class PadItem extends BaseButton {
 	public PadItem(TextureRegion[] tex, int tile) {
 		this.tex = tex;
 		setColor(0xffffff);
-		setTile(tile);
+		this.tile = tile;
 	}
 
 	//

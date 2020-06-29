@@ -102,9 +102,9 @@ public final class Constants
 		ICON_FILTER = 25,
 		ICON_DELAY = 26,
 		ICON_COMPRESS = 27,
+		ICON_MISC = 28,
+		ICON_TIME = 29,
 
-		ICON_BG_STOP = 28,
-		ICON_BG_PLAY = 29,
 
 		ICON_44 = 32,
 		ICON_48 = 33,
@@ -146,9 +146,10 @@ public final class Constants
 	// tools
 	// ---------------------------------------
 	public static final int
-		TOOL_TEMPO_MUL = 0,
-		TOOL_TEMPO_DETECT = 1,
-		TOOL_TEMPO_SET = 2,
+		TOOL_TEMPO_PAUSE = 0,
+		TOOL_TEMPO_MUL = 1,
+		TOOL_TEMPO_DETECT = 2,
+		TOOL_TEMPO_SET = 3,
 		TOOL_SEQ_AB = 4,
 		TOOL_SEQ_CLEAR = 5,
 		TOOL_SEQ_SHUFFLE = 6,
@@ -156,16 +157,15 @@ public final class Constants
 		TOOL_FX_LOFI = 8,
 		TOOL_FX_FILTER = 9,
 		TOOL_FX_DELAY = 10,
-		TOOL_FX_COMP = 11,
-		TOOL_MISC_ABOUT = 12,
-		TOOL_MISC_BACKGROUND = 13,
-		TOOL_MISC_PAUSE = 14,
-		TOOL_MISC_SAVE = 15
+		TOOL_FX_COMP = 11,			
+		TOOL_MISC_SAVE = 12,
+		TOOL_MISC_SETTINGS = 14,
+		TOOL_MISC_ABOUT = 15
 		;
 
 	public static final int [] TOOL_ICONS = {
 		// timing
-		ICON_NOTE4, ICON_DOT, ICON_METRONOME, -1,
+		ICON_PAUSE, ICON_NOTE4, ICON_DOT, ICON_METRONOME,
 
 		// sequence
 		ICON_A, ICON_DEL, ICON_MIX, ICON_44,
@@ -174,7 +174,7 @@ public final class Constants
 		ICON_LOFI, ICON_FILTER, ICON_DELAY, ICON_COMPRESS,
 
 		// settings
-		ICON_HELP, ICON_BG_STOP, ICON_PAUSE, ICON_SAVE
+		ICON_SAVE, -1, ICON_SETTINGS, ICON_HELP,
 	};
 
 	// ---------------------------------------
@@ -182,7 +182,7 @@ public final class Constants
 	// ---------------------------------------
 
 	public static final int [] SELECTOR_ICONS = {
-		ICON_METRONOME, ICON_SEQ, ICON_WAVEFORM, ICON_SETTINGS,
+		ICON_TIME, ICON_SEQ, ICON_WAVEFORM, ICON_MISC,
 	};
 
 

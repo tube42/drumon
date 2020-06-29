@@ -46,6 +46,7 @@ public class DrumApp extends BaseApp {
 		World.scene_choice2 = new Choice2Scene();
 		World.scene_save = new SaveScene();
 		World.scene_about = new AboutScene();
+		World.scene_settings = new SettingsScene();
 		World.mgr = mgr;
 
 		World.mgr.setScene(World.scene_drum);

@@ -7,5 +7,6 @@ package se.tube42.drum.data;
 public class Settings
 {
 	public static boolean bg_play = false;
+	public static boolean pause_restart = true;
 
 }

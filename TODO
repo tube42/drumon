@@ -1,5 +1,7 @@
 TODO
-
+ * app starts very slowly on old devices, maybe this has to do with assets being loaded at startup?
+   - add a screen that notifies users about assets being loaded
+ * save / about / settings pages need a visually better close/cancel button (correct size, different color, etc)
  * re-write the low-pass to decrease load
 
 DONE

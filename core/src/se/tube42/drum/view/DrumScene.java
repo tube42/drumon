@@ -337,8 +337,10 @@ public class DrumScene extends Scene implements SequencerListener {
 
 		switch (mode) {
 		case 0:
+			i0 = seq.isPaused() ? ICON_PLAY : ICON_PAUSE;
+
 			// assuming the icon order is 1/4, 1/8 and 1/16
-			i0 = ICON_NOTE4 + prog.getTempoMultiplier();
+			i1 = ICON_NOTE4 + prog.getTempoMultiplier();
 			break;
 		case 1:
 			i0 = prog.getBank(voice) == 0 ? ICON_A : ICON_B;
@@ -350,9 +352,7 @@ public class DrumScene extends Scene implements SequencerListener {
 			v2 = World.mixer.getEffectChain().isEnabled(2);
 			v3 = World.mixer.getEffectChain().isEnabled(3);
 			break;
-		case 3:
-			i1 = Settings.bg_play ? ICON_BG_PLAY : ICON_BG_STOP;
-			i2 = seq.isPaused() ? ICON_PLAY : ICON_PAUSE;
+		case 3:			
 			break;
 		}
 
@@ -390,7 +390,9 @@ public class DrumScene extends Scene implements SequencerListener {
 			get_choice(World.prog, ICON_METRONOME, Program.PARAM_TEMPO, -1);
 			break;
 
-		case TOOL_MISC_PAUSE:
+		case TOOL_TEMPO_PAUSE:
+			if(World.seq.isPaused() && Settings.pause_restart)
+				World.seq.restart();
 			World.seq.setPause(!World.seq.isPaused());
 			break;
 
@@ -433,9 +435,8 @@ public class DrumScene extends Scene implements SequencerListener {
 			clear_pads(voice, false);
 			msg = "Cleared track";
 			break;
-		case TOOL_MISC_BACKGROUND:
-			Settings.bg_play = !Settings.bg_play;
-			msg = Settings.bg_play ? "Play in background" : "Pause in background";
+		case TOOL_MISC_SETTINGS:
+			World.mgr.setScene(World.scene_settings, 120);
 			break;
 
 		case TOOL_MISC_ABOUT:

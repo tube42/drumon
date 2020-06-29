@@ -47,7 +47,7 @@ public final class World extends UIC
     public static Choice2Scene scene_choice2;
 	public static SaveScene scene_save;
 	public static AboutScene scene_about;
-
+    public static SettingsScene scene_settings;
 
     public static TempoDetector td = new TempoDetector();
     public static Program prog;

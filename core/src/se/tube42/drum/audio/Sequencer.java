@@ -35,8 +35,6 @@ public class Sequencer
         setProgram(prog);
         setPause(false);
         reset();
-
-        bcnt = 31; // next will be 0
     }
 
     public void setListener(SequencerListener listener)
@@ -46,9 +44,14 @@ public class Sequencer
 
     public void reset()
     {
-        tcnt = 0;
-        bcnt = 0;
+        restart();
         prog.reset();
+    }
+
+    public void restart() 
+    {    
+        tcnt = 0;
+        bcnt = 31; // next will be 0
     }
 
     //

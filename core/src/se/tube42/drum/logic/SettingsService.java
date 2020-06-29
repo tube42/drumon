@@ -40,9 +40,9 @@ public final class SettingsService
 			dos.writeInt(fileflags);
 
 			dos.writeBoolean(Settings.bg_play);
+			dos.writeBoolean(Settings.pause_restart);
 
 			// reserved for future
-			dos.writeBoolean(false);
 			dos.writeBoolean(false);
 			dos.writeInt(0);
 			dos.writeInt(0);

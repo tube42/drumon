@@ -124,7 +124,7 @@ public final class Constants
 		{ "kick2.au", "kick_hard.au", "BD1.au" },
 		{ "snare2.au", "SD2.au", "snare_supraphonic_hard.au", },
 		{ "floor_tom2.au", "HITOM4.au" },
-		{ "tamburin.au", "CLAPS.au" },
+		{ "tamburin.au", "CLAPS.au", "Hi_Shk1.au" },
 
 		{ "side_stick1.au", "CHOICE_BITS_COWBELL.au","RIM.au" },
 		{ "closed_hat_hard.au", "HIGH_HAT_closed_soft.au", "CLHIHAT2.au" },

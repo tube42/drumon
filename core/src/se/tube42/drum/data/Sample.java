@@ -49,6 +49,13 @@ public class Sample
             buffer[offset++] += v2 * amp;
             buffer[offset++] += v3 * amp;
         }
+
+        // in case there are some odd ones
+        for(int i = remain % 4; i != 0; i--) {
+            final float v0 = ss[curr++];
+            buffer[offset++] += v0 * amp;
+        }
+
     }
 
     //

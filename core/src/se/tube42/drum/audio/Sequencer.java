@@ -14,22 +14,20 @@ import static se.tube42.drum.data.Constants.*;
  * thread once we are there...
  */
 
-public class Sequencer
-{
+public class Sequencer {
     // The beats are laid out like this:
-    //  0   1   2   3   4   5   | 6   7
-    //  8   9   10  11  12  13  | 14  15
-    //  16  17  18  19  20  21  | 22  23
-    //  24  25  26  27  28  29  | 30  31
-    // the odd ones are only in 4/8  and 3/8
+    // 0 1 2 3 4 5 | 6 7
+    // 8 9 10 11 12 13 | 14 15
+    // 16 17 18 19 20 21 | 22 23
+    // 24 25 26 27 28 29 | 30 31
+    // the odd ones are only in 4/8 and 3/8
     // the ones after | are not in the tenary measures
     private int tcnt, bcnt;
     private boolean pause;
     private Program prog;
     private SequencerListener listener;
 
-    public Sequencer(Program prog)
-    {
+    public Sequencer(Program prog) {
         this.listener = null;
 
         setProgram(prog);
@@ -37,109 +35,96 @@ public class Sequencer
         reset();
     }
 
-    public void setListener(SequencerListener listener)
-    {
+    public void setListener(SequencerListener listener) {
         this.listener = listener;
     }
 
-    public void reset()
-    {
+    public void reset() {
         restart();
         prog.reset();
     }
 
-    public void restart() 
-    {    
+    public void restart() {
         tcnt = 0;
         bcnt = 31; // next will be 0
     }
 
     //
-    public void setProgram(Program prog)
-    {
+    public void setProgram(Program prog) {
         this.prog = prog;
     }
 
-    public Program getProgram()
-    {
+    public Program getProgram() {
         return prog;
     }
 
     //
 
-    public boolean isPaused() { return pause; }
-    public void setPause(boolean p) { this.pause = p; }
+    public boolean isPaused() {
+        return pause;
+    }
+
+    public void setPause(boolean p) {
+        this.pause = p;
+    }
 
     //
 
-    public int getBeat()
-    {
+    public int getBeat() {
         return bcnt;
     }
 
-    public int nextBeat()
-    {
-        final int max = 30 * World.freq;
-        final int m = 1 << prog.getTempoMultiplier();
-        int n = (max - tcnt) / (prog.getTempo() * m);
+    // this is called when we enter a new beat and may want to play new notes
+    private void visit_beat(int position) {
+        if (listener != null)
+            listener.onBeatStart(position);
 
-        // error handler??
-        if(n < 1) n = World.freq / 4;
+        for (int i = 0; i < VOICES; i++) {
+            if (prog.get(i, position)) {
+                float amp = prog.getVolume(i);
+                final int variant = prog.getSampleVariant(i);
 
-        return n;
+                // check if there is any volume variation
+                final float vr = prog.getVolumeVariation(i) / 100.0f;
+                if (vr > 0) {
+                    amp *= ServiceProvider.getRandom(1 - vr, 1 + vr);
+                }
+
+                World.sounds[i].start(variant, amp);
+                if (listener != null)
+                    listener.onSampleStart(position, i);
+            }
+        }
     }
 
-    public boolean update(int samples)
-    {
-        if(pause) {
-            // tcnt = 0;
-            return true;
-        }
+    // progress the sequencer with up to "samples" samples, returns the actual number of samples processed
+    public int update(int samples) {
+        if (pause)
+            return samples;
 
+        // num-samples = (freq * 30 ) / (temp * 2 ^ multiplier)
+        // (tempo is beats per minute and we start with laves, hence 30)
         final int max = 30 * World.freq;
-        final int m = 1 << prog.getTempoMultiplier();
+        final int samples_per_beat = prog.getTempo() << prog.getTempoMultiplier();
 
-        tcnt += samples * prog.getTempo() * m;
+        tcnt += samples * samples_per_beat;
+        if (tcnt < max)
+            return samples;
 
-        if(tcnt > max) {
-            tcnt -= max;
+        // we started a new beat
+        samples = (tcnt - max) / samples_per_beat;
+        tcnt = 0;
 
-            // this should not happen...
-            if(tcnt > max) {
-                tcnt = 0;
-            }
+        // move to next beat and figure our where it is
+        bcnt = (bcnt + 1) & 31;
 
-            bcnt = (bcnt + 1) & 31;
+        final int mes = prog.getMeasure();
+        bcnt = Measure.tenaryCorrection(mes, bcnt); // correct beat for tenary where we skip 4th (or 7th & 8th)
 
-            final int mes = prog.getMeasure();
-            // correct beat for tenary where we skip 4th (or 7th & 8th)
-            bcnt = Measure.tenaryCorrection(mes, bcnt);
-
-            // if we are doing x/4 skip the odd ones
-            if(!Measure.plays(mes, bcnt))
-                return false;
-
-            if(listener != null)
-            	listener.onBeatStart(bcnt);
-
-            for(int i = 0; i < VOICES; i++) {
-                if(prog.get(i, bcnt)) {
-                    float amp = prog.getVolume(i);
-                    final int variant = prog.getSampleVariant(i);
-
-                    // check if there is any volume variation
-                    final float vr = prog.getVolumeVariation(i) / 100.0f;
-                    if(vr > 0) {
-                        amp *= ServiceProvider.getRandom( 1 - vr, 1 + vr);
-                    }
-
-                    World.sounds[i].start(variant, amp);
-                    if(listener != null)
-            			listener.onSampleStart(bcnt, i);
-                }
-            }
-            return true;
+        if (Measure.plays(mes, bcnt)) { // check if we skip this beat (e.g. skip odd ones in x/4)
+            visit_beat(bcnt);
         }
-        return false;
+
+        return samples;
     }
 }

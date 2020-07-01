@@ -28,34 +28,16 @@ public class DrumApp extends BaseApp {
 		onResize(World.sw, World.sh);
 
 		World.bgc = bgc;
-		load_assets();
+		World.mgr = mgr;
 
 		// update size once more
 		onResize(World.sw, World.sh);
 
-		// create mixer
-		World.prog = new Program(DEF_AMPS);
-		World.seq = new Sequencer(World.prog);
-		final DeviceOutput dev = new DeviceOutput();
-		World.mixer = new Mixer(dev);
-
-		// set the default amps
-
-		World.scene_drum = new DrumScene();
-		World.scene_choice = new ChoiceScene();
-		World.scene_choice2 = new Choice2Scene();
-		World.scene_save = new SaveScene();
-		World.scene_about = new AboutScene();
-		World.scene_settings = new SettingsScene();
-		World.mgr = mgr;
-
-		World.mgr.setScene(World.scene_drum);
+		// World.mgr.setScene(World.scene_drum);
+		World.mgr.setScene(new InitScene() );
 
 		// TEMP until we fix the code handling back:
-		Gdx.input.setCatchBackKey(false);
-
-		// start the mixer!
-		World.mixer.start();
+		Gdx.input.setCatchBackKey(false);		
 	}
 
 	public void onUpdate(float dt, long dtl) {
@@ -68,55 +50,13 @@ public class DrumApp extends BaseApp {
 
 	// ----------------------------------------------
 
-	private void load_assets() {
-
-		String aname = "" + World.ui_ascale;
-		System.out.println("USING " + aname);
-
-		Texture tmp;
-		tmp = AssetService.load(aname + "/tiles.png", true);
-		World.tex_tiles = AssetService.divide(tmp, 4, 2);
-
-		tmp = AssetService.load(aname + "/icons.png", true);
-		World.tex_icons = AssetService.divide(tmp, 8, 8);
-
-		tmp = AssetService.load(aname + "/rect.png", false);
-		World.tex_rect = new TextureRegion[1];
-		World.tex_rect[0] = new TextureRegion(tmp);
-
-		World.font1 = AssetService.createFonts(
-			"fonts/Roboto-Regular.ttf", CHARSET1,
-			World.ui_ascale * SIZE_FONT1)[0];
-
-		World.font2 = AssetService.createFonts(
-			"fonts/RobotoCondensed-Light.ttf", CHARSET2,
-				World.ui_ascale * SIZE_FONT2)[0];
-
-		try {
-			World.sounds = new Sample[VOICES];
-			for (int i = 0; i < VOICES; i++) {
-				final int vcount = SAMPLES[i].length;
-				final float[][] data = new float[vcount][];
-				for (int j = 0; j < vcount; j++) {
-					data[j] = ServiceProvider.loadSample("samples/" + SAMPLES[i][j], World.freq);
-				}
-
-				World.sounds[i] = new Sample(data);
-			}
-
-		} catch (Exception e) {
-			System.err.println("ERROR " + e);
-			System.err.flush();
-			System.exit(20);
-		}
-	}
-
 	@Override
 	public void pause() {
 		ServiceProvider.autoSave();
 		if (!Settings.bg_play) {
 			World.mgr.onPause();
-			World.mixer.stop();
+			if(World.mixer != null)
+				World.mixer.stop();
 		}
 		super.pause();
 	}
@@ -124,7 +64,8 @@ public class DrumApp extends BaseApp {
 	@Override
 	public void resume() {
 		super.resume();
-		World.mixer.start();
+		if(World.mixer != null)
+			World.mixer.start();
 		World.mgr.onResume();
 
 	}
@@ -134,9 +75,11 @@ public class DrumApp extends BaseApp {
 
 		// assuming we allowed bg-play, we might need to update stop music now
 		World.mgr.onPause();
-		World.mixer.stop();
-
-		World.mixer.dispose();
+		if(World.mixer != null)  {
+			World.mixer.stop();
+			World.mixer.dispose();
+		}
+		
 		super.dispose();
 	}
 }

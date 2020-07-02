@@ -14,7 +14,7 @@ import static se.tube42.drum.data.Constants.*;
 public class AboutScene extends Scene {
 
 	private Layer layer;
-	private ButtonItem close;
+	private ButtonItem close, code;
 	private BaseText text;
 
 	public AboutScene() {
@@ -24,10 +24,12 @@ public class AboutScene extends Scene {
 		text.setAlignment(-0.5f, 0.5f);
 		text.setText(ABOUT_TEXT);
 
+		code = new ButtonItem("github page");
 		close = new ButtonItem("close");
+		close.setColor(COLOR_BUTTON_CLOSE);
 
 		layer = getLayer(0);
-		layer.add(close, text);
+		layer.add(close, code, text);
 	}
 
 	public void onShow() {
@@ -58,6 +60,8 @@ public class AboutScene extends Scene {
 		close.setSize( w - 2 * gap, size);
 		close.setPosition(gap, gap);
 
+		code.setSize( w - 2 * gap, size);
+		code.setPosition(gap, gap + close.getY() + close.getH());
 	}
 
 
@@ -82,6 +86,8 @@ public class AboutScene extends Scene {
 			BaseItem hit = layer.hit(x, y);
 			if (hit == close)
 				go_back();
+			else if(hit == code)
+				SystemService.getInstance().showURL(GITHUB_PAGE);
 		} else if (!down) {
 
 		}

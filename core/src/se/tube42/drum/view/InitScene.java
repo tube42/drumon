@@ -1,14 +1,12 @@
 package se.tube42.drum.view;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import se.tube42.lib.scene.*;
 import se.tube42.lib.service.AssetService;
 import se.tube42.lib.item.*;
 
-import se.tube42.lib.ks.MessageListener;
 import se.tube42.drum.audio.*;
 import se.tube42.drum.data.*;
 import se.tube42.drum.logic.*;
@@ -23,12 +21,12 @@ public class InitScene extends Scene implements Runnable {
 	public InitScene() {
 		super("loading");
 
-		ServiceProvider.setColorItem(0xCDCDCD, World.bgc, 0f, 1f, 0f); // light-gray background so we can see things
+		ServiceProvider.setColorItem(0x909090, World.bgc, 0f, 1f, 0f); // light-gray background so we can see things
 		load_first_assets();
 
 		text = new BaseText(World.font2);
 		text.setAlignment(-0.5f, 0.5f);
-		text.setText("Loading...");
+		text.setText("loading ...");
 		text.setColor(0x000000);
 
 		img = new SpriteItem(World.tex_icons, ICON_HELP);
@@ -45,9 +43,8 @@ public class InitScene extends Scene implements Runnable {
 		final int size = World.size_button;
 		final int gap = size / 2;
 
-		text.setMaxWidth(w - 2 * gap);
-		text.setPosition(w / 2, 3 * h / 4);
-		img.setPosition((w - img.getW()) / 2, (h - img.getH()) / 2);
+		img.setPosition((w - img.getW()) / 2, h / 2);
+		text.setPosition(w / 2, img.getY() - 1.5f * img.getH());
 	}
 
 	// ----------------------------------------------------------
@@ -75,10 +72,10 @@ public class InitScene extends Scene implements Runnable {
 	}
 
 	// load the other assets fron this thread
-	public void run() {		
-		
+	public void run() {
+
 		try {
-			for(int i = 0; i < VOICES; i++) {
+			for (int i = 0; i < VOICES; i++) {
 				img.setIndex(ICON_KICK + i);
 
 				final int vcount = SAMPLES[i].length;
@@ -104,7 +101,7 @@ public class InitScene extends Scene implements Runnable {
 
 			// and lets start things...
 			World.mgr.setScene(World.scene_drum);
-			World.mixer.start();		
+			World.mixer.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(20);

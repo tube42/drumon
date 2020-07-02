@@ -4,8 +4,9 @@ import android.app.*;
 import android.widget.*;
 import android.text.*;
 import android.content.ClipboardManager;
-import android.content.ClipData;
-
+// import android.content.ClipData;
+import android.content.*;
+import android.net.*;
 
 import se.tube42.drum.logic.*;
 
@@ -23,6 +24,12 @@ public class AndroidService extends SystemService
 
 
     // -----------------------------------------------------
+
+    public void showURL(String url)
+    {
+        Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        activity.startActivity(browser);
+    }
 
     public boolean setClipboard(String text)
     {

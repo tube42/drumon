@@ -42,6 +42,11 @@ public class SystemService
     public void showMessage(String msg)
     {
         System.out.println(msg);
-
     }
+
+    public void showURL(String url)
+    {
+        System.out.println("BROWSE " + url);
+    }
+
 }

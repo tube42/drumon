@@ -31,6 +31,7 @@ public class SettingsScene extends Scene
         buttons[BT_BACKGROUND] = new ButtonItem("");
         buttons[BT_PAUSE_RESTART] = new ButtonItem("");
         buttons[BT_CLOSE] = new ButtonItem("Close");
+        buttons[BT_CLOSE].setColor(COLOR_BUTTON_CLOSE);
 
         layer = getLayer(0);        
         layer.add(buttons);

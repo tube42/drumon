@@ -17,7 +17,7 @@ public class SaveScene extends Scene
 {
     private static final int
           BT_DEL = 0,
-          BT_CANCEL = 1,
+          BT_CLOSE = 1,
           BT_IMPORT = 2,
           BT_EXPORT = 3,
           BT_LOAD = 4,
@@ -45,7 +45,8 @@ public class SaveScene extends Scene
         buttons[BT_IMPORT] = new ButtonItem("Import");
         buttons[BT_EXPORT] = new ButtonItem("Export");
         buttons[BT_DEL] = new ButtonItem("Delete");
-        buttons[BT_CANCEL] = new ButtonItem("Cancel");
+        buttons[BT_CLOSE] = new ButtonItem("Close");
+        buttons[BT_CLOSE].setColor(COLOR_BUTTON_CLOSE);
 
 
         layer = getLayer(0);
@@ -248,7 +249,7 @@ public class SaveScene extends Scene
             update_clipboard(); // for testing...
             break;
 
-        case BT_CANCEL:
+        case BT_CLOSE:
             go_back();
             break;
         }

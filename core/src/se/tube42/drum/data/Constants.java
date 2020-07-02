@@ -195,8 +195,8 @@ public final class Constants
 
 		COLOR_SAVE = 0xFFFFFF,
 		COLOR_BUTTON = 0xFFFFFF,
-		COLOR_BUTTON_WARN = 0xFF3030
-
+		COLOR_BUTTON_WARN = 0xFF3030,
+		COLOR_BUTTON_CLOSE = 0xA0D0A0
 		;
 
 	public static final int [] COLOR_SELECTORS = {
@@ -233,4 +233,5 @@ public final class Constants
 		"The app may look simple, but you can get some amazing sound from it. " +
 		"Pro tip 1: try long-press. Pro tip 2: the save page can be used for live playing!"
 		;
+	public static final String GITHUB_PAGE = "https://github.com/tube42/drumon";
 }

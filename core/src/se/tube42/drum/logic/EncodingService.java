@@ -1,12 +1,6 @@
 
 package se.tube42.drum.logic;
 
-import java.io.*;
-
-import se.tube42.lib.service.*;
-import se.tube42.drum.data.*;
-
-
 /**
  * handles quasi-base64 encoding of binary data
  */

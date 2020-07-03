@@ -1,19 +1,13 @@
 package se.tube42.drum;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.*;
 
-import se.tube42.lib.tweeny.*;
-import se.tube42.lib.scene.*;
-import se.tube42.lib.util.*;
-import se.tube42.lib.service.*;
-
-import se.tube42.drum.view.*;
-import se.tube42.drum.logic.*;
-import se.tube42.drum.audio.*;
 import se.tube42.drum.data.*;
-import static se.tube42.drum.data.Constants.*;
+import se.tube42.drum.logic.*;
+import se.tube42.drum.view.*;
+import se.tube42.lib.scene.*;
+import se.tube42.lib.tweeny.*;
+import se.tube42.lib.util.*;
 
 public class DrumApp extends BaseApp {
 

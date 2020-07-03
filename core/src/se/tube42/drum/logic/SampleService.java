@@ -3,8 +3,6 @@ package se.tube42.drum.logic;
 
 import java.io.*;
 
-import se.tube42.lib.service.*;
-
 public final class SampleService
 {
 

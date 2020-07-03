@@ -1,10 +1,10 @@
 
 package se.tube42.drum.audio;
 
-import com.badlogic.gdx.audio.*;
 import com.badlogic.gdx.utils.*;
 
 import se.tube42.drum.data.*;
+
 import static se.tube42.drum.data.Constants.*;
 
 /*

@@ -1,8 +1,9 @@
 
 package se.tube42.drum.audio;
 
-import se.tube42.drum.logic.*;
 import se.tube42.drum.data.*;
+import se.tube42.drum.logic.*;
+
 import static se.tube42.drum.data.Constants.*;
 
 /*

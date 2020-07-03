@@ -3,13 +3,9 @@ package se.tube42.drum.view;
 
 import com.badlogic.gdx.Input.*;
 
-
-import se.tube42.lib.tweeny.*;
-import se.tube42.lib.scene.*;
-import se.tube42.lib.item.*;
-
 import se.tube42.drum.data.*;
-import se.tube42.drum.audio.*;
+import se.tube42.lib.item.*;
+import se.tube42.lib.scene.*;
 
 import static se.tube42.drum.data.Constants.*;
 

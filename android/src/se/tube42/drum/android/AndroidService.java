@@ -1,12 +1,9 @@
 package se.tube42.drum.android;
 
 import android.app.*;
-import android.widget.*;
-import android.text.*;
-import android.content.ClipboardManager;
-// import android.content.ClipData;
 import android.content.*;
 import android.net.*;
+import android.widget.*;
 
 import se.tube42.drum.logic.*;
 

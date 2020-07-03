@@ -1,15 +1,14 @@
 package se.tube42.drum.view;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
-import se.tube42.lib.scene.*;
-import se.tube42.lib.service.AssetService;
-import se.tube42.lib.item.*;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.*;
 
 import se.tube42.drum.audio.*;
 import se.tube42.drum.data.*;
 import se.tube42.drum.logic.*;
+import se.tube42.lib.item.*;
+import se.tube42.lib.scene.*;
+import se.tube42.lib.service.*;
 
 import static se.tube42.drum.data.Constants.*;
 

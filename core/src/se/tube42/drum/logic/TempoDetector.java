@@ -1,13 +1,6 @@
 
 package se.tube42.drum.logic;
 
-import java.io.*;
-
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.audio.*;
-import com.badlogic.gdx.utils.*;
-
-import se.tube42.drum.data.*;
 import static se.tube42.drum.data.Constants.*;
 
 public class TempoDetector

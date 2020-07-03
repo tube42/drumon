@@ -1,7 +1,6 @@
 
 package se.tube42.drum.desktop;
 
-import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl.*;
 
 import se.tube42.drum.*;

@@ -1,21 +1,16 @@
 
 package se.tube42.drum.logic;
 
-import java.io.*;
-
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.files.*;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.audio.*;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
 
-import se.tube42.lib.ks.*;
-import se.tube42.lib.tweeny.*;
-import se.tube42.lib.item.*;
-import se.tube42.lib.service.*;
+import java.io.*;
 
 import se.tube42.drum.data.*;
+import se.tube42.lib.ks.*;
+import se.tube42.lib.service.*;
+import se.tube42.lib.tweeny.*;
+
 import static se.tube42.drum.data.Constants.*;
 
 public class ServiceProvider

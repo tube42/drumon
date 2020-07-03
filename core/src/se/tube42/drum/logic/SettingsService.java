@@ -2,14 +2,9 @@
 package se.tube42.drum.logic;
 
 import java.io.*;
-import java.util.Set;
 
-import se.tube42.lib.service.*;
-
-import se.tube42.drum.audio.*;
 import se.tube42.drum.data.*;
-
-import static se.tube42.drum.data.Constants.*;
+import se.tube42.lib.service.*;
 
 
 public final class SettingsService

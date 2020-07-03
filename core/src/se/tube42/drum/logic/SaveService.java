@@ -3,10 +3,9 @@ package se.tube42.drum.logic;
 
 import java.io.*;
 
-import se.tube42.lib.service.*;
-
 import se.tube42.drum.audio.*;
 import se.tube42.drum.data.*;
+import se.tube42.lib.service.*;
 
 import static se.tube42.drum.data.Constants.*;
 

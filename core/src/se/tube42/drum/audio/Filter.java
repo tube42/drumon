@@ -1,9 +1,6 @@
 
 package se.tube42.drum.audio;
 
-import se.tube42.drum.data.*;
-import static se.tube42.drum.data.Constants.*;
-
 /*
  * simple two pole filter
  */

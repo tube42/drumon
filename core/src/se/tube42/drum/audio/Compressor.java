@@ -55,7 +55,7 @@ public final class Compressor extends Effect
     }
 
 
-    private final float comp(float in)
+    private float comp(float in)
     {
         if(in < src && in > -src)
             return in * mul1;

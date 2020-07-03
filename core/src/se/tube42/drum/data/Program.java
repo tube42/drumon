@@ -232,12 +232,12 @@ public class Program extends Parameters
 
 
     // some bitfield helpers to make the code above more clean
-    private static final boolean get_bit(int data, int bit)
+    private static boolean get_bit(int data, int bit)
     {
         final int mask = 1 << bit;
         return (data & mask) != 0;
     }
-    private static final int set_bit(int data, int bit, boolean set)
+    private static int set_bit(int data, int bit, boolean set)
     {
         final int mask = 1 << bit;
         if(set) data |= mask;

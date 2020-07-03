@@ -236,6 +236,6 @@ public final class SaveService
     public static boolean load(int num)
     {
         final String str = getSave(num);
-        return str == null ? false : stringToCurrent(str);
+        return str != null && stringToCurrent(str);
     }
 }

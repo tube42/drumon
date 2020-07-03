@@ -21,11 +21,8 @@ public final class Measure
  
         if((m == MEASURE_44 || m == MEASURE_34) && (b & 1) != 0)
             return false;
-        
-        if((m == MEASURE_34 || m == MEASURE_68) && (b & 7) >= 6)
-            return false;
-        
-        return true;
+
+        return (m != MEASURE_34 && m != MEASURE_68) || (b & 7) < 6;
     }
     
     public static int tenaryCorrection(int m, int b)

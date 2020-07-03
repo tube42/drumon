@@ -529,10 +529,8 @@ public class DrumScene extends Scene implements SequencerListener {
 	}
 
 	private void onEnter(BaseButton hit, boolean pressed) {
-		switch (hit.class_) {
-		case CLASS_PAD:
+		if (hit.class_ == CLASS_PAD) {
 			select_pad(World.prog.getVoice(), hit.id);
-			break;
 		}
 	}
 

@@ -41,12 +41,11 @@ public class TempoDetector
                     return true;
                 }
             }
-            return false;
         } else {
             reset();
             l0 = n;
-            return false;
         }
+        return false;
     }
 
     public int get()

@@ -134,12 +134,10 @@ implements TweenListener
 
     public void onFinish(Item item, int index, int msg)
     {
-        switch(msg) {
-        case MSG_UPDATE:
+        if (msg == MSG_UPDATE) {
             setColor(new_color);
             setIcon(new_icon);
             setTile(new_tile);
-            break;
         }
     }
 }

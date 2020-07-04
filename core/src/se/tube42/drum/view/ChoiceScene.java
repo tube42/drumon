@@ -155,7 +155,7 @@ public class ChoiceScene extends Scene
     private void choice_update()
     {
 
-        final float yn = (y - y_min) / (float) (y_max - y_min);
+        final float yn = (y - y_min) / (y_max - y_min);
         final float y1 = y0 + yd * yn;
         mark.setImmediate(BaseItem.ITEM_Y, y1 - mark.getH() / 2);
 

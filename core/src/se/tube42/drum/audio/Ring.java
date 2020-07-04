@@ -10,6 +10,8 @@ package se.tube42.drum.audio;
  * (already patented, sorry)
  */
 
+import java.util.Arrays;
+
 public final class Ring
 {
     private int curr, size;
@@ -25,8 +27,7 @@ public final class Ring
     public void reset()
     {
         curr = 0;
-        for(int i = 0; i < data.length; i++)
-            data[i] = 0;
+        Arrays.fill(data, 0);
     }
 
     public void write(final float val)

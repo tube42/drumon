@@ -30,7 +30,7 @@ public final class SaveService
 
     public static String getSave(int num)
     {
-        return StorageService.load(SAVE_NAME + "." + num, (String)null);
+        return StorageService.load(SAVE_NAME + "." + num, null);
     }
 
     public static void setSave(int num, String data)

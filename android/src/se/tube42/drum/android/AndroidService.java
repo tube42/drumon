@@ -16,7 +16,7 @@ public class AndroidService extends SystemService
     {
         this.activity = activity;
         this.cman = (ClipboardManager)
-              activity.getSystemService(activity.CLIPBOARD_SERVICE);
+              activity.getSystemService(Context.CLIPBOARD_SERVICE);
     }
 
 

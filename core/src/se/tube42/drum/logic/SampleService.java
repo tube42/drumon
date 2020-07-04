@@ -63,8 +63,7 @@ public final class SampleService
         is.close();
 
         // resample
-        final float [] resampled = resample(samples, freq_in, freq);
-        return resampled;
+        return resample(samples, freq_in, freq);
     }
 
 

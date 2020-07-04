@@ -52,7 +52,7 @@ public class AboutScene extends Scene {
         final int gap = size / 2;
 
 		text.setMaxWidth(w - 2 * gap);
-		text.setPosition(w / 2, h / 2 + (size + 2 * gap) / 2);
+		text.setPosition(w / 2f, h / 2f + (size + 2 * gap) / 2f);
 		text.setSize( w - 2 * gap, h);
 
 		close.setSize( w - 2 * gap, size);

@@ -195,9 +195,9 @@ public class DrumScene extends Scene implements SequencerListener {
 			final float y1 = bi.y2;
 
 			if (animate) {
-				final float x0 = x1 + (x1 < World.sw / 2 ? -World.sw : World.sw);
-				final float y0 = x1 + (y1 < World.sh / 2 ? -World.sh : World.sh);
-				final float p = 0.8f + (8 - i / 4) * 0.05f;
+				final float x0 = x1 + (x1 < World.sw / 2f ? -World.sw : World.sw);
+				final float y0 = x1 + (y1 < World.sh / 2f ? -World.sh : World.sh);
+				final float p = 0.8f + (8 - i / 4f) * 0.05f;
 				final float t = ServiceProvider.getRandom(0.35f, 0.5f);
 
 				bi.pause(BaseItem.ITEM_X, x0, p).tail(x1).configure(t, TweenEquation.QUAD_OUT);

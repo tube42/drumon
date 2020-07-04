@@ -42,8 +42,8 @@ public class InitScene extends Scene implements Runnable {
 		final int size = World.size_button;
 		final int gap = size / 2;
 
-		img.setPosition((w - img.getW()) / 2, h / 2);
-		text.setPosition(w / 2, img.getY() - 1.5f * img.getH());
+		img.setPosition((w - img.getW()) / 2, h / 2f);
+		text.setPosition(w / 2f, img.getY() - 1.5f * img.getH());
 	}
 
 	// ----------------------------------------------------------

@@ -106,16 +106,16 @@ public class ChoiceScene extends Scene
         final int w1 = s;
         final int h1 = s;
 
-        mark.setSize(w1 - World.size_tile / 4, World.size_tile);
+        mark.setSize(w1 - World.size_tile / 4f, World.size_tile);
         mark.setPosition((w - mark.getW()) / 2, 0);
 
         canvas.setSize(w1, h1);
         canvas.setPosition(x0, y0);
 
-        desc0.setSize(World.size_tile / 2, World.size_tile / 2);
+        desc0.setSize(World.size_tile / 2f, World.size_tile / 2f);
 
-        text_val.setPosition( w / 2, h / 2);
-        text_label.setPosition( w / 2, canvas.getY());
+        text_val.setPosition( w / 2f, h / 2f);
+        text_label.setPosition( w / 2f, canvas.getY());
 
         this.y0 = y0 + mark.getH() / 2 + 1;
         this.yd = Math.max(1, canvas.getH() - mark.getH() - 2);

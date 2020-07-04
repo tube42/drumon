@@ -123,15 +123,15 @@ public class Choice2Scene extends Scene
 
         mark.setSize(World.size_tile, World.size_tile);
         canvas.setSize(s, s);
-        canvas.setPosition((w - s) / 2, (h - s) / 2);
-        icon.setSize(World.size_tile / 2, World.size_tile / 2);
+        canvas.setPosition((w - s) / 2f, (h - s) / 2f);
+        icon.setSize(World.size_tile / 2f, World.size_tile / 2f);
 
         x0 = canvas.getX() + mark.getW() / 2 + 1;
         y0 = canvas.getY() + mark.getH() / 2 + 1;
         xd = Math.max(1, canvas.getW() - mark.getW() - 2);
         yd = Math.max(1, canvas.getH() - mark.getH() - 2);
 
-        label.setPosition( w / 2, canvas.getY());
+        label.setPosition( w / 2f, canvas.getY());
 
         choice_update();
     }

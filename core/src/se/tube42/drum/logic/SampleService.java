@@ -21,8 +21,8 @@ public final class SampleService
         dos.writeInt(0);
 
 
-        for(int i = 0; i < data.length; i++)
-            dos.writeShort((short)(data[i] * (1 << 15)));
+        for(float datum : data)
+            dos.writeShort((short)(datum * (1 << 15)));
 
         dos.flush();
         dos.close();

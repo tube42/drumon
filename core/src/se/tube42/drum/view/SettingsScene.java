@@ -53,8 +53,7 @@ public class SettingsScene extends Scene
 
     private void animate(boolean in_)
     {
-        for(int i = 0; i < buttons.length; i++) {
-            final ButtonItem bi = buttons[i];
+        for(final ButtonItem bi : buttons) {
             final float t = ServiceProvider.getRandom(0.3f, 0.5f);
             bi.set(BaseItem.ITEM_A, in_, 0.0f, 1f, t, null);
             bi.set(BaseItem.ITEM_S, in_, 0.8f, 1f, t / 2, TweenEquation.BACK_OUT);

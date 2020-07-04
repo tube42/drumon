@@ -94,15 +94,13 @@ public class SaveScene extends Scene
     private void animate(boolean in_)
     {
         // in animation:
-        for(int i = 0; i < saves.length; i++) {
-            final SaveItem si = saves[i];
+        for(final SaveItem si : saves) {
             final float t = ServiceProvider.getRandom(0.3f, 0.4f);
             si.set(BaseItem.ITEM_Y, in_, World.sh, si.y2 , t, TweenEquation.BACK_OUT);
             si.setImmediate(BaseItem.ITEM_X, si.x2);
         }
 
-        for(int i = 0; i < buttons.length; i++) {
-            final ButtonItem bi = buttons[i];
+        for(final ButtonItem bi : buttons) {
             final float t = ServiceProvider.getRandom(0.4f, 0.5f);
             bi.set(BaseItem.ITEM_A, in_, 0.0f, 1f, t / 2, null);
             bi.set(BaseItem.ITEM_Y, in_, -bi.getH(), bi.y2, t, TweenEquation.BACK_OUT);

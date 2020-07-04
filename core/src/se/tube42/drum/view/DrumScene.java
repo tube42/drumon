@@ -118,9 +118,9 @@ public class DrumScene extends Scene implements SequencerListener {
 			marker.setBeat(0);
 		} else {
 			reposition(false);
-			for (int i = 0; i < tiles.length; i++) {
+			for (BaseButton tile : tiles) {
 				final float t = ServiceProvider.getRandom(0.2f, 0.3f);
-				tiles[i].set(BaseItem.ITEM_A, 1).configure(t, null);
+				tile.set(BaseItem.ITEM_A, 1).configure(t, null);
 			}
 
 			// update beat right away, dont wait until the next one
@@ -132,9 +132,9 @@ public class DrumScene extends Scene implements SequencerListener {
 	}
 
 	public void onHide() {
-		for (int i = 0; i < tiles.length; i++) {
+		for (BaseButton tile : tiles) {
 			final float t = ServiceProvider.getRandom(0.2f, 0.3f);
-			tiles[i].set(BaseItem.ITEM_A, 0).configure(t, null);
+			tile.set(BaseItem.ITEM_A, 0).configure(t, null);
 		}
 	}
 

@@ -22,8 +22,8 @@ public class Sample
 
         // get the end of the biggest sample
         this.safe_end = 0;
-        for(int i = 0; i < data.length; i++) {
-            safe_end = Math.max(safe_end, data[i].length);
+        for(float[] datum : data) {
+            safe_end = Math.max(safe_end, datum.length);
         }
 
         stop();

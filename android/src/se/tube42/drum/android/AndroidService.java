@@ -57,11 +57,9 @@ public class AndroidService extends SystemService
     public void showMessage(final String msg)
     {
         try {
-            final Runnable r = new Runnable() {
-                public void run() {
-                    Toast t = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
-                    t.show();
-                }
+            final Runnable r = () -> {
+                Toast t = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
+                t.show();
             };
 
             activity.runOnUiThread(r);

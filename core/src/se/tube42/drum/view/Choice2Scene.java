@@ -181,8 +181,8 @@ public class Choice2Scene extends Scene
     private void choice_update()
     {
         // uppdate view
-        final float xn = (x - x_min) / (float) (x_max - x_min);
-        final float yn = (y - y_min) / (float) (y_max - y_min);
+        final float xn = (x - x_min) / (x_max - x_min);
+        final float yn = (y - y_min) / (y_max - y_min);
         final float x1 = x0 + xd * xn;
         final float y1 = y0 + yd * yn;
         mark.setImmediate(BaseItem.ITEM_X, x1 - mark.getW() / 2);

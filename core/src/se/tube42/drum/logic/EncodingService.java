@@ -99,7 +99,7 @@ public final class EncodingService
             return false;
 
         for(int i = 0; i < len; i++)
-            if( BASE64_STR.indexOf( (int)str.charAt(i)) < 0)
+            if( BASE64_STR.indexOf(str.charAt(i)) < 0)
                 return false;
 
         return true;

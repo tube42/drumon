@@ -188,9 +188,10 @@ public final class Constants
 
 	// colors & alphas
 	public static final int
-		COLOR_BG = 0x505050,
+		COLOR_BG = 0x909090,
 		COLOR_MARKER = 0xA02032,
 		COLOR_VOICES = 0xC29968,
+		COLOR_PADS = 0xffdd7f,
 
 
 		COLOR_SAVE = 0xFFFFFF,
@@ -206,20 +207,6 @@ public final class Constants
 		0x808022,
 	};
 
-
-	/* see
-	 * http://gamedev.stackexchange.com/questions/46463/is-there-an-optimum-set-of-colors-for-10-players/
-	 */
-	public static final int [] COLOR_PADS  = {
-		0x95bf7f,
-		0xffdd7f,
-		0xf33f7f,
-		0xffaebf,
-		0xc47f7f,
-		0x807f99,
-		0x807fc7,
-		0xff7fff,
-	};
 
 	public static final float
 		// ALPHA_NORMAL = 1,

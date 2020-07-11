@@ -55,6 +55,11 @@ public class DrumScene extends Scene implements SequencerListener {
 			final PadItem pi = new PadItem(TILE_PAD0);
 			pi.register(CLASS_PAD, i, false);
 			tiles[index] = tile_pads[i] = pi;
+
+			// set pad color and make the 4/8 adds a bit darker
+			final int c1 = COLOR_PADS;
+			final int c2 = ServiceProvider.mulColor(c1, 0.75f);
+			tile_pads[i].setColor((i & 1) == 0 ? c1 : c2);
 		}
 
 		// VOICES
@@ -226,11 +231,8 @@ public class DrumScene extends Scene implements SequencerListener {
 
 		item_msg.setText(str);
 		item_msg.setImmediate(BaseItem.ITEM_Y, y0);
-
 		item_msg.set(BaseItem.ITEM_X, x0 + dx, x0).configure(0.2f, null).pause(1).tail(x0 - dx).configure(0.2f, null);
-
 		item_msg.set(BaseItem.ITEM_Y, y0 + dy, y0).configure(0.2f, null).pause(1).tail(y0 - dy).configure(0.2f, null);
-
 		item_msg.set(BaseItem.ITEM_A, 0, 1).configure(0.2f, null).pause(1).tail(0).configure(0.2f, null);
 	}
 
@@ -297,14 +299,6 @@ public class DrumScene extends Scene implements SequencerListener {
 			World.prog.setVoice(voice);
 			for (int i = 0; i < VOICES; i++)
 				tile_voices[i].setAlpha(i == voice ? 1 : ALPHA_INACTIVE);
-
-			final int c = COLOR_PADS[voice];
-			ServiceProvider.setColorItem(c, World.bgc, 0f, 0.1f, 0.7f);
-
-			// set pad color and make the 4/8 adds a bit darker
-			final int c2 = ServiceProvider.mulColor(c, 0.75f);
-			for (int i = 0; i < PADS; i++)
-				tile_pads[i].setColor((i & 1) == 0 ? c : c2);
 		}
 
 		tile_voices[voice].animPress();
@@ -352,7 +346,7 @@ public class DrumScene extends Scene implements SequencerListener {
 			v2 = World.mixer.getEffectChain().isEnabled(2);
 			v3 = World.mixer.getEffectChain().isEnabled(3);
 			break;
-		case 3:			
+		case 3:
 			break;
 		}
 
@@ -617,7 +611,8 @@ public class DrumScene extends Scene implements SequencerListener {
 			mb_sample = 0;
 
 			// udpate beat marker
-			marker.setBeat(beat);
+			final float beat_time = Measure.beatTime(World.prog.getMeasure(), World.prog.getTempo(), World.prog.getTempoMultiplier());
+			marker.setBeat( beat, beat_time);
 			marker.flags |= BaseItem.FLAG_VISIBLE;
 
 			// mark played pad

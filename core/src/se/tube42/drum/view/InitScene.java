@@ -21,7 +21,7 @@ public class InitScene extends Scene implements Runnable {
 	public InitScene() {
 		super("loading");
 
-		ServiceProvider.setColorItem(0x909090, World.bgc, 0f, 1f, 0f); // light-gray background so we can see things
+		ServiceProvider.setColorItem(0xFFFFFF, World.bgc, 0f, 1f, 0f); // light-gray background so we can see things
 		load_first_assets();
 
 		text = new BaseText(World.font2);

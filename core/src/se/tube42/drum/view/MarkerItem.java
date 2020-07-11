@@ -32,20 +32,14 @@ public class MarkerItem extends SpriteItem
 
     public void setBeat(int b)
     {
+        setBeat(b, 0f);
+    }
+
+    public void setBeat(int b, float time)
+    {
         if(b == last) return;
-
         last = b;
-
         final PadItem t = pads[b];
-
-        setPosition(0.07f, t.getX(), t.getY());
-
-
-        set(ITEM_S, 0.9f).configure(0.1f, null)
-              .tail(1.1f).configure(0.1f, null)
-              .tail(1f).configure(0.1f, null);
-
-        set(ITEM_A, 0.9f).configure(0.1f, null)
-              .tail(1f).configure(0.2f, null);
+        setPosition(time, t.getX(), t.getY());
     }
 }

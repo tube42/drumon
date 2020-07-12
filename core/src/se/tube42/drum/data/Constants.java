@@ -121,16 +121,19 @@ public final class Constants
 	// ---------------------------------------
 
 	public static final String [][] SAMPLES = {
-		{ "kick2.au", "kick_hard.au", "BD1.au" },
-		{ "snare2.au", "SD2.au", "snare_supraphonic_hard.au", },
-		{ "floor_tom2.au", "HITOM4.au" },
-		{ "tamburin.au", "CLAPS.au", "Hi_Shk1.au" },
+		{ "kick2.au", "kick_hard.au", "BD1.au", "domingus-djembe-lo-1.au" },
+		{ "snare2.au", "SD2.au", "snare_supraphonic_hard.au", "domingus-djembe-mid-3.au"},
+		{ "floor_tom2.au", "HITOM4.au", "domingus-djembe-lo-1.au", "domingus-djembe-lo-king.au"},
+		{ "tamburin.au", "CLAPS.au", "Hi_Shk1.au", "domingus-djembe-hi-1.au" },
 
-		{ "side_stick1.au", "CHOICE_BITS_COWBELL.au","RIM.au" },
+		{ "side_stick1.au", "CHOICE_BITS_COWBELL.au", "RIM.au", "domingus-djembe-hi-2.au" },
 		{ "closed_hat_hard.au", "HIGH_HAT_closed_soft.au", "CLHIHAT2.au" },
 		{ "semi_open_hat.au", "open_hat4.au", "OPHIHAT2.au" },
 		{ "ride_centre2.au", "RIDE5.au" },
 	};
+
+
+
 
 	public static final float [] DEF_AMPS = {
 		1.5f, 1.0f, 0.8f, 0.7f,
@@ -157,7 +160,7 @@ public final class Constants
 		TOOL_FX_LOFI = 8,
 		TOOL_FX_FILTER = 9,
 		TOOL_FX_DELAY = 10,
-		TOOL_FX_COMP = 11,			
+		TOOL_FX_COMP = 11,
 		TOOL_MISC_SAVE = 12,
 		TOOL_MISC_SETTINGS = 14,
 		TOOL_MISC_ABOUT = 15

@@ -1,0 +1,3 @@
+Use your smartphone as a drum machine.
+
+Simple and minimalist drum app that can, for example, be used to accompany guitar or bass players.

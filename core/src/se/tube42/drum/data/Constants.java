@@ -112,8 +112,9 @@ public final class Constants
 		ICON_68 = 35,
 		ICON_4x3 = 36,
 
-		ICON_DECALS_1 = 56,
-		ICON_DECALS_A = 60
+		ICON_SOUND_SELECT = 40,
+		ICON_SOUND_SELECT_TEMPLATE = 48,
+		ICON_PATTERN_SELECT = 56
 		;
 
 	// ---------------------------------------
@@ -121,12 +122,12 @@ public final class Constants
 	// ---------------------------------------
 
 	public static final String [][] SAMPLES = {
-		{ "kick2.au", "kick_hard.au", "BD1.au", "domingus-djembe-lo-1.au" },
-		{ "snare2.au", "SD2.au", "snare_supraphonic_hard.au", "domingus-djembe-mid-3.au"},
+		{ "kick2.au", "kick_hard.au", "BD1.au", "domingus-djembe-lo-1.au", "domingus-djembe-lo-king.au" },
+		{ "snare2.au", "SD2.au", "snare_supraphonic_hard.au", "domingus-djembe-hi-1.au", "domingus-djembe-hi-2.au" },
 		{ "floor_tom2.au", "HITOM4.au", "domingus-djembe-lo-1.au", "domingus-djembe-lo-king.au"},
-		{ "tamburin.au", "CLAPS.au", "Hi_Shk1.au", "domingus-djembe-hi-1.au" },
+		{ "tamburin.au", "CLAPS.au", "Hi_Shk1.au",  "domingus-djembe-hi-1.au", "domingus-djembe-hi-2.au" },
 
-		{ "side_stick1.au", "CHOICE_BITS_COWBELL.au", "RIM.au", "domingus-djembe-hi-2.au" },
+		{ "side_stick1.au", "CHOICE_BITS_COWBELL.au", "RIM.au", "domingus-djembe-mid-3.au" },
 		{ "closed_hat_hard.au", "HIGH_HAT_closed_soft.au", "CLHIHAT2.au" },
 		{ "semi_open_hat.au", "open_hat4.au", "OPHIHAT2.au" },
 		{ "ride_centre2.au", "RIDE5.au" },

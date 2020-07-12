@@ -25,15 +25,19 @@ public class VoiceItem extends PressItem
 		ANIM_DOWN = 2,
 		ANIM_UP = 3
 		;
+    private TextureRegion [] tex_decals;
+    private int dec0, dec1, dec2;
+    private boolean active;
 
-    private int dec0, dec1;
-
-    public VoiceItem(int icon, int color)
+    public VoiceItem(TextureRegion [] tex_decals, int variations, int icon, int color)
     {
         super(TILE_BUTTON0, icon, color);
 
-		dec0 = dec1 = -1;
-		setAnimType(ANIM_NORMAL);
+        this.tex_decals = tex_decals;
+        this.dec0 = ICON_SOUND_SELECT_TEMPLATE + variations - 1;
+        dec1 = dec2 = -1;
+        active = false;
+        setAnimType(ANIM_NORMAL);
     }
 
     public void animPress()
@@ -76,17 +80,22 @@ public class VoiceItem extends PressItem
 
     public void setVariant(int sample, int bank)
     {
-        dec0 = sample == 0 ? -1 : ICON_DECALS_1 + sample;
-        dec1 = bank == 0 ? -1 : ICON_DECALS_A + 1;
+        dec1 = ICON_SOUND_SELECT + sample;
+        dec2 = bank == 0 ? -1 : ICON_PATTERN_SELECT + bank;
+    }
+
+    public void setActive(boolean active) {
+        super.setActive(active);
+        this.active = active;
     }
 
 
     public void draw(SpriteBatch sb)
     {
         super.draw(sb);
-        final float hp = World.halfpixel;
 
-        if(dec0 != -1 || dec1 != -1) {
+        // draw decals if this voice is active
+        if(active) {
             final float a = getAlpha();
             final float s = getScale();
             final float x = getX() + get(ITEM_V);
@@ -94,27 +103,16 @@ public class VoiceItem extends PressItem
             final float r = getRotation();
             final float w2 = w / 2;
             final float h2 = h / 2;
-            final float w4 = w / 4;
-            final float h4 = h / 4;
+            final float hp = World.halfpixel;
 
-            if(dec0 != -1) {
-                sb.draw(World.tex_icons[dec0],
-                        x + hp, h2 + y + hp,
-                        w4, h4,
-                        w2, h2,
-                        s, s, r);
-            }
+            sb.setColor(1, 1, 1, a);
 
-            if(dec1 != -1) {
-                sb.draw(World.tex_icons[dec1],
-                        w2 + x + hp, y + hp,
-                        w4, h4,
-                        w2, h2,
-                        s, s, r);
-            }
-
+            if(dec0 != -1)
+                sb.draw(tex_decals[dec0], x + hp, y + hp, w2, h2, w, h, s, s, r);
+            if(dec1 != -1)
+                sb.draw(tex_decals[dec1], x + hp, y + hp, w2, h2, w, h, s, s, r);
+            if(dec2 != -1)
+                sb.draw(tex_decals[dec2], x + hp, y + hp, w2, h2, w, h, s, s, r);
         }
     }
-
-
 }

@@ -65,7 +65,8 @@ public class DrumScene extends Scene implements SequencerListener {
 		// VOICES
 		tile_voices = new VoiceItem[VOICES];
 		for (int i = 0; i < VOICES; i++, index++) {
-			final VoiceItem vi = new VoiceItem(ICON_KICK + i, COLOR_VOICES);
+			final int variations = SAMPLES[i].length;
+			final VoiceItem vi = new VoiceItem(World.tex_icons, variations, ICON_KICK + i, COLOR_VOICES);
 			vi.register(CLASS_VOICE, i, true);
 			tiles[index] = tile_voices[i] = vi;
 		}
@@ -298,7 +299,7 @@ public class DrumScene extends Scene implements SequencerListener {
 		} else {
 			World.prog.setVoice(voice);
 			for (int i = 0; i < VOICES; i++)
-				tile_voices[i].setAlpha(i == voice ? 1 : ALPHA_INACTIVE);
+				tile_voices[i].setActive(i == voice);
 		}
 
 		tile_voices[voice].animPress();

@@ -3,62 +3,28 @@ package se.tube42.drum.android;
 import android.app.*;
 import android.widget.*;
 import android.text.*;
-import android.content.ClipboardManager;
-// import android.content.ClipData;
+
 import android.content.*;
 import android.net.*;
 
+import java.io.*;
+
 import se.tube42.drum.logic.*;
+import se.tube42.drum.util.*;
 
-public class AndroidService extends SystemService
-{
-    private Activity activity;
-    private ClipboardManager cman;
+public class AndroidService extends SystemService {
+    private MainActivity activity;
 
-    public AndroidService(Activity activity)
-    {
+    public AndroidService(MainActivity activity) {
         this.activity = activity;
-        this.cman = (ClipboardManager)
-              activity.getSystemService(Context.CLIPBOARD_SERVICE);
     }
 
-
-    // -----------------------------------------------------
-
-    public void showURL(String url)
-    {
+    public void showURL(String url) {
         Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         activity.startActivity(browser);
     }
 
-    public boolean setClipboard(String text)
-    {
-        try {
-            cman.setPrimaryClip( ClipData.newPlainText("drumon data", text) );
-            return true;
-        } catch(Exception e) {
-            System.err.println(e);
-            return false;
-        }
-    }
-
-    public String getClipboard()
-    {
-        try {
-            final ClipData clip = cman.getPrimaryClip();
-            if(clip != null) {
-                final ClipData.Item item = clip.getItemAt(0);
-                final CharSequence text = item.getText();
-                return text == null ? null : text.toString();
-            }
-        } catch(Exception e) {
-            System.err.println(e);
-        }
-        return null;
-    }
-
-    public void showMessage(final String msg)
-    {
+    public void showMessage(final String msg) {
         try {
             final Runnable r = new Runnable() {
                 public void run() {
@@ -68,9 +34,18 @@ public class AndroidService extends SystemService
             };
 
             activity.runOnUiThread(r);
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println(e);
         }
     }
 
+    @Override
+    public void writeFile(String suggestedName, String mimeType, Work<OutputStream> w) {
+        activity.writeFile(suggestedName, mimeType, w);
+    }
+
+    @Override
+    public void readFile(String suggestedName, String mimeType, Work<InputStream> r) {
+        activity.readFile(suggestedName, mimeType, r);
+    }
 }

@@ -47,13 +47,6 @@ public final class Constants
 		PADS = 4 * 4 * 2
 		;
 
-	public static final int
-		MEASURE_44 = 0,
-		MEASURE_34 = 1,
-		MEASURE_88 = 2,
-		MEASURE_68 = 3
-		;
-
 	// effect chain
 	public static final int
 		FX_LOFI = 0,
@@ -107,10 +100,6 @@ public final class Constants
 
 
 		ICON_44 = 32,
-		ICON_48 = 33,
-		ICON_34 = 34,
-		ICON_68 = 35,
-		ICON_4x3 = 36,
 
 		ICON_SOUND_SELECT = 40,
 		ICON_SOUND_SELECT_TEMPLATE = 48,

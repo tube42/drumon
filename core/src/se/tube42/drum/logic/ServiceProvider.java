@@ -35,13 +35,13 @@ public class ServiceProvider
     public static void autoLoad()
     {
 		SettingsService.load();
-        if(World.prog != null)
+        if(World.dm != null)
             SaveService.load(-1);
     }
 
     public static void autoSave()
     {
-        if(World.prog != null)
+        if(World.dm != null)
 			SaveService.save(-1);
 		SettingsService.save();
     }

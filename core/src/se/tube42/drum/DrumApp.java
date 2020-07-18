@@ -37,7 +37,7 @@ public class DrumApp extends BaseApp {
 		World.mgr.setScene(new InitScene() );
 
 		// TEMP until we fix the code handling back:
-		Gdx.input.setCatchBackKey(false);		
+		Gdx.input.setCatchBackKey(false);
 	}
 
 	public void onUpdate(float dt, long dtl) {
@@ -55,8 +55,8 @@ public class DrumApp extends BaseApp {
 		ServiceProvider.autoSave();
 		if (!Settings.bg_play) {
 			World.mgr.onPause();
-			if(World.mixer != null)
-				World.mixer.stop();
+			if(World.dm != null)
+				World.dm.mixer.stop();
 		}
 		super.pause();
 	}
@@ -64,8 +64,8 @@ public class DrumApp extends BaseApp {
 	@Override
 	public void resume() {
 		super.resume();
-		if(World.mixer != null)
-			World.mixer.start();
+		if(World.dm != null)
+			World.dm.mixer.start();
 		World.mgr.onResume();
 
 	}
@@ -75,11 +75,11 @@ public class DrumApp extends BaseApp {
 
 		// assuming we allowed bg-play, we might need to update stop music now
 		World.mgr.onPause();
-		if(World.mixer != null)  {
-			World.mixer.stop();
-			World.mixer.dispose();
+		if(World.dm != null)  {
+			World.dm.mixer.stop();
+			World.dm.mixer.dispose();
 		}
-		
+
 		super.dispose();
 	}
 }

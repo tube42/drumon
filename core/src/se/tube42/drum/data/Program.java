@@ -1,7 +1,6 @@
 
 package se.tube42.drum.data;
 
-import se.tube42.lib.util.*;
 import static se.tube42.drum.data.Constants.*;
 
 /*
@@ -21,14 +20,12 @@ public class Program extends Parameters
     private int bank_active;
     private int [] sample_variants;
     private int voice;
-    private int flags;
     private float [] default_amps;
 
     public Program(float [] amps)
     {
         super(2 + 2 * VOICES);
         this.default_amps = amps;
-        this.flags = 0;
         this.data = new int[VOICE_BANKS][VOICES];
         this.sample_variants = new int[VOICES];
 
@@ -73,24 +70,6 @@ public class Program extends Parameters
             return "multiplicate";
         else
             return null;
-    }
-    // flags
-    public int getRawFlags()
-    {
-        return flags;
-    }
-    public void setRawFlags(int flags)
-    {
-        this.flags = flags;
-    }
-    public int getMeasure()
-    {
-        return flags & 7;
-    }
-
-    public void setMeasure(int s)
-    {
-        flags =  (s & 7) | ( flags & ~7);
     }
 
     //

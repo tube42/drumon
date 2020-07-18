@@ -111,10 +111,8 @@ public class InitScene extends Scene implements Runnable {
 			}
 
 			// create mixer etc
-			World.prog = new Program(DEF_AMPS);
-			World.seq = new Sequencer(World.prog);
 			final DeviceOutput dev = new DeviceOutput();
-			World.mixer = new Mixer(dev);
+			World.dm = new DrumMachine(World.sounds, dev);
 
 			// create the scenes
 			World.scene_drum = new DrumScene();
@@ -126,7 +124,6 @@ public class InitScene extends Scene implements Runnable {
 
 			// and lets start things...
 			World.mgr.setScene(World.scene_drum);
-			World.mixer.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(20);

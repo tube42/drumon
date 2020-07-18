@@ -22,18 +22,25 @@ public final class Mixer implements Runnable, Disposable {
     private volatile boolean stopped;
 
     private Output output;
-    private EffectChain chain;
+    private Sequencer seq;
+    private Sample[] sounds;
+    private EffectChain effects;
 
-    public Mixer(Output output) {
+
+    public Mixer(Sequencer seq, EffectChain effects, Sample[] sounds, Output output) {
+        this.seq = seq;
+        this.effects = effects;
+        this.sounds = sounds;
+        this.output = output;
+
         this.buffer_size = (World.samples + SIMD_WIDTH - 1) & ~(SIMD_WIDTH - 1);
         this.buffer = new float[buffer_size];
-        System.out.println("MIXER: buffer-size=" + buffer_size + " SIMD-width=" + SIMD_WIDTH);
-        this.output = output;
-        this.chain = new EffectChain();
         this.thread = null;
+
+        System.out.println("MIXER: buffer-size=" + buffer_size + " SIMD-width=" + SIMD_WIDTH);
     }
 
-    public void start() {
+	public void start() {
         if (thread == null) {
             System.out.println("MIXER: started " + stopped);
             stopped = false;
@@ -54,10 +61,6 @@ public final class Mixer implements Runnable, Disposable {
 
     // ---------------------------------------------------------
 
-    public EffectChain getEffectChain() {
-        return chain;
-    }
-
     public Output getOutput() {
         return output;
     }
@@ -74,16 +77,16 @@ public final class Mixer implements Runnable, Disposable {
         }
         // feed samples and check with sequencer
         for (int samples = 0; samples < buffer_size;) {
-            int spent = World.seq.update(buffer_size - samples);
-            for (int i = 0; i < World.sounds.length; i++) {
-                World.sounds[i].write(buffer, samples, spent);
+            int spent = seq.update(buffer_size - samples);
+            for (int i = 0; i < sounds.length; i++) {
+                sounds[i].write(buffer, samples, spent);
             }
 
             samples += spent;
         }
 
         // process effects
-        chain.process(buffer, 0, buffer_size);
+        effects.process(buffer, 0, buffer_size);
     }
 
     public void run() {

@@ -61,7 +61,7 @@ public class SaveScene extends Scene {
         super.onShow();
 
         // save current data & cleat temp
-        restore_data = SaveService.currentToString();
+        restore_data = SaveService.drumMachineToString(World.dm);
         temp_data = null;
 
         // no save selected for now
@@ -218,7 +218,7 @@ public class SaveScene extends Scene {
         // temp load song if it has any
         temp_data = SaveService.getSave(index);
         if (temp_data != null)
-            if (!SaveService.stringToCurrent(temp_data))
+            if (!SaveService.drumMachineFromString(World.dm, temp_data))
                 temp_data = null; // cant load this?
 
         update_saves();
@@ -298,7 +298,7 @@ public class SaveScene extends Scene {
 
     public void go_back() {
         // restore data before going back
-        SaveService.stringToCurrent(restore_data);
+        SaveService.drumMachineFromString(World.dm, restore_data);
         World.mgr.setScene(World.scene_drum, 200);
     }
 

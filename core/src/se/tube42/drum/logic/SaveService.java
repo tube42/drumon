@@ -70,10 +70,11 @@ public final class SaveService {
     // -----------------------------------------------------------
 
     // serialize current program
-    public static String currentToString() {
+    public static String drumMachineToString(DrumMachine dm) {
         try {
-            final Program p = World.prog;
-            final EffectChain fx = World.mixer.getEffectChain();
+            final Program p = dm.prog;
+            final EffectChain fx = dm.effects;
+            final TimeSignature ts = dm.ts;
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             DataOutputStream dos = new DataOutputStream(baos);
 
@@ -85,12 +86,12 @@ public final class SaveService {
 
             dos.writeInt(fileflags);
 
-            // serialize p
+            // serialize p & ts
             dos.writeInt(p.getRawBanks());
             dos.writeShort(p.getTempo());
             dos.writeByte(p.getTempoMultiplier());
             dos.writeByte(p.getVoice());
-            dos.writeInt(p.getRawFlags());
+            dos.writeInt(ts.getTimeSignature() );
 
             for (int i = 0; i < VOICES; i++) {
                 final int banks = p.getUsedBanks(i);
@@ -131,7 +132,7 @@ public final class SaveService {
     }
 
     // load current program from a string
-    public static boolean stringToCurrent(String str) {
+    public static boolean drumMachineFromString(DrumMachine dm, String str) {
         if (!isValidSave(str))
             return false;
 
@@ -139,8 +140,9 @@ public final class SaveService {
         str = str.trim().substring(HEADER.length(), str.length() - CHECKSUM_SIZE);
 
         try {
-            final Program p = World.prog;
-            final EffectChain fx = World.mixer.getEffectChain();
+            final Program p = dm.prog;
+            final EffectChain fx = dm.effects;
+            final TimeSignature ts = dm.ts;
 
             byte[] bytes = EncodingService.decode64(str);
             if (bytes == null) {
@@ -159,7 +161,7 @@ public final class SaveService {
             p.setTempo(dis.readShort());
             p.setTempoMultiplier(dis.readByte());
             p.setVoice(dis.readByte());
-            p.setRawFlags(dis.readInt());
+            ts.setTimeSignature(dis.readInt());
 
             for (int i = 0; i < VOICES; i++) {
                 final int voiceflags = dis.readInt();
@@ -206,7 +208,7 @@ public final class SaveService {
 
     // save this
     public static boolean save(int num) {
-        final String data = currentToString();
+        final String data = drumMachineToString(World.dm);
         if (data != null) {
             setSave(num, data);
             return true;
@@ -218,6 +220,6 @@ public final class SaveService {
     // load from a save
     public static boolean load(int num) {
         final String str = getSave(num);
-        return str == null ? false : stringToCurrent(str);
+        return str == null ? false : drumMachineFromString(World.dm, str);
     }
 }

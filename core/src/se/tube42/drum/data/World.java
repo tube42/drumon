@@ -49,9 +49,7 @@ public final class World extends UIC
 	public static AboutScene scene_about;
     public static SettingsScene scene_settings;
 
-    public static TempoDetector td = new TempoDetector();
-    public static Program prog;
-    public static Sequencer seq;
-    public static Mixer mixer;
     public static Sample [] sounds;
+    public static TempoDetector td = new TempoDetector();
+    public static DrumMachine dm;
 }

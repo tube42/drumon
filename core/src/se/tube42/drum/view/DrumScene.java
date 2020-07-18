@@ -39,10 +39,16 @@ public class DrumScene extends Scene implements SequencerListener {
 	private boolean first;
 	private volatile int mb_beat, mb_sample; // seq state posted from the other thread
 
+	private DrumMachine dm;
+
 	public DrumScene() {
 		super("drum");
 
-		World.seq.setListener(this);
+		this.dm = World.dm;
+
+		dm.seq.setListener(this);
+		dm.mixer.start();
+
 
 		ServiceProvider.setColorItem(COLOR_BG, World.bgc, 0f, 1f, 2f);
 
@@ -137,11 +143,11 @@ public class DrumScene extends Scene implements SequencerListener {
 			}
 
 			// update beat right away, dont wait until the next one
-			marker.setBeat(World.seq.getBeat());
+			marker.setBeat(dm.seq.getBeat());
 		}
 
 		// this is needed since the animation code above has removed or alpha change:
-		select_sound(World.prog.getVoice(), true);
+		select_sound(dm.prog.getVoice(), true);
 	}
 
 	public void onHide() {
@@ -154,13 +160,26 @@ public class DrumScene extends Scene implements SequencerListener {
 	private void reposition(boolean animate) {
 		final int w = World.sw;
 		final int h = World.sh;
-		final int m = World.prog.getMeasure();
 
-		// position pads:
-		if (m == MEASURE_88 || m == MEASURE_68) {
+
+		// This is annoyingly complex: position pads based on time signature etc.
+		final TimeSignature ts = dm.ts;
+		final int padsize = ts.isQuaver() ? World.size_pad2 : World.size_pad1;
+
+		for (int i = 0; i < PADS; i++) {
+			tile_pads[i].setSize(padsize, padsize);
+
+			if(!ts.beatPlays(i)) // hide the ones that are not visible:
+				tile_pads[i].flags &= ~BaseItem.FLAG_VISIBLE;
+			else
+				tile_pads[i].flags |= BaseItem.FLAG_VISIBLE;
+		}
+
+
+		if(ts.isQuaver()) { // 6/8 and 8/8
 			marker.setSize(World.size_pad2, World.size_pad2);
-			final int x0 = World.x0_pad2 + (m == MEASURE_68 ? World.stripe_pad2_x : 0);
-			final int y0 = World.y0_pad2;
+			final int x0 = World.x0_pad2 + (ts.getColumns() < 8 ? World.stripe_pad2_x : 0);
+			final int y0 = World.y0_pad2 - (ts.getRows() < 4 ? World.size_pad2 / 2: 0);
 			for (int y = 0; y < 4; y++) {
 				for (int x = 0; x < 8; x++) {
 					final PadItem pad = tile_pads[x + y * 8];
@@ -169,10 +188,10 @@ public class DrumScene extends Scene implements SequencerListener {
 					pad.y2 = y0 + World.stripe_pad2_y * (3 - y);
 				}
 			}
-		} else { // MEASURE_44 or MEASURE_34
+		} else { // 3/4 and 4/4
 			marker.setSize(World.size_pad1, World.size_pad1);
-			final int x0 = World.x0_pad1 + (m == MEASURE_34 ? World.stripe_pad1 / 2 : 0);
-			final int y0 = World.y0_pad1;
+			final int x0 = World.x0_pad1 + (ts.getColumns() < 4 ? World.stripe_pad1 / 2 : 0);
+			final int y0 = World.y0_pad1 - (ts.getRows() < 4 ? World.stripe_pad1 / 2: 0);
 			for (int y = 0; y < 4; y++) {
 				for (int x = 0; x < 8; x++) {
 					final PadItem pad = tile_pads[x + y * 8];
@@ -183,13 +202,6 @@ public class DrumScene extends Scene implements SequencerListener {
 			}
 		}
 
-		// hide the ones that are not visible:
-		for (int i = 0; i < PADS; i++) {
-			if (!Measure.plays(m, i))
-				tile_pads[i].flags &= ~BaseItem.FLAG_VISIBLE;
-			else
-				tile_pads[i].flags |= BaseItem.FLAG_VISIBLE;
-		}
 
 		// position the rest
 		for (int y = 0; y < 4; y++) {
@@ -240,8 +252,8 @@ public class DrumScene extends Scene implements SequencerListener {
 	// ------------------------------------------------
 	// PADS
 	private void update_pad(int pad) {
-		final int voice = World.prog.getVoice();
-		tile_pads[pad].setTile(World.prog.get(voice, pad) ? TILE_PAD1 : TILE_PAD0);
+		final int voice = dm.prog.getVoice();
+		tile_pads[pad].setTile(dm.prog.get(voice, pad) ? TILE_PAD1 : TILE_PAD0);
 	}
 
 	private void update_pads() {
@@ -250,21 +262,20 @@ public class DrumScene extends Scene implements SequencerListener {
 	}
 
 	private void clear_pads(int voice, boolean allbanks) {
-		World.prog.clear(voice, allbanks);
+		dm.prog.clear(voice, allbanks);
 	}
 
 	private void shuffle_pads(int voice) {
-		final int m = World.prog.getMeasure();
 		for (int i = 0; i < PADS * 5;) {
 			int a = ServiceProvider.getRandomInt(PADS);
 			int b = ServiceProvider.getRandomInt(PADS);
 
 			// dont touch them if they are not playable in current metre
-			if (!Measure.plays(m, a) || !Measure.plays(m, b))
+			if (!dm.ts.beatPlays(a) || !dm.ts.beatPlays(b))
 				continue;
 
 			i++;
-			if (World.prog.get(voice, a) && !World.prog.get(voice, b)) {
+			if (dm.prog.get(voice, a) && !dm.prog.get(voice, b)) {
 				select_pad(voice, a);
 				select_pad(voice, b);
 			}
@@ -272,9 +283,9 @@ public class DrumScene extends Scene implements SequencerListener {
 	}
 
 	private void select_pad(int voice, int pad) {
-		World.prog.set(voice, pad, !World.prog.get(voice, pad));
+		dm.prog.set(voice, pad, !dm.prog.get(voice, pad));
 		tile_pads[pad].animPress();
-		if (voice == World.prog.getVoice())
+		if (voice == dm.prog.getVoice())
 			update_pad(pad);
 	}
 
@@ -283,21 +294,21 @@ public class DrumScene extends Scene implements SequencerListener {
 
 	private void update_sounds() {
 		for (int i = 0; i < VOICES; i++) {
-			tile_voices[i].setVariant(World.prog.getSampleVariant(i), World.prog.getBank(i));
+			tile_voices[i].setVariant(dm.prog.getSampleVariant(i), dm.prog.getBank(i));
 		}
 	}
 
 	private void select_sound(int voice, boolean force) {
-		final int old_voice = World.prog.getVoice();
+		final int old_voice = dm.prog.getVoice();
 
 		if (!force && old_voice == voice) {
 			final int max = World.sounds[voice].getNumOfVariants();
-			int next = 1 + World.prog.getSampleVariant(voice);
+			int next = 1 + dm.prog.getSampleVariant(voice);
 			if (next >= max)
 				next = 0;
-			World.prog.setSampleVariant(voice, next);
+			dm.prog.setSampleVariant(voice, next);
 		} else {
-			World.prog.setVoice(voice);
+			dm.prog.setVoice(voice);
 			for (int i = 0; i < VOICES; i++)
 				tile_voices[i].setActive(i == voice);
 		}
@@ -308,15 +319,15 @@ public class DrumScene extends Scene implements SequencerListener {
 
 	private void longpress_sound(int voice) {
 		// long press on voice => change voice volume
-		get_choice(World.prog, ICON_KICK + voice, Program.PARAM_VOLUME_VAR_n + voice, Program.PARAM_VOLUME_n + voice);
+		get_choice(dm.prog, ICON_KICK + voice, Program.PARAM_VOLUME_VAR_n + voice, Program.PARAM_VOLUME_n + voice);
 	}
 
 	// ------------------------------------------------
 	// TOOLS
 
 	private void update_tools(boolean modechange) {
-		final Sequencer seq = World.seq;
-		final Program prog = World.prog;
+		final Sequencer seq = dm.seq;
+		final Program prog = dm.prog;
 		final int voice = prog.getVoice();
 
 		boolean v0, v1, v2, v3;
@@ -339,13 +350,13 @@ public class DrumScene extends Scene implements SequencerListener {
 			break;
 		case 1:
 			i0 = prog.getBank(voice) == 0 ? ICON_A : ICON_B;
-			i3 = ICON_44 + prog.getMeasure();
+			i3 = ICON_44 + dm.ts.getTimeSignature();
 			break;
 		case 2:
-			v0 = World.mixer.getEffectChain().isEnabled(0);
-			v1 = World.mixer.getEffectChain().isEnabled(1);
-			v2 = World.mixer.getEffectChain().isEnabled(2);
-			v3 = World.mixer.getEffectChain().isEnabled(3);
+			v0 = dm.effects.isEnabled(0);
+			v1 = dm.effects.isEnabled(1);
+			v2 = dm.effects.isEnabled(2);
+			v3 = dm.effects.isEnabled(3);
 			break;
 		case 3:
 			break;
@@ -359,7 +370,7 @@ public class DrumScene extends Scene implements SequencerListener {
 	}
 
 	private void select_tool(int id) {
-		final int voice = World.prog.getVoice();
+		final int voice = dm.prog.getVoice();
 		final int op = TOOLS * mode + id;
 		String msg = null;
 		boolean tmp;
@@ -368,31 +379,31 @@ public class DrumScene extends Scene implements SequencerListener {
 
 		switch (op) {
 		case TOOL_TEMPO_MUL:
-			int n = World.prog.getTempoMultiplier() + 1;
+			int n = dm.prog.getTempoMultiplier() + 1;
 			if (n > MAX_TEMPO_MUL)
 				n = MIN_TEMPO_MUL;
-			World.prog.setTempoMultiplier(n);
+			dm.prog.setTempoMultiplier(n);
 			break;
 
 		case TOOL_TEMPO_DETECT:
 			if (World.td.add()) {
-				World.prog.setTempo(World.td.get());
+				dm.prog.setTempo(World.td.get());
 				msg_show("" + World.td.get(), 0, -1);
 			}
 			break;
 
 		case TOOL_TEMPO_SET:
-			get_choice(World.prog, ICON_METRONOME, Program.PARAM_TEMPO, -1);
+			get_choice(dm.prog, ICON_METRONOME, Program.PARAM_TEMPO, -1);
 			break;
 
 		case TOOL_TEMPO_PAUSE:
-			if(World.seq.isPaused() && Settings.pause_restart)
-				World.seq.restart();
-			World.seq.setPause(!World.seq.isPaused());
+			if(dm.seq.isPaused() && Settings.pause_restart)
+				dm.seq.restart();
+			dm.seq.setPause(!dm.seq.isPaused());
 			break;
 
 		case TOOL_SEQ_AB:
-			World.prog.setBank(voice, 1 ^ World.prog.getBank(voice));
+			dm.prog.setBank(voice, 1 ^ dm.prog.getBank(voice));
 			break;
 
 		case TOOL_SEQ_SHUFFLE:
@@ -401,28 +412,29 @@ public class DrumScene extends Scene implements SequencerListener {
 			break;
 
 		case TOOL_SEQ_MEASURE:
-			World.prog.setMeasure(Measure.getNextMeasure(World.prog.getMeasure()));
+			dm.ts.nextTimeSignature();
+			// dm.prog.setMeasure(Hypermeasure.getNextMeasure(dm.prog.getMeasure()));
 			update(false, false, true, false);
 			reposition(false);
 			return;
 
 		case TOOL_FX_LOFI:
-			tmp = World.mixer.getEffectChain().toggle(0);
+			tmp = dm.effects.toggle(0);
 			msg = "lo-fi effect " + (tmp ? "on" : "off");
 			break;
 
 		case TOOL_FX_FILTER:
-			tmp = World.mixer.getEffectChain().toggle(1);
+			tmp = dm.effects.toggle(1);
 			msg = "filter effect " + (tmp ? "on" : "off");
 			break;
 
 		case TOOL_FX_DELAY:
-			tmp = World.mixer.getEffectChain().toggle(2);
+			tmp = dm.effects.toggle(2);
 			msg = "delay effect " + (tmp ? "on" : "off");
 			break;
 
 		case TOOL_FX_COMP:
-			tmp = World.mixer.getEffectChain().toggle(3);
+			tmp = dm.effects.toggle(3);
 			msg = "compressor " + (tmp ? "on" : "off");
 			break;
 
@@ -451,7 +463,7 @@ public class DrumScene extends Scene implements SequencerListener {
 
 	private void longpress_tool(int id) {
 		final int op = TOOLS * mode + id;
-		final EffectChain ef = World.mixer.getEffectChain();
+		final EffectChain ef = dm.effects;
 		String msg = null;
 
 		tile_tools[id].animPress();
@@ -474,7 +486,7 @@ public class DrumScene extends Scene implements SequencerListener {
 			break;
 
 		case TOOL_TEMPO_DETECT:
-			World.prog.setTempo(120);
+			dm.prog.setTempo(120);
 			msg_show("120", 0, -1);
 			break;
 
@@ -487,8 +499,8 @@ public class DrumScene extends Scene implements SequencerListener {
 		case TOOL_SEQ_CLEAR:
 			for (int i = 0; i < VOICES; i++)
 				clear_pads(i, true);
-			World.prog.reset();
-			World.mixer.getEffectChain().reset();
+			dm.prog.reset();
+			dm.effects.reset();
 			select_sound(0, true);
 
 			msg = "Cleared song";
@@ -533,7 +545,7 @@ public class DrumScene extends Scene implements SequencerListener {
 	private void onEnter(BaseButton hit, boolean pressed) {
 		switch (hit.class_) {
 		case CLASS_PAD:
-			select_pad(World.prog.getVoice(), hit.id);
+			select_pad(dm.prog.getVoice(), hit.id);
 			break;
 		}
 	}
@@ -612,13 +624,13 @@ public class DrumScene extends Scene implements SequencerListener {
 			mb_sample = 0;
 
 			// udpate beat marker
-			final float beat_time = Measure.beatTime(World.prog.getMeasure(), World.prog.getTempo(), World.prog.getTempoMultiplier());
+			final float beat_time = dm.ts.beatTime(dm.prog.getTempo(), dm.prog.getTempoMultiplier());
 			marker.setBeat( beat, beat_time);
 			marker.flags |= BaseItem.FLAG_VISIBLE;
 
 			// mark played pad
 			if (samples != 0) {
-				final int mask = 1 << World.prog.getVoice();
+				final int mask = 1 << dm.prog.getVoice();
 				if ((samples & mask) != 0) {
 					tile_pads[beat].animAction(0);
 				}

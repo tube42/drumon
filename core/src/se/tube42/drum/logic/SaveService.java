@@ -31,6 +31,12 @@ public final class SaveService {
         return StorageService.load(SAVE_NAME + "." + num, null);
     }
 
+    public static void deleteSave(int num) {
+
+        // NOT IMPLEMENTED:
+        // StorageService.delete(SAVE_NAME + "." + num);
+    }
+
     public static void setSave(int num, String data) {
         if (data != null) {
             StorageService.save(SAVE_NAME + "." + num, data);

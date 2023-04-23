@@ -58,6 +58,11 @@ public class ButtonItem extends PadItem
         }
     }
 
+    public String getText()
+    {
+        return text.getText();
+    }
+
     public void draw(SpriteBatch sb)
     {
         super.draw(sb);

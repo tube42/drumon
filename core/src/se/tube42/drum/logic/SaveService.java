@@ -28,13 +28,15 @@ public final class SaveService {
     // -----------------------------------------------------------
 
     public static String getSave(int num) {
-        return StorageService.load(SAVE_NAME + "." + num, null);
+        String tmp = StorageService.load(SAVE_NAME + "." + num, null);
+
+        if(tmp != null && "".equals(tmp)) // workaround because there is no StorageService.delete() to delete saves
+            tmp = null;
+        return tmp;
     }
 
     public static void deleteSave(int num) {
-
-        // NOT IMPLEMENTED:
-        // StorageService.delete(SAVE_NAME + "." + num);
+        StorageService.save(SAVE_NAME + "." + num, "");
     }
 
     public static void setSave(int num, String data) {

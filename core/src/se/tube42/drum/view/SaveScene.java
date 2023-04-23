@@ -279,7 +279,7 @@ public class SaveScene extends Scene {
         buttons[BT_SET_SAVE].setActive(true);
 
         buttons[BT_SEQ_RENDER].setActive(false); // TODO: under development
-        buttons[BT_SET_CLEAR].setActive(false); // TODO: used library needs update
+        buttons[BT_SET_CLEAR].setActive(true);
     }
 
     private void press_button(int index) {

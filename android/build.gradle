@@ -23,8 +23,8 @@ android {
         targetSdkVersion 28
 
 		// app version
-        versionCode 33
-        versionName "0.3.3"
+        versionCode 34
+        versionName "0.3.4"
 
     }
 	compileOptions {
